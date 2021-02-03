@@ -116,7 +116,7 @@
                                     {% when 'product_link' %}
                                         {%- assign ariaGCLabel = "Shop " | append: grandchildlink.title -%}
                                     {% when 'page_link' %}
-                                        {%- assign ariaGCLabel = "View " | append: grandchildlink.title | append: 'page' -%}
+                                        {%- assign ariaGCLabel = "View " | append: grandchildlink.title | append: ' page' -%}
                                 {% endcase %}
                                 <div>
                                     <a href="{{ grandchildlink.url }}"
