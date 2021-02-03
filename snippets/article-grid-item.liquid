@@ -1,0 +1,72 @@
+{%- assign fixed_aspect_ratio = false -%}
+{% unless image_size == 'natural' %}
+  {%- assign fixed_aspect_ratio = true -%}
+{% endunless %}
+
+{%- assign title = article.title -%}
+{%- assign author = article.author -%}
+{%- assign title_parts = title | split: '|' -%}
+{%- if title_parts.size > 1 -%}
+	{%- assign title = title_parts[0] -%}
+	{%- assign author = title_parts[1] -%}
+{%- endif -%}
+
+{%- assign thumb = article.image -%}
+{%- if article.metafields.chums.thumbnail_image and images[article.metafields.chums.thumbnail_image] -%}
+	{%- assign thumb = images[article.metafields.chums.thumbnail_image] -%}
+{%- endif -%}
+
+<div class="blog-article--padder">
+  <div class="blog-article">
+    <a href="{{ article.url }}" class="blog-article__image--wrapper">
+      {% if thumb %}   
+      <div class="lazyload blog-article__image--background"
+           data-bgset="{% include 'bgset', image: thumb %}"
+           data-sizes="auto">     
+      </div>
+      <noscript>
+        <img class="lazyloaded" src="{{ thumb | img_url: '400x' }}" alt="{{ title | escape }}">
+      </noscript>    
+      {% endif %}
+    </a>
+
+    {% if section.settings.blog_show_date %}
+    <div class="blog-article__date">
+      {{ article.published_at | time_tag: format: 'month_day_year' }}
+    </div>
+    {% endif %}
+    {% if section.settings.blog_show_tags and article.tags.size > 0 %}
+    <div class="blog-article__tags">     
+      {% for tag in article.tags %}
+      {% include 'filter-out-custom-tags' %}
+      <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if section.settings.blog_show_comments and articles.comments_count > 0 %}
+    <div class="blog-article__comments">
+      <a href="{{ article.url }}#comments">
+        {{ 'blogs.comments.with_count' | t: count: article.comments_count }}
+      </a>
+    </div>
+    {% endif %}
+    <div class="blog-article__title">
+      <a href="{{ article.url }}">{{ title }}</a>
+      {% if section.settings.blog_show_author %}
+      <div class="blog-article__author">by {{ author }}</div>
+      {% endif %}
+    </div>
+
+
+    {% if section.settings.blog_show_excerpt %}
+    <div class="rte article__excerpt">
+      {% if article.excerpt.size > 0 %}
+      {{ article.excerpt }}
+      {% else %}
+      {{ article.content | strip_html | truncatewords: 40 }}
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+</div>

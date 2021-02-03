@@ -1,0 +1,14 @@
+<div class="activities-menu">
+  {% for link in activities_menu.links %}
+  <div class="activities-menu__section">
+    <div class="h5">
+      <a href="{{link.url}}">{{link.title}}</a>
+    </div>
+    {% for childlink in link.links %}
+    <div>
+      <a href="{{childlink.url}}" class="site-nav__dropdown-link">{{childlink.title}}</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>

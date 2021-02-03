@@ -1,0 +1,103 @@
+{%- assign productType = product.type | handleize -%}
+{%- assign optionName = option.name | handleize -%}
+{%- assign optionValue = value | handleize -%}
+
+{%- case productType -%}
+	{%- when 'retainer' -%}
+		{%- case optionName -%}
+			{%- when 'end-size' -%}
+				{%- case optionValue -%}
+					{%- when 'regular' -%}
+						{{- 'R' -}}
+					{%- when 'standard' -%}
+						{{- 'STD' -}}
+					{%- when 'large' -%}
+						{{- 'L' -}}
+					{%- when 'small' -%}
+						{{- 'S' -}}
+					{%- else -%}
+						{{- value | escape -}}
+				{%- endcase -%}
+			{%- when 'rope-size' -%}
+				{%- case optionValue -%}
+					{%- when '3mm' -%}
+						{{- '3' -}}
+					{%- when '5mm' -%}
+						{{- '5' -}}
+					{%- when 'kids-3mm' -%}
+						{{- 'K' -}}
+					{%- else -%}
+						{{- value | escape -}}
+				{%- endcase -%}
+			{%- when 'length' -%}
+				{%- case optionValue -%}
+					{%- when 'regular' -%}
+						{{- 'R' -}}
+					{%- when 'long' -%}
+						{{- 'L' -}}
+				{%- endcase -%}
+			{%- else -%}
+			{{- value | escape -}}
+		{%- endcase -%}
+	{%- when 'apparel' -%}
+		{%- case optionName -%}
+			{%- when 'size' -%}
+				{%- case optionValue -%}
+					{%- when 'small' -%}
+						{{- 'SM' -}}
+					{%- when 'medium' -%}
+						{{- 'MD' -}}
+					{%- when 'large' -%}
+						{{- 'LG' -}}
+					{%- when 'x-large' -%}
+						{{- 'XL' -}}
+					{%- when 'xx-large' -%}
+						{{- 'XXL' -}}
+					{%- else -%}
+						{{- value | escape -}}
+				{%- endcase -%}
+		{%- endcase -%}
+	{%- when 'outdoor-accessories' -%}
+		{%- case optionName -%}
+			{%- when 'width' -%}
+				{%- case optionValue -%}
+					{%- when 'standard' -%}
+						{{- 'STD' -}}
+					{%- when 'wide' -%}
+						{{- 'WD' -}}
+					{%- when 'small' -%}
+						{{- 'SM' -}}
+					{%- when 'micro' -%}
+						{{- 'XS' -}}
+					{%- else -%}
+						{{- value | escape -}}
+				{%- endcase -%}
+			{%- when 'size' -%}
+				{%- case optionValue -%}
+					{%- when 'small' -%}
+						{{- 'S' -}}
+					{%- when 'large' -%}
+						{{- 'L' -}}
+					{%- else -%}
+						{{- value | escape -}}
+				{%- endcase -%}
+			{% else %}
+			{{- value | escape -}}
+		{%- endcase -%}
+	{%- when 'bags-cases' -%}
+		{%- case optionName -%}
+			{%- when 'size' -%}
+				{%- case optionValue -%}
+					{%- when 'small' -%}
+						{{- 'S' -}}
+					{%- when 'large' -%}
+						{{- 'L' -}}
+					{%- else -%}
+						{{- value | escape -}}
+				{%- endcase -%}
+			{% else %}
+			{{- value | escape -}}
+		{%- endcase -%}
+	{%- else -%}
+		{{- value | escape -}}
+{%- endcase -%}

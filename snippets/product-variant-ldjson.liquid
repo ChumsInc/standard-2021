@@ -1,0 +1,43 @@
+{% comment %}
+variables required for render:
+- matchingVariants
+- product
+{% endcomment %}
+
+{% for _variant in matchingVariants %}
+  {% assign _optionNames = '' %}
+  {% for _option in product.options_with_values %}
+      {% assign _optionPosition = 'option' | append: _option.position %}
+      {% assign _optionName = _option.name | append: ': ' | append: _variant[_optionPosition] %}   
+      {% assign _optionNames = _optionNames | append: _optionName | append: '; ' %}
+  {% endfor %}
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Product",
+    "offers": {
+      "@type": "Offer",
+      "availability":"https://schema.org/{% if _variant.available %}InStock{% else %}OutOfStock{% endif %}",
+      "price": "{{ _variant.price | divided_by: 100.00 }}",
+      "priceCurrency": "{{ shop.currency }}",
+      "url": "{{ shop.url }}{{ product.url }}"
+    },
+    "brand": {{ product.vendor | json }},
+    {% if _variant.sku %}"sku": "{{ _variant.sku }}",{% endif %}
+    {% if _variant.barcode %}"gtin12": "{{ _variant.barcode }}",{% endif %}    
+    "name": {{ product.title | json }},
+    "description": {{ product.description | split: '<!-- split -->' | first | strip_html | json }},
+    "disambiguatingDescription": {{ _optionNames | json }},
+    "category": "",
+    "url": "{{ shop.url }}{{ product.url }}",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https:{{ _variant.featured_image.src | img_url: '1024x1024' }}",
+      "image": "https:{{ _variant.featured_image.src | img_url: '1024x1024' }}",
+      "name": {{ _variant.title | json }},
+      "width": 1024,
+      "height": 1024
+    }
+  }
+</script>
+{% endfor %}

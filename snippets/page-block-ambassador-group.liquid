@@ -1,0 +1,19 @@
+<div {{block.shopify_attributes}} class="page-width page-width--flush-small">
+  <div class="ambassador-list">
+    {% for ambassador in section.blocks %}
+    {%- if ambassador.type == 'ambassador' -%}
+    <div class="ambassador-padder">
+      <div class="ambassador__link">
+        <a href="{{ambassador.settings.link}}" class="ambassador__link-item">
+          <img class="lazyload" data-src="{{ambassador.settings.image | img_url: 'x345'}}" />
+          <div class="ambassador__info">
+	        <div class="ambassador__name">{{ ambassador.settings.title }}</div>
+            <div class="btn btn--inverse">{{ ambassador.settings.type }}</div>     
+          </div>
+        </a>
+      </div>
+    </div>
+    {%- endif -%}
+    {% endfor %}
+  </div>
+</div>

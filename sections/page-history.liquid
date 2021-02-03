@@ -1,0 +1,140 @@
+{% style %}
+  .history-list .history-list__grid {
+    flex-wrap: {% if section.settings.allow_wrap %}wrap{% else %}nowrap{% endif %};
+  }
+
+
+  @media screen and (min-width: 960px) {
+    .history-list .history-list__grid .history-entry--padder {
+      flex-basis: {{ 1 | times: 100 | divided_by: section.settings.per_row}}%;
+    }
+  }
+
+  @media screen and (max-width: 589px) {
+	.history-list .history-list__grid {
+		flex-wrap: nowrap;
+	}	
+    .history-list .history-list__grid .history-entry--padder {
+      flex-basis: {{ 1 | times: 100 | divided_by: section.settings.per_row_mobile}}%;
+    }
+  }
+
+{% endstyle %}
+
+
+<div class="index-section">
+  <div {{section.shopify_attributes}} class="page-width {% unless section.settings.mobile_scrollable %}page-width--flush-small{% endunless %}">
+    <div class="history-list" {% if block.settings.mobile_scrollable %}data-aos="overflow__animation"{% endif %}>
+      {% if section.settings.title != blank %}
+      <div class="section-header">
+        <h2>{{ section.settings.title }}</h2>
+      </div>
+      {% endif %}
+      <div class="{% if section.settings.mobile_scrollable %}grid-overflow-wrapper {% endif %} {% if section.settings.allow_wrap == false %}grid-overflow-wrapper--forced{% endif %}">
+        <div data-section-id="{{ block.id }}">
+          <div class="history-list__grid history-list__grid--gutters history-list__grid--{{ section.settings.grid_align | default: 'left'}}">
+            {% for block in section.blocks %}
+            <div class="history-entry--padder">
+              <div class="history-entry">              
+                <div class="lazyload history-entry__image--background"
+                       data-bgset="{% include 'bgset', image: block.settings.image %}"
+                       data-sizes="auto">     
+                  </div>
+                  <noscript>
+                    <img class="lazyloaded" src="{{ block.settings.image | img_url: '600x' }}" alt="{{ block.settings.title | escape }}">
+                  </noscript>                      
+              </div>
+              <div class="history-entry__info">
+                <h3 class="history-entry__date">{{ block.settings.title }}</h3>
+                <div class="history-entry__text rte">{{ block.settings.event }}</div>                   
+              </div>
+            </div>
+
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ 'ambassador-scroll.js' | asset_url | script_tag }}
+
+
+{% schema %}
+  {
+    "name": "Page.Chums History page",
+    "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "select",
+          "id": "align_text",
+          "label": "Alignment",
+          "default": "center",
+          "options": [
+			{"value": "left","label": "Left"},
+			{"value": "center","label": "Centered"}
+          ]
+        },
+		{
+          "type": "checkbox",
+          "id": "mobile_scrollable",
+          "label": "Enable swipe on mobile",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "per_row",
+          "label": "Entries per row",
+          "default": 3.5,
+          "min": 1,
+          "max": 5,
+          "step": 0.5
+        },
+        {
+          "type": "range",
+          "id": "per_row_mobile",
+          "label": "Entries per row (mobile)",
+          "default": 1.5,
+          "min": 1,
+          "max": 3,
+          "step": 0.5
+        },
+        {
+          "type": "checkbox",
+          "id": "allow_wrap",
+          "label": "Allow grid wrapping",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "grid_align",
+          "label": "Grid alignment",
+          "default": "left",
+          "options": [
+            {"value": "left", "label": "Left"},
+            {"value": "center", "label": "Center"},
+            {"value": "right", "label": "Right"}
+          ]
+		}
+	],
+    "blocks": [{
+        "type": "history-entry",
+        "name": "History Entry",
+        "settings": [
+            {"type": "text", "id":"title", "label":"Section Title", "default": "Date"}, 
+            {"type": "image_picker", "id": "image", "label": "Image"},
+            {"type": "richtext", "id": "event", "label": "Event"}
+        ]
+    }]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

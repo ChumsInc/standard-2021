@@ -1,0 +1,182 @@
+<!doctype html>
+<html class="no-js" lang="{{ shop.locale }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_button }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="dns-prefetch" href="https://ajax.googleapis.com">
+  <meta name="format-detection" content="telephone=no">
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-W5BRKMS');</script>
+  <!-- End Google Tag Manager -->
+
+  {%- if settings.favicon -%}
+    <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png" />
+  {%- endif -%}
+
+  {% render 'seo-title' %}
+
+
+  {% if page_description %}
+  <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  {% render 'social-meta-tags' %}
+
+  {% render 'font-face' %}
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+  {{ 'swatches.scss.css' | asset_url | stylesheet_tag }}
+
+  {% comment %}
+  Below are some javascript polyfills for older or non-standard browsers (ahem, msie).
+  {% endcomment %}
+  {{ 'polyfills.1.0.25.min.js' | asset_url | script_tag }}
+
+  
+  {% style %}
+    .collection-item__title {
+      font-size: {{ settings.type_collection_size | times: 0.8 }}px;
+    }
+
+    @media screen and (min-width: 769px) {
+      .collection-item__title {
+        font-size: {{ settings.type_collection_size }}px;
+      }
+    }
+  {% endstyle %}
+  
+
+  <script>
+    if(void 0===window.CHUMS) {
+      var CHUMS=window.CHUMS={};
+    }
+    
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+
+    window.theme = window.theme || {};
+    theme.strings = {
+      addToCart: {{ 'products.product.add_to_cart' | t | json }},
+      soldOut: {{ 'products.product.sold_out' | t | json }},
+      unavailable: {{ 'products.product.unavailable' | t | json }},
+      stockLabel: {{ 'products.product.stock_label' | t: count: '[count]' | json }},
+      savePrice: {{ 'products.general.save_html' | t: saved_amount: '[saved_amount]' | json }},
+      cartEmpty: {{ 'cart.general.empty' | t | json }},
+      cartTermsConfirmation: {{ 'cart.general.terms_confirm' | t | json }}
+    };
+    theme.settings = {
+      dynamicVariantsEnable: true,
+      dynamicVariantType:{{ settings.variant_type | json }},
+      cartType: {{ settings.cart_type | json }},
+      currenciesEnabled: {{ settings.enable_currencies | json }},
+      moneyFormat: {{ shop.money_format | json }},
+      saveType: {{ settings.product_save_type | json }},
+      recentlyViewedEnabled: false,
+      inventoryThreshold: {{ settings.inventory_threshold }},
+      quickView: {{ settings.quick_shop_enable }},
+      themeVersion: "2.1.3"
+    };
+  </script>
+
+  {{ content_for_header }}
+
+  {% comment %}
+  vendor-scripts-jquery.1.0.25: minimized pack of jquery 3.5.1, theme-jquery.js, jquery.ba-throttle-debounce.js
+  {% endcomment %}
+  <script src="{{ 'vendor-scripts-jquery.1.0.25.min.js' | asset_url | split: '?' | first }}" defer="defer"></script>
+  <script src="{{ 'vendor-scripts-chums.1.0.25.min.js' | asset_url | split: '?' | first }}" defer="defer"></script>
+
+  {% if settings.enable_currencies %}
+    <script src="/services/javascripts/currencies.js" defer="defer"></script>
+    <script src="{{ 'currencies.jquery.min.js' | asset_url | split: '?' | first }}" defer="defer"></script>
+  {% endif %}
+
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'retainer-chooser.js' | asset_url }}" defer="defer"></script>
+
+  {%- if template contains 'customers' -%}
+    <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>
+  {%- endif -%}
+  {% render 'judgeme_core' %}
+
+  
+
+  {% render 'shogun-head' %}
+  {% include 'judgeme_core' %}
+</head>
+
+<body class="template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}{% if settings.enable_currencies %} currencies-enabled{% endif %}" data-transitions="false">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W5BRKMS"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  
+  {% comment %}
+    Enable below script if page transitions enabled
+  {% endcomment %}
+  {% comment %}
+  <script type="text/javascript">window.setTimeout(function() { document.body.className += " loaded"; }, 25);</script>
+  {% endcomment %}
+
+  <a class="in-page-link visually-hidden skip-link" href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
+
+  <div id="PageContainer" class="page-container">
+    <div class="transition-body">
+
+    {% section 'header' %}
+
+      <main class="main-content" id="MainContent">
+        {{ content_for_layout }}
+      </main>
+      
+      {% if template contains 'index' %}
+      {% endif %}
+      {% section 'footer-promotions' %}
+      {% section 'footer' %}
+
+    </div>
+  </div>
+  <script>
+var _learnq = _learnq || []; 
+
+var page = window.location.href;
+
+_learnq.push(['track', 'Viewed Page',
+
+{url: page}
+
+]);
+
+</script>
+
+  {% section 'newsletter-popup' %}
+
+  {% if settings.cart_type == 'drawer' %}
+    {% render 'ajax-cart-template' %}
+  {% endif %}
+
+  {% if settings.enable_currencies %}
+    <span
+      id="CurrencyData"
+      class="hide"
+      data-shop-currency="{{ shop.currency }}"
+      data-default-currency="{{ settings.default_currency | default: shop.currency }}"
+      data-format="{{ settings.currency_format | default: 'money_with_currency_format' }}"
+      data-money-format="{{ shop.money_format | strip_html }}"
+      data-money-currency-format="{{ shop.money_with_currency_format | strip_html }}">
+    </span>
+  {% endif %}
+
+  {% render 'video-modal' %}
+  {% render 'modal-zoom' %}
+  {% render 'photoswipe-template' %}
+  {% if template contains 'product' %}
+    {% render 'recently-viewed-product-template' %}
+  {% endif %}
+</body>
+</html>

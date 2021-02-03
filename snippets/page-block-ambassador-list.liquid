@@ -1,0 +1,44 @@
+{% style %}
+  .ambassador-list .ambassador-list__grid {
+    flex-wrap: {% if block.settings.allow_wrap %}wrap{% else %}nowrap{% endif %};
+  }
+
+
+  @media screen and (min-width: 960px) {
+    .ambassador-list .ambassador-list__grid .ambassador--padder {
+      flex-basis: {{ 1 | times: 100 | divided_by: block.settings.per_row}}%;
+    }
+  }
+
+  @media screen and (max-width: 589px) {
+	.ambassador-list .ambassador-list__grid {
+		flex-wrap: nowrap;
+	}	
+    .ambassador-list .ambassador-list__grid .ambassador--padder {
+      flex-basis: {{ 1 | times: 100 | divided_by: block.settings.per_row_mobile}}%;
+    }
+  }
+
+{% endstyle %}
+
+
+<div {{block.shopify_attributes}} class="page-width {% unless section.settings.mobile_scrollable %}page-width--flush-small{% endunless %}">
+
+  <div class="ambassador-list" {% if block.settings.mobile_scrollable %}data-aos="overflow__animation"{% endif %}>
+    {% if block.settings.title %}<h2 style="text-align: center;">{{ block.settings.title }}</h2>{% endif %}
+    <div class="{% if block.settings.mobile_scrollable %}grid-overflow-wrapper {% endif %} {% if block.settings.allow_wrap == false %}grid-overflow-wrapper--forced{% endif %}">
+      <div data-section-id="{{ block.id }}" >
+        <div class="ambassador-list__grid ambassador-list__grid--gutters ambassador-list__grid--{{ block.settings.grid_align | default: 'left'}}">
+          {% for link in linklists[block.settings.links].links %}
+              {% assign ambassador_type = false %}
+              {% if block.settings.show_ambassador_type %}
+                  {% assign ambassador_type = block.settings.ambassador_type %}
+              {% endif %}
+          {% include 'page-ambassador-link' link: link.url %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ 'ambassador-scroll.js' | asset_url | script_tag }}

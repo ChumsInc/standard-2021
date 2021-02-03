@@ -1,0 +1,96 @@
+{% comment %}
+variables required for this snippet
+- option
+- option_index
+- option_index0
+- product
+- current_variant
+- section_id
+{% endcomment %}
+
+
+{%- assign is_color = false -%}
+{%- assign color_option_index = 0 -%}
+
+{%- assign is_size = false -%}
+{%- assign size_option_index = 0 -%}
+
+{% assign has_mix = false %}
+{% assign mix_option_index = 0 %}
+
+{% assign productType = product.type | handleize %}
+
+{% if settings.product_color_swatches %}
+  {% for _option in product.options_with_values %}
+    {% if _option == option %}
+      {% assign color_option_index = forloop.index0 %}
+      {% assign downcased_option = _option.name | downcase %}
+      {% if downcased_option contains 'color' or downcased_option contains 'colour' or downcased_option contains 'pattern' %}
+        {% assign is_color = true %}
+      {% elsif downcased_option contains 'size' or downcased_option contains 'length' or downcased_option contains 'width' %}
+        {% assign is_size = true %}
+      {% elsif downcased_option contains 'mix' or downcased_option contains 'style' %}
+        {% assign has_mix = true %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% assign current_colors = '' | split: ',' %}
+
+
+<div class="variant-wrapper variant-wrapper--{{ settings.variant_type }} js">
+    <label class="variant__label
+                {% if option.name == 'Default' or option.name == 'Title' %} hidden-label{% endif %}
+                {% unless settings.variant_labels_enable %} hidden-label{% endunless %}"
+           for="ProductSelect-{{ section_id }}-option-{{ option_index0 }}">
+        {{ option.name }}
+        {% if is_color %}
+        <span class="variant__label-info">
+      <span id="VariantColorLabel-{{ section_id }}-{{ option_index0 }}"
+            data-option-index="{{ color_option_index }}">
+        {{ option.selected_value }}
+      </span>
+    </span>
+        {% elsif is_size %}
+        <span class="variant__label-info">
+      <span id="VariantSizeLabel-{{ section_id }}-{{ option_index0 }}"
+            data-option-index="{{ size_option_index }}">
+        {{ option.selected_value}}
+      </span>
+    </span>
+        {% endif %}
+    </label>
+
+    {% assign option_index = option_index %}
+    {% assign product_available = true %}
+
+    <fieldset class="variant-input-wrap {% if is_color %}variant-input-wrap--colors{% endif %}"
+              name="{{ option.name }}"
+              data-index="option{{ option_index }}"
+              id="ProductSelect-{{ section_id }}-option-{{ option_index0 }}">
+        {% for value in option.values %}
+          {% if is_size %}
+            {% include 'variant-size-button' %}
+          {% elsif is_color %}
+      		{% assign variantField = 'option' | append: option_index %}
+            {% if product.options.size == 1 %}      		
+              {% assign variant = product.variants[option_index0] %}
+      			{% assign variant = product.variants | where: variantField, value | first %}
+      			<!-- option_index={{option_index|json}}; variantField={{variantField | json}} value={{value | json}}, variant={{variant | json}} -->
+              {%- assign product_available = variant.available -%}
+	      		
+      		{% else %}
+      			{% assign variantField = 'option' | append: option_index %}
+      			{% assign variant = product.variants | where: variantField, value | first %}
+            {% endif %}
+            {% include 'variant-color-button' %}
+          {% else %}
+          <label for="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}"
+                 class="variant__button-label{% unless product_available %} disabled{% endunless %}">
+              {{- value | escape -}}
+          </label>
+          {% endif %}
+        {% endfor %}
+    </fieldset>
+</div>

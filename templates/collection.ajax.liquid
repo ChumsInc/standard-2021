@@ -1,0 +1,22 @@
+{% comment %}
+  Exact same as normal collection template but without unneeded markup
+  that slows down ajax loading
+{% endcomment %}
+{% layout none %}
+
+<div id="CollectionAjaxContent">
+  <div class="page-width">
+    <div class="grid">
+      <div class="grid__item medium-up--one-fifth grid__item--sidebar">
+        {% if collection.all_types.size == 1 and collection.all_types[0] == 'Retainer' %}
+        {% section 'collection-retainer-chooser' %}
+        {% else %}
+        {% section 'collection-sidebar' %}
+        {% endif %}
+      </div>
+      <div class="grid__item medium-up--four-fifths grid__item--content">
+        {% section 'collection-template' %}
+      </div>
+    </div>
+  </div>
+</div>

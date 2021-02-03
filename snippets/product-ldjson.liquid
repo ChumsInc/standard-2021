@@ -1,0 +1,28 @@
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Product",
+    "offers": {
+      "@type": "Offer",
+      "availability":"https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+      "price": "{{ current_variant.price | divided_by: 100.00 }}",
+      "priceCurrency": "{{ shop.currency }}",
+      "url": "{{ shop.url }}{{ product.url | split: '?' | first }}"
+    },
+    "brand": {{ product.vendor | json }},
+    {% if current_variant.sku %}"sku": "{{ current_variant.sku }}",{% endif %}
+    {% if current_variant.barcode %}"gtin12": "{{ current_variant.barcode }}",{% endif %}    
+    "name": {{ product.title | json }},
+    "description": {{ product.description | split: '<!-- split -->' | first | strip_html | strip_newlines | json }},
+    "category": "",
+    "url": "{{- shop.url -}}{{- product.url | split: '?' | first -}}",
+    "image": {
+      "@type": "ImageObject",
+      "url": "https:{{ product.featured_image.src | img_url: '1024x1024' }}",
+      "image": "https:{{ product.featured_image.src | img_url: '1024x1024' }}",
+      "name": {{ product.title | json }},
+      "width": 1024,
+      "height": 1024
+    }
+  }
+</script>

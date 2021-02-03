@@ -1,0 +1,98 @@
+<div
+  data-subsection
+  data-section-id="{{ article.id }}"
+  data-section-type="slideshow-section"
+  data-align-top="true"
+  class="hero-slideshow"
+  {% if section.settings.parallax %}data-parallax="true"{% endif %}>
+  <div class="slideshow-wrapper">
+    {%- assign natural_height = false -%}
+    {% if section.settings.section_height == 'natural' %}
+      {% if article.image != blank %}
+        {%- assign natural_height = true -%}
+        {%- capture natural_height_ratio -%}{{ 100 | divided_by: article.image.aspect_ratio }}%{% endcapture %}
+      {% endif %}
+    {% endif %}
+
+    {% if natural_height %}
+      {% style %}
+        .hero-natural--{{ article.id }} {
+          height: 0;
+          padding-bottom: {{ natural_height_ratio }};
+        }
+      {% endstyle %}
+    {% endif %}
+
+    {% if natural_height %}
+      <div class="hero-natural--{{ article.id }}">
+    {% endif %}
+      <div id="Slideshow-{{ article.id }}"
+        class="hero hero--{{ section.settings.section_height }} hero--{{ article.id }} hero--mobile--{{ section.settings.mobile_height }} loading loading--delayed"
+        {% if natural_height %}
+          data-natural="true"
+        {% endif %}
+        data-aos="hero__animation"
+        data-slide-count="1">
+        <div
+          class="slideshow__slide slideshow__slide--{{ article.id }}"
+          data-id="{{ article.id }}">
+
+          {% if section.settings.parallax %}
+            {% if article.image != blank %}
+              {% style %}
+                .hero__image--{{ article.id }} {
+                  background-position: {{ section.settings.focal_point }};
+                  background-size: cover;
+                }
+              {% endstyle %}
+            {% endif %}
+            <div class="parallax-container">
+              <div class="hero__image-wrapper">
+                <div
+                  class="parallax-image hero__image hero__image--{{ article.id }}{% unless hero_text %} hero__image--no-overlay{% endunless %}{% if article.image != blank %} lazyload{% else %} hero__image--svg{% endif %}"
+                  {% if article.image != blank %}
+                    data-bgset="{% render 'bgset', image: article.image %}"
+                    data-sizes="auto"
+                  {% endif %}>
+                {% if article.image == blank %}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                {% endif %}
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <div class="hero__image-wrapper{% unless hero_text %} hero__image-wrapper--no-overlay{% endunless %}">
+              {% if article.image != blank %}
+                {% style %}
+                  .hero__image--{{ article.id }} {
+                    object-position: {{ section.settings.focal_point }};
+                    font-family: "object-fit: cover; object-position: {{ section.settings.focal_point }};";
+                  }
+                {% endstyle %}
+
+                {%- assign img_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+                <img class="image-fit hero__image hero__image--{{ article.id }} lazyload"
+                  src=""
+                  data-src="{{ img_url }}"
+                  data-aspectratio="{{ article.image.aspect_ratio }}"
+                  data-sizes="auto"
+                  data-parent-fit="cover"
+                  alt="{{ article.image.alt | escape }}">
+                <noscript>
+                  <img class="image-fit hero__image hero__image--{{ article.id }}"
+                    src="{{ article.image | img_url: '1400x' }}"
+                    alt="{{ article.image.alt | escape }}">
+                </noscript>
+              {% else %}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% if natural_height %}
+      </div>
+    {% endif %}
+  </div>
+</div>

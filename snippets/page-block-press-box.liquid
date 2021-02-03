@@ -1,0 +1,19 @@
+{%- assign image = block.settings.image -%}
+{%- assign img_url = image | img_url: '300x223' -%}
+
+{%- assign hover_image = block.settings.hover_image -%}
+{%- assign hover_img_url = hover_image | img_url: '300x223' -%}
+
+<div class="press-box">
+  <a href="{{block.settings.link}}" target="_blank" rel="noreferrer noopener">
+    <figure class="img-container">
+      <img class="img-fluid no-hover lazyload"
+           data-src="{{ img_url}}"          
+           alt="Photo: {{block.settings.alt_text}}">
+      <img class="img-fluid hover lazyload"
+           data-src="{{ hover_img_url}}"          
+           alt="Photo: {{block.settings.alt_text}}">
+      <figcaption>{{block.settings.caption}}</figcaption>
+    </figure>
+  </a>
+</div>

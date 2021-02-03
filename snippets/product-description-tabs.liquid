@@ -1,0 +1,75 @@
+{% comment %}
+	Copyright Chums Inc
+	By Steve Montgomery
+	2019-09-08
+{% endcomment %}
+
+{%- assign blockId = block.id -%}
+{%- assign productType = productType | handleize -%}
+
+{% if product %}
+  {%- assign blockId = block.id | append: product.id -%}
+{% endif %}
+
+{%- assign descriptionParts = product.description | split:"<!-- split -->" -%}
+<div class="tabs__wrapper">
+  <div class="tabs__tab-bar">
+    {% if descriptionParts.size >= 1 %}
+    <button type="button" 
+            class="tabs__tab-btn tabs__tab-btn--selected" 
+            aria-controls="ProductDescription-{{blockId}}-description" aria-expanded="true">
+      Description
+    </button>
+    {% endif %}
+    
+    {% if descriptionParts.size >= 2 %}
+    <button type="button" 
+            class="tabs__tab-btn" 
+            aria-controls="ProductDescription-{{blockId}}-details" aria-expanded="false">
+     Details
+    </button>
+    {% endif %}
+
+    {% if descriptionParts.size >= 3 %}
+    <button type="button" 
+            class="tabs__tab-btn" 
+            aria-controls="ProductDescription-{{blockId}}-other" aria-expanded="false">
+     {% if productType == 'apparel' %}Sizing{% else %}More{% endif %}
+    </button>
+    {% endif %}
+  </div>
+  
+  {% if descriptionParts.size >= 1 %}
+  <div id="ProductDescription-{{blockId}}-description" 
+       class="tabs__tab-content tabs__tab-content--selected">
+    <div class="tabs__tab-content--inner">
+      <div class="product-single__description rte">
+        {{ descriptionParts[0] }}
+      </div>    
+    </div>
+  </div>
+  {% endif %}
+  
+  {% if descriptionParts.size >= 2 %}
+  <div id="ProductDescription-{{blockId}}-details" 
+       class="tabs__tab-content">
+    <div class="tabs__tab-content--inner">
+      <div class="product-single__description rte">
+        {{ descriptionParts[1] }}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
+  {% if descriptionParts.size >= 3 %}
+  <div id="ProductDescription-{{blockId}}-other" 
+       class="tabs__tab-content">
+    <div class="tabs__tab-content--inner">
+      <div class="product-single__description rte">
+        {{ descriptionParts[2] }}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
+</div>

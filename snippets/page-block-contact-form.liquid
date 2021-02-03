@@ -1,0 +1,85 @@
+{%- assign blockId = block.id -%}
+{% if product %}
+  {%- assign blockId = block.id | append: product.id -%}
+{% endif %}
+
+<div class="index-section">
+  <div class="page-width">
+
+    <div class="grid">
+      <div class="grid__item{% if block.settings.narrow_column %} medium-up--three-quarters medium-up--push-one-eighth{% endif %}">
+        {% if block.settings.title != blank %}
+          <div class="section-header">
+            <h2 class="section-header__title">
+              {{ block.settings.title }}
+            </h2>
+          </div>
+        {% endif %}
+
+        <div class="form-vertical">
+          {% form 'contact' %}
+
+            {% if form.posted_successfully? %}
+              <p class="note note--success">
+                {{ 'contact.form.post_success' | t }}
+              </p>
+            {% endif %}
+
+            {{ form.errors | default_errors }}
+
+            <div class="grid grid--small">
+              <div class="grid__item medium-up--full">
+                <label for="ContactFormReason-{{ blockId }}">Your Reason</label>
+                <div class="form-check-container">
+                  <div class="form-check">
+                  	<input type="radio" id="ContactFormReason-sales-{{ blockId }}" name="contact[reason]" value="sales" class="form-check-input">
+                    <label class="form-check-label" for="ContactFormReason-sales-{{ blockId }}">Sales</label>
+                  </div>
+                  <div class="form-check">
+                  	<input type="radio" id="ContactFormReason-cs-{{ blockId }}" name="contact[reason]" value="cs" class="form-check-input">
+                    <label class="form-check-label" for="ContactFormReason-cs-{{ blockId }}">Customer Service</label>
+                  </div>
+                  <div class="form-check">
+                  	<input type="radio" id="ContactFormReason-tech-{{ blockId }}" name="contact[reason]" value="tech" class="form-check-input">
+                    <label class="form-check-label" for="ContactFormReason-tech-{{ blockId }}">Technical Information</label>
+                  </div>
+                  <div class="form-check">
+                  	<input type="radio" id="ContactFormReason-comment-{{ blockId }}" name="contact[reason]" value="comment" class="form-check-input">
+                    <label class="form-check-label" for="ContactFormReason-comment-{{ blockId }}">Comments / Suggestions / Questions</label>
+                  </div>
+                  <div class="form-check">
+                  	<input type="radio" id="ContactFormReason-ambassador-{{ blockId }}" name="contact[reason]" value="ambassador" class="form-check-input">
+                    <label class="form-check-label" for="ContactFormReason-ambassador-{{ blockId }}">Become an Ambassador</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid__item medium-up--one-half">
+                <label for="ContactFormName-{{ blockId }}">{{ 'contact.form.name' | t }}</label>
+                <input type="text" id="ContactFormName-{{ blockId }}" class="input-full" name="contact[name]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+              </div>
+
+              <div class="grid__item medium-up--one-half">
+                <label for="ContactFormEmail-{{ blockId }}">{{ 'contact.form.email' | t }}</label>
+                <input type="email" id="ContactFormEmail-{{ blockId }}" class="input-full" name="contact[email]" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+              </div>
+            </div>
+
+            {% if block.settings.show_phone %}
+              <label for="ContactFormPhone-{{ blockId }}">{{ 'contact.form.phone' | t }}</label>
+              <input type="tel" id="ContactFormPhone-{{ blockId }}" class="input-full" name="contact[phone]" pattern="[0-9\-]*" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+            {% endif %}
+
+            <label for="ContactFormMessage-{{ blockId }}">{{ 'contact.form.message' | t }}</label>
+            <textarea rows="5" id="ContactFormMessage-{{ blockId }}" class="input-full" name="contact[body]">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+            <button type="submit" class="btn">
+              {{ 'contact.form.send' | t }}
+            </button>
+
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

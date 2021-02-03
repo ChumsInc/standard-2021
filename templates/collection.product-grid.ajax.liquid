@@ -1,0 +1,13 @@
+{% comment %}
+  Exact same as normal collection template but without unneeded markup
+  that slows down ajax loading
+{% endcomment %}
+{% layout none %}
+
+{% for product in collection.products %}
+	{% include 'product-grid-item' %}
+{% else %}
+  <div class="grid__item">
+    <p>{{ 'collections.general.no_matches' | t }}</p>
+  </div>
+{% endfor %}

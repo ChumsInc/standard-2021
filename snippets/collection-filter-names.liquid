@@ -1,0 +1,17 @@
+{% case tag_name %}
+	{% when 'regular end' %}
+		Normal Frames (5-10 mm)
+	{% when 'large end' %}
+		Large Frames (10-20mm)
+	{% when 'small end' %}
+		Small Frames (2-4 mm)
+	{% when 'mono' %}
+		Mono Filament (fishing line)
+	{% when 'floating accessories' %}
+		Floating
+	{% else %}
+		{%- assign tag_words = tag_name | split: ' ' -%}
+		{%- for tag_word in tag_words -%}
+			{{ tag_word | capitalize }}
+		{%- endfor -%}
+{% endcase %}

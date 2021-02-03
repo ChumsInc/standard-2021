@@ -1,0 +1,153 @@
+{%- assign blockId = block.id -%}
+{% if product %}
+  {%- assign blockId = block.id | append: product.id -%}
+{% endif %}
+
+<div class="index-section">
+  <div class="page-width">
+
+    <div class="grid">
+      <div class="grid__item{% if block.settings.narrow_column %} medium-up--three-quarters medium-up--push-one-eighth{% endif %}">
+        {% if block.settings.title != blank %}
+          <div class="section-header">
+            <h2 class="section-header__title">
+              {{ block.settings.title }}
+            </h2>
+          </div>
+        {% endif %}
+
+        <div class="form-vertical">
+          {% form 'contact' %}
+
+            {% if form.posted_successfully? %}
+              <p class="note note--success">
+                {{ 'contact.form.post_success' | t }}
+              </p>
+            {% endif %}
+
+            {{ form.errors | default_errors }}
+			
+          <h2>About You</h2>
+          <small>Basic information abut you so we can know more about where to send you products, your online presence, etc.</small>
+            <div class="grid grid--small">
+              <div class="grid__item medium-up--one-half">
+                <label for="ContactFormName-{{ blockId }}">{{ 'contact.pro-form.name' | t }}</label>
+                <input type="text" id="ContactFormName-{{ blockId }}" class="input-full" name="contact[name]" 
+                       required autocapitalize="words" autocomplete="name"
+                       value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}" placeholder="{{ 'contact.pro-form.name' | t }}">
+              </div>
+
+              <div class="grid__item medium-up--one-half">
+                <label for="ContactFormEmail-{{ blockId }}">{{ 'contact.pro-form.email' | t }}</label>
+                <input type="email" id="ContactFormEmail-{{ blockId }}" class="input-full" name="contact[email]" 
+                       required autocorrect="off" autocapitalize="off"  autocomplete="email"
+                       value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'contact.pro-form.email' | t }}">
+              </div>
+              <div class="grid__item medium-up--full">
+                <label for="ContactFormStreetAddress-{{ blockId }}">{{ 'contact.pro-form.address' | t }}</label>
+                <input type="text" id="ContactFormStreetAddress-{{ blockId }}" class="input-full" name="contact[address]" 
+                       required autocorrect="off" autocapitalize="off" autocomplete="street-address"
+                       value="{% if form.address %}{{ form.address }}{% elsif customer %}{{ customer.default_address.address1 }}{% endif %}" 
+                       placeholder="{{ 'contact.pro-form.address' | t }}">
+              </div>
+              <div class="grid__item medium-up--one-third">
+                <label for="ContactFormCity-{{ blockId }}">{{ 'contact.pro-form.city' | t }}</label>
+                <input type="text" id="ContactFormCity-{{ blockId }}" class="input-full" name="contact[city]" 
+                       required autocorrect="off" autocapitalize="off" autocomplete="address-level2"
+                       value="{% if form.address %}{{ form.address }}{% elsif customer %}{{ customer.default_address.city }}{% endif %}" 
+                       placeholder="{{ 'contact.pro-form.city' | t }}">
+              </div>
+              <div class="grid__item medium-up--one-third">
+                <label for="ContactFormProvince-{{ blockId }}">{{ 'contact.pro-form.province' | t }}</label>
+                <input type="text" id="ContactFormProvince-{{ blockId }}" class="input-full" name="contact[province]" 
+                       required autocorrect="off" autocapitalize="off" autocomplete="address-level1"
+                       value="{% if form.province %}{{ form.province }}{% elsif customer %}{{ customer.default_address.province }}{% endif %}" 
+                       placeholder="{{ 'contact.pro-form.province' | t }}">
+              </div>
+              <div class="grid__item medium-up--one-third">
+                <label for="ContactFormZip-{{ blockId }}">{{ 'contact.pro-form.zip' | t }}</label>
+                <input type="text" id="ContactFormZip-{{ blockId }}" class="input-full" name="contact[zip]" 
+                       required autocorrect="off" autocapitalize="off" autocomplete="postal-code"
+                       value="{% if form.zip %}{{ form.zip }}{% elsif customer %}{{ customer.default_address.zip }}{% endif %}"
+                       placeholder="{{ 'contact.pro-form.zip' | t }}">
+              </div>
+            </div>
+
+            {% if block.settings.show_phone %}
+              <label for="ContactFormPhone-{{ blockId }}">{{ 'contact.pro-form.phone' | t }}</label>
+              <input type="tel" id="ContactFormPhone-{{ blockId }}" class="input-full" name="contact[phone]" 
+                     required pattern="[0-9\-]*" autocomplete="tel"
+                     value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+                     placeholder="{{ 'contact.pro-form.phone' | t }}">
+            {% endif %}
+
+            <label for="ContactFormReason-{{ blockId }}">{{ 'contact.pro-form.reason' | t }}</label>
+            <textarea rows="5" id="ContactFormReason-{{ blockId }}" class="input-full" name="contact[body]" required 
+                      placeholder="{{ 'contact.pro-form.reason' | t }}">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+
+          	<hr />
+          <h2>Your Company</h2>
+          <small>Tell use more about your work, the company you work for and how it qualifies you to be a part of the Chums Pro program.</small>
+          {%- assign guideChecked = false -%}
+          {%- assign oiProChecked = false -%}
+          {%- assign otherChecked = false -%}
+          {%- if form.companyType == 'guide' -%}
+          {%- assign guideChecked = 'checked' -%}
+          {%- elsif form.companyType == 'oiPro' -%}
+          {%- assign oiProChecked = 'checked' -%}
+          {%- elsif form.companyType == 'other' -%}
+          {%- assign otherChecked = 'checked' -%}
+          {%- endif -%}
+
+          <div class="grid grid--small">
+          	<div class="grid__item medium-up--full form-check-container">
+              <div class="form-check">                
+              	<input type="radio" class="form-check-input" id="ContactFormGuide-{{ blockId }}" name="contact[companyType]" value="guide" checked="{{ guideChecked }}" />
+                <label for="ContactFormGuide-{{ blockId }}" class="form-check-label">Professional Guide or Outfitter</label>
+              </div>
+              <div class="form-check">
+              	<input type="radio" class="form-check-input" id="ContactFormOIPro-{{ blockId }}" name="contact[companyType]" value="oiPro" checked="{{ oiProChecked }}" />
+                <label for="ContactFormOIPro-{{ blockId }}" class="form-check-label">Outdoor Industry Professional</label>
+              </div>
+              <div class="form-check">
+              	<input type="radio" class="form-check-input" id="ContactFormOther-{{ blockId }}" name="contact[companyType]" value="other" checked="{{ otherChecked }}" />
+                <label for="ContactFormOther-{{ blockId }}" class="form-check-label">Other (Please explain below)</label>
+              </div>
+            </div>
+            <div class="grid__item medium-up--full">
+                <label for="ContactFormCompany-{{ blockId }}">{{ 'contact.pro-form.company' | t }}</label>
+                <input type="text" id="ContactFormCompany-{{ blockId }}" class="input-full" name="contact[company]" 
+                       required autocorrect="off" autocapitalize="off" autocomplete="organization"
+                       value="{% if form.company %}{{ form.company }}{% endif %}"
+                       placeholder="{{ 'contact.pro-form.company' | t }}">            
+            </div>
+            <div class="grid__item medium-up--full">
+                <label for="ContactFormTitle-{{ blockId }}">{{ 'contact.pro-form.title' | t }}</label>
+                <input type="text" id="ContactFormTitle-{{ blockId }}" class="input-full" name="contact[title]" 
+                       required autocorrect="off" autocapitalize="off" autocomplete="organization-title"
+                       value="{% if form.company %}{{ form.company }}{% endif %}"
+                       placeholder="{{ 'contact.pro-form.title' | t }}">            
+            </div>
+            <div class="grid__item medium-up--full">
+                <label for="ContactFormWebsite-{{ blockId }}">{{ 'contact.pro-form.website' | t }}</label>
+                <input type="text" id="ContactFormWebsite-{{ blockId }}" class="input-full" name="contact[website]" 
+                       autocorrect="off" autocapitalize="off" autocomplete="url"
+                       value="{% if form.company %}{{ form.company }}{% endif %}"
+                       placeholder="{{ 'contact.pro-form.website' | t }}">            
+            </div>
+            <div class="grid__item medium-up--full">
+                <label for="ContactFormOther-{{ blockId }}">{{ 'contact.pro-form.explain' | t }}</label>
+              	<textarea rows="5" id="ContactFormOther-{{ blockId }}" class="input-full" name="contact[other]" 
+                          placeholder="{{ 'contact.pro-form.explain' | t }}">{% if form.body %}{{ form.other }}{% endif %}</textarea>  
+            </div>
+          </div>
+            <button type="submit" class="btn">
+              {{ 'contact.form.send' | t }}
+            </button>
+
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

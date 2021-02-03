@@ -1,0 +1,65 @@
+{% comment %}
+variables required for this snippet:
+- variant
+- product
+- value
+- option_index
+- option
+- section_id
+- color_option_index
+{% endcomment %}
+
+
+{% assign image_id = '' | split: ',' %}
+{% assign hashSku = variant.sku | prepend: '#' %}
+{% for img in product.images %}
+	{% assign img_alt_list = img.alt | split: ' '  %}
+
+	{% if img.attached_to_variant? == false and img_alt_list contains hashSku %}    		
+		<!-- hashSku={{hashSku | json}}; img_alt_list = {{img_alt_list | json }} -->
+
+      {% assign alt_image_id = img.id | split: ',' %}
+      {% assign image_id = image_id | concat: alt_image_id %}
+	{% endif %}
+{% endfor %}
+
+{% assign color_code = value %}
+{% assign variantField = 'option' | append: option_index %}
+{% assign matchingVariant = product.variants | where: variantField, value | first %}
+
+{% if matchingVariant %}
+{% if matchingVariant.metafields.product.color_code %}
+{% assign color_code = matchingVariant.metafields.product.color_code %}
+{% endif %}
+{% endif %}
+
+
+<div class="variant-input 
+            {% unless product_available %}variant-input--sold-out variant-input--disabled{% endunless %}"
+     data-index="option{{ option_index }}"
+     data-value="{{ value | escape }}">
+    <input type="radio"
+           {% if option.selected_value == value %} checked="checked"{% endif %}
+           value="{{ value | escape }}"
+           data-index="option{{ option_index }}"
+           data-images="{{image_id | uniq | join: '|'}}"
+           name="{{ option.name }}"
+           class="variant__input-{{ section_id }}
+                {% unless product_available %} disabled{% endunless %} 
+                variant__input--color-swatch-{{ section_id }}"
+           data-color-name="{{ value | escape }}"
+           data-color-index="{{ color_option_index }}"
+           data-color-filter=""
+           id="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}">
+    <label for="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}"
+           class="variant__button-label 
+                color-swatch color-swatch--{{ color_code | handleize }} 
+                {% unless product_available %} disabled{% endunless %}"
+           title="{{value | upper}}">
+        <span class="sr-only">{{- value | escape -}}</span>
+    </label>
+
+    {% render 'product-variant-ldjson',
+              matchingVariants: product.variants | where: variantField, value,
+              product: product %}
+</div>

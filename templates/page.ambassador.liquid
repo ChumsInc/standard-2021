@@ -1,0 +1,42 @@
+{% assign names = page.title | split: ',' %}
+{% assign firstname = page.title %}
+{% if page.title.size > 1 %}
+	{% assign firstname = names[1] %}
+{% endif %}
+{% assign lastname = names[0] %}
+
+<div class="page-width page-content">
+
+  {% assign page_parent = pages['ambassadors'] %}
+  {% include 'breadcrumbs' %}
+
+  <div class="grid">
+    <div class="grid__item medium-up--three-quarters medium-up--push-one-eighth">
+      <div class="ambassador__container">
+        <div class="ambassador__main">
+          <img class="ambassador__image--hero lazyload" data-src={{page.metafields.chums.header_image | file_img_url: '1100x'}}>
+          <div class="ambassador__content">
+            <div class="ambassador__name">
+              <h1>{{ firstname }} {{ lastname }}</h1>
+              <h2>{{page.metafields.chums.tags | split: '|' | join: ', '}}</h2>
+            </div>
+
+            <div class="rte rte--nomargin">
+              {{ page.content }}
+            </div>
+          </div>
+        </div>
+        <div class="ambassador__products">
+          <h3>{{firstname}}'s Essentials</h3>
+          {%- assign products = page.metafields.chums.featured_products | split: '|' -%}
+          {%- for _prod in products -%}
+          	{%- assign product = all_products[_prod] -%}
+          	{% include 'product-grid-item', grid_item_width: 'ambassador__item' %}
+          {%- endfor -%}         
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

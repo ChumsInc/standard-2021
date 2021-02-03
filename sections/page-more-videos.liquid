@@ -1,0 +1,95 @@
+{% style %}
+  .video-list .video-list__grid .video--padder {
+  	flex: 0 0 {{ 1 | times: 100 | divided_by: section.settings.per_row }}%;
+  }
+
+  @media screen and (min-width: 960px) {
+    .video--padder {
+      flex-basis: {{ 1 | times: 100 | divided_by: section.settings.per_row}}%;
+    }
+  }
+
+  @media screen and (max-width: 589px) {
+    .video--padder {
+      flex-basis: 100%;
+    }
+  }
+
+{% endstyle %}
+
+<div class="index-section video-list">
+  <div {{section.shopify_attributes}} class="page-width page-width--flush-small">
+    <div class="video-list__grid video-list__grid--gutters">
+      {% for block in section.blocks %}
+      <div class="video--padder">
+        <div class="video-container">
+          {% if block.settings.video_url %}
+          <iframe width="560" height="315" src="{{ block.settings.video_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "More videos",
+    "settings": [
+		{
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "select",
+          "id": "align_text",
+          "label": "Alignment",
+          "default": "center",
+          "options": [
+			{"value": "left","label": "Left"},
+			{"value": "center","label": "Centered"}
+          ]
+        },
+		{
+          "type": "range",
+          "id": "per_row",
+          "label": "Videos per row",
+          "default": 3,
+          "min": 1,
+          "max": 4,
+          "step": 1
+        }
+	],
+    "blocks": [
+      {
+        "type": "Video",
+        "name": "Video",
+        "settings": [
+            {
+            "type": "text",
+            "id": "title",
+			"label": "Title",
+            "default": "Video Title",
+			"info": "Title does not display on page"
+            },
+          {
+            "type": "text",
+            "id": "video_url",
+            "label": "Background video link",
+            "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "info": "Supports YouTube, .MP4 and Vimeo. Not all features supported by Vimeo. [Learn more](https://archetypethemes.co/blogs/impulse/how-do-i-add-background-videos)"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

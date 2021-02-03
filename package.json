@@ -1,0 +1,10 @@
+{
+  "name": "standard-2021",
+  "version": "1.0.0",
+  "dependencies": {
+  },
+  "scripts": {
+    "preview": "theme open",
+    "watch": "theme watch"
+  }
+}

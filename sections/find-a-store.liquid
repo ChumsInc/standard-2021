@@ -1,0 +1,337 @@
+<div id="store-map-{{ section.id }}" class="store-map">
+  <form class="store-map__search flex-grid" action="." method="get" id="searchform">
+    <img src="{{ 'booby.icon.png' | file_url }}" alt="Chums" id="map-icon" style="display:none;">
+    <input type="hidden" name="company" id="company" value="chums">
+    <input type="hidden" name="pos-lat" id="pos-lat" value="38.744161">
+    <input type="hidden" name="pos-lng" id="pos-lng" value="-109.499473">
+    <div class="flex-grid__item flex-grid__item--50">
+      <input type="text" name="homeaddress" id="homeaddress" value="" class=""
+             placeholder="ZIP or Address">
+    </div>
+    <div class="flex-grid__item flex-grid__item--25">
+      <select name="range" id="range" class="form-control">
+        <option value="10">10 Miles</option>
+        <option value="25" selected="selected">25 Miles</option>
+        <option value="50">50 Miles</option>
+        <option value="100">100 Miles</option>
+      </select>
+    </div>
+    <div class="flex-grid__item flex-grid__item--25">
+      <button id="zipsearch" class="btn btn-primary btn-block" type="submit">Search</button>
+    </div>
+    <div class="form-group">
+      <span id="message"></span><!-- end of span#message -->
+    </div>
+  </form>
+  <div class="flex-grid searchresults">
+    <div id="searchresults" class="flex-grid__item flex-grid__item--25"></div>
+
+    <div class="flex-grid__item flex-grid__item--75 store-map__map-container">
+        <div id="googlemap"></div><!-- end of div#google-map -->
+    </div>
+  </div>
+</div>
+<!--<link rel="stylesheet" type="text/css" href="/css/storemap.css?v=20131003"/>-->
+<script>
+    /*global CHUMS, $, google */
+	
+    (function () {
+        "use strict";
+        var MILES_TO_METERS = 1609.344,
+            results,
+            user,
+            map,
+            ui,
+            init,
+            alertGeocoderError;
+
+        results = {
+            list: [],
+            counter: 0,
+
+            display: function () {
+                var i, iLen;
+                for (i = 0, iLen = results.list.length; i < iLen; i += 1) {
+                    results.addLocation(i);
+                    map.addMarker(i);
+                }
+            },
+
+            addLocation: function (index) {
+                var customer = results.list[index],
+                    dist = Number(customer.distance),
+                    address = customer.AddressLine1
+                        + (customer.AddressLine2 !== '' ? '<br>' + customer.AddressLine2 : '')
+                        + (customer.AddressLine3 !== '' ? '<br>' + customer.AddressLine3 : '')
+                        + '<br>' + customer.City + ', ' + customer.State + ' '
+                        + (customer.CountryCode === 'US' || customer.CountryCode === 'USA' ? customer.ZipCode : customer.CountryCode);
+
+                $('<div>')
+                    .addClass('store-map__customer')
+                    .data('index', index)
+                    .prop('id', 'customer-link-' + index)
+                    .append($('<div>').addClass('store-map__customer__name').text(customer.CustomerName))
+                    .append($('<div>').addClass('store-map__customer__address').html(address))
+                    .append($('<div>').addClass('store-map__customer__distance').text('Distance: ' + dist.toFixed(dist > 10 ? 0 : 1) + ' mi.'))
+                    .appendTo('#searchresults');
+            }
+        };
+
+        user = {
+            isLoggedIn: false,
+            allowDrag: false,
+            location: null
+        };
+
+        map = {
+            options: null,
+            instance: null,
+            geocoder: null,
+            infoWindow: null,
+            homeMarker: null,
+            markerImage: null,
+            markers: [],
+            markerListeners: [],
+            listeners: {
+                click: []
+            },
+            rangeCircle: null,
+
+            addMarker: function (index) {
+
+                var customer = results.list[index],
+                    gMarker = new google.maps.Marker({
+                        position: new google.maps.LatLng(customer.latitude, customer.longitude),
+                        map: map.instance,
+                        draggable: user.allowDrag && user.isLoggedIn,
+                        title: customer.CustomerName,
+                        icon: map.markerImage
+                    });
+                map.markers.push(gMarker);
+                map.listeners.click.push(google.maps.event.addListener(gMarker, 'click', function () {
+                    $('#customer-link-' + index).click();
+                }));
+                $('#resultcount').text(map.markers.length);
+            },
+
+            clearMarkers: function () {
+                var i, iLen;
+
+                results.list = [];
+                results.counter = 0;
+
+                for (i = 0, iLen = map.markers.length; i < iLen; i += 1) {
+                    if (map.markers[i] !== undefined) {
+                        map.markers[i].setMap(null);
+                    }
+                    if (map.listeners.click[i] !== undefined) {
+                        google.maps.event.removeListener(map.listeners.click[i]);
+                    }
+                }
+                map.markers = [];
+                map.listeners.click = [];
+                map.removeRangeCircle();
+            },
+
+
+            setCenter: function (location) {
+                map.homeMarker.setPosition(new google.maps.LatLng(location.lat, location.lng));
+                map.instance.setCenter(map.homeMarker.getPosition());
+            },
+
+            showSearchCircle: function (radius) {
+                if (radius === undefined) {
+                    radius = $('#range').val();
+                }
+
+                var circleOpts =  {
+                    center: map.homeMarker.getPosition(),
+                    radius: parseInt(radius, 10) * MILES_TO_METERS,
+                    map: map.instance,
+                    fillColor: '#666666',
+                    fillOpacity: 0.05,
+                    strokeColor: '#ff0000',
+                    strokeWeight: 2,
+                    strokeOpacity: 0.25
+                };
+                map.rangeCircle = new google.maps.Circle(circleOpts);
+            },
+
+            removeRangeCircle: function () {
+                if (map.rangeCircle !== undefined && map.rangeCircle !== null) {
+                    map.rangeCircle.setMap(null);
+                    map.rangeCircle = null;
+                }
+            },
+
+            search: function () {
+                var pos = map.homeMarker.getPosition();
+                $('#pos-lat').val(pos.lat());
+                $('#pos-lng').val(pos.lng());
+
+                map.clearMarkers();
+                map.showSearchCircle();
+
+                $.ajax({
+                  url: 'https://intranet.chums.com/api/stores.php',
+                    timeout: 30000,
+                    cache: false,
+                    data: $('#searchform').serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+                        var range = $('#range').val();
+
+                        results.list = data.list;
+                        if (data.list.length === 0) {
+                            $('#searchresults').html('No results found within ' + range + ' mile' + (range === '1' ? '' : 's'));
+                        } else {
+                            $('#searchresults').empty();
+                            // $('#searchresults').html('Results [<span id="resultcount">0</span>/' + data.list.length + ']<hr>');
+                        }
+                        results.display();
+//            lookup.timer = setTimeout(getNewLocations, lookup.delay);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus + '<br>' + errorThrown);
+                    }
+                });
+                $('#searchresults').empty().text("Reloading ...");
+            },
+
+            init: function () {
+                map.options = {
+                    zoom: 12,
+                    center: ui.getCenter(),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                map.instance = new google.maps.Map(document.getElementById('googlemap'), map.options);
+
+                map.markerImage = new google.maps.MarkerImage(
+                    $('#map-icon').attr('src'),
+                    new google.maps.Size(24, 32),
+                    new google.maps.Point(0, 0),
+                    new google.maps.Point(16, 32)
+                );
+
+                map.homeMarker = new google.maps.Marker({
+                    clickable: true,
+                    draggable: true,
+                    map: map.instance,
+                    position: map.instance.getCenter(),
+                    title: "Your location"
+                });
+                google.maps.event.addListener(map.homeMarker, 'dragend', function () {
+                    $('#homeaddress').val();
+                    map.instance.setCenter(map.homeMarker.getPosition());
+                    map.search();
+                });
+
+                if (navigator.geolocation !== undefined) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                        map.instance.setCenter(initialLocation);
+                        map.homeMarker.setPosition(initialLocation);
+                        map.search();
+                    });
+                }
+
+                map.geocoder = new google.maps.Geocoder();
+                map.infoWindow = new google.maps.InfoWindow();
+            }
+        };
+
+        ui = {
+            getCenter: function () {
+                return new google.maps.LatLng($('#pos-lat').val(), $('#pos-lng').val());
+            },
+
+            init: function () {
+                $('#homeaddress').change(function () {
+                    user.location = null;
+                });
+
+                $('#searchform')
+                    .submit(function (ev) {
+                        ev.preventDefault();
+
+                        if ($('#homeaddress').val() === '') {
+                            map.homeMarker.setPosition(map.instance.getCenter());
+                            window.setTimeout(map.search, 250);
+                            return;
+                        }
+
+                        if (user.location !== null) {
+                            window.setTimeout(map.search, 250);
+                            return;
+                        }
+
+                        map.geocoder.geocode({'address': $('#homeaddress').val()}, function (results, status) {
+                            switch (status) {
+                            case google.maps.GeocoderStatus.OK:
+                                user.location = results[0].geometry.location;
+                                map.instance.setCenter(results[0].geometry.location);
+                                map.homeMarker.setPosition(results[0].geometry.location);
+                                map.search();
+                                break;
+
+                            default:
+                                alertGeocoderError(status);
+                                break;
+                            }
+                        });
+                    });
+
+                $('#searchresults').on('click', '.store-map__customer', function (ev) {
+                    ev.preventDefault();
+                    map.infoWindow.setContent($(this).html());
+                    map.infoWindow.open(map.instance, map.markers[$(this).data('index')]);
+                });
+
+            }
+        };
+
+        init = function () {
+            ui.init();
+            map.init();
+        };
+
+
+        alertGeocoderError = function (status) {
+            switch (status) {
+            case google.maps.GeocoderStatus.REQUEST_DENIED:
+                console.log("This webpage is not allowed to use the Google GeoCoder.");
+                break;
+
+            case google.maps.GeocoderStatus.INVALID_REQUEST:
+                console.log("This GeocoderRequest was invalid.");
+                break;
+
+            case google.maps.GeocoderStatus.OVER_QUERY_LIMIT:
+                console.log("This webpage has gone over the requests limit in too short a period of time.");
+                break;
+
+            default:
+                console.log("There was an error with this lookup. Please retry later.");
+                break;
+            }
+        };
+
+        window.onload = init;
+    }());
+
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_G18R6IdCF6T9vReDCY5HTz-VshZU49o"></script>
+
+{% schema %}
+  {
+    "name": "Section name",
+    "settings": []
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

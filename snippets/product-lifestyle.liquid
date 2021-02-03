@@ -1,0 +1,12 @@
+{% if product.metafields.chums.lifestyle_image && product.metafields.chums.lifestyle_image.size %}
+<div class="product__lifestyle product__lifestyle--{{product.metafields.chums.lifestyle_layout | handleize}}">
+  {% for image in product.metafields.chums.lifestyle_image %}
+  {% assign lifestyle_alt_text = image | replace: '-', ' '| replace: '_', ' ' | replace: '.png', '' | replace: '.jpeg', '' | replace: '.jpg', '' %}
+  <div class="product__lifestyle-image">
+    {%- assign img_url = image | file_img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+    <img class="lazyload product__lifestyle-image" data-src="{{img_url}}" data-sizes="auto" alt="{{product.title}} lifestyle: {{ lifestyle_alt_text }}"/>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+

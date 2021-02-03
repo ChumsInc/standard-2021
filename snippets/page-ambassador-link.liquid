@@ -1,0 +1,23 @@
+{%- assign pageHandle =  link | remove: '/pages/' %}
+{%- assign page = pages[pageHandle] -%}
+{%- assign image = images[page.metafields.chums.menu_image] -%}
+{%- assign title = page.title | split: ',' | reverse | join: ' ' -%}
+<div class="ambassador--padder">
+  <div class="ambassador">
+    <a href="{{ link }}" class="ambassador__image--wrapper">
+      {% if image %}   
+      <div class="lazyload ambassador__image--background"
+           data-bgset="{% include 'bgset', image: image %}"
+           data-sizes="auto">     
+      </div>
+      <noscript>
+        <img class="lazyloaded" src="{{ image | img_url: '600x' }}" alt="{{ title | escape }}">
+      </noscript>    
+      {% endif %}
+      <div class="ambassador__info">
+        <div class="ambassador__name">{{ title }}</div>
+        {% if ambassador_type %}<div class="btn btn--inverse">{{ ambassador_type }}</div>{% endif %}
+      </div>
+    </a>
+  </div>
+</div>

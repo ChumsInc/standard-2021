@@ -1,0 +1,202 @@
+<div class="index-section {{ section_class }}">
+  <div class="page-width text-{{ block.settings.align_text }}">
+    <div class="grid">
+      {% assign openings = 0 %}
+      {% for block in section.blocks %}
+      	{% if block.settings.enabled %}
+        {% assign openings = openings | plus: 1 %}
+      	{% endif %}
+      {% endfor %}  
+      <div class="grid__item medium-up--three-quarters medium-up--push-one-eighth">
+	  	<strong>{% if openings > 0 %}{{section.settings.open_position_text}}{% else %}{{section.settings.no_open_position_text}}{% endif %}</strong>
+      </div>
+      
+      {% for block in section.blocks %}
+        {% if block.settings.enabled %}
+          <div class="grid__item medium-up--three-quarters medium-up--push-one-eighth job-opening">
+            <h3 class="job-opening--title">
+              <a href="{{block.settings.filename | file_url}}" rel="nofollow noopener" target="_blank">{{block.settings.title}}</a>
+            </h3>
+            <div class="job-opening--details">
+              <dl>
+                <div>
+                  <dt>Job Location</dt>
+                  <dd>
+                    {% case block.settings.location %}
+                    {% when 'slc' %}
+                      Salt Lake City, UT
+                    {% when 'hurricane' %}
+                      Hurricane, UT
+                    {% when 'ketchum' %}
+                      Ketchum, ID
+                    {% endcase %}                  
+                  </dd>
+                </div>
+                <div>
+                  <dt>Posted</dt>
+                  <dd>{{ block.settings.posted | date: "%b %d, %Y" }}</dd>
+                </div>
+                <div>
+                  <dt>Employment Type</dt>
+                  <dd>{% if block.settings.fulltime %}Full Time{% else %}Part Time{% endif %}</dd>
+                </div>
+                <div>
+                  <dt>Description</dt>
+                  <dd>{{ block.settings.objective }}</dd>
+                </div>
+                <div>
+                  <dt>Responsibilities</dt>
+                  <dd>{{ block.settings.responsibilities }}</dd>
+                </div>
+                <div>
+                  <dt>Experience Requirements</dt>
+                  <dd>{{ block.settings.experience }}</dd>
+                </div>
+              </dl>
+            </div>
+            {% if block.settings.filename %}
+            <div><a class="job-opening--link" href="{{block.settings.filename | file_url}}" rel="nofollow noopener" target="_blank">Download Job Details</a></div>
+            {% endif %}
+            <!-- {{ block.settings | json }} -->
+            <script type="application/ld+json">
+            {
+            "@context": "http://schema.org",
+            "@type": "JobPosting",
+            "datePosted": "{{ block.settings.posted | date: "%Y-%m-%d"}}",
+            "employmentType": "{% if block.settings.fulltime %}full-time{% else %}part-time{% endif %}",
+            "hiringOrganization": "Chums Inc",
+            "description": {{ block.settings.objective | json }},
+            "jobLocation": {
+              "@type": "Place",
+              {% case block.settings.location %}
+              {% when 'slc' %}
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Salt Lake City",
+                "addressRegion": "UT",
+                "postalCode": "84119",
+                "streetAddress": "2424 S 2570 W"
+              }
+			  {% when 'hurricane' %}
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Hurricane",
+                "addressRegion": "UT",
+                "postalCode": "84737",
+                "streetAddress": "104 S Main St"
+              }
+              {% when 'ketchum' %}
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Ketchum",
+                "addressRegion": "ID",
+                "postalCode": "83340",
+                "streetAddress": "210 East Sun Valley Rd"
+              }
+              {% endcase %}     
+            },
+            "qualifications": {{ block.settings.experience | json }},
+            "responsibilities": {{ block.settings.responsibilities | json }},
+            {% if block.settings.fulltime %}
+            "workHours": "40 hours per week",
+            {% endif %}
+            "title": {{ block.settings.title | json}}
+          	}
+            </script>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Open Positions",
+    "settings": [
+      {
+        "type": "text",
+        "id": "open_position_text",
+        "label": "Text for open positions",
+		"default": "Positions Available"
+      },
+      {
+        "type": "text",
+        "id": "no_open_position_text",
+        "label": "Text if no open positions",
+		"default": "Sorry, there are currently no open positions at Chums"
+      }
+	],
+	"blocks": [
+		{
+          "type": "position",
+          "name": "Job Opening",
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+			  "label": "Job Position"
+            },
+            {
+              "type": "checkbox",
+              "id": "enabled",
+			  "label": "Job Currently Open"
+            },
+            {
+              "type": "select",
+              "id": "location",
+              "options": [{"value": "slc", "label":"Salt Lake City, UT"},{"value": "hurricane", "label":"Hurricane, UT"},{"value": "ketchum", "label":"Ketchum, ID"}],
+              "label": "Job Location"
+              },
+            {
+              "type": "text",
+              "id": "posted",
+              "label": "Date the job is posted",
+			  "info": "Formatted YYYY-MM-DD"
+            },
+            {
+              "type": "text",
+              "id": "filename",
+              "label": "The job position PDF filename",
+              "info": "This must match the filename of a file uploaded to the settings / files page"
+            },
+            {
+              "type": "textarea",
+              "id": "objective",
+              "label": "Position Description",
+              "info": "Enter a brief summary of the job description",
+			  "default": "Chums Inc., located in Salt Lake City, UT, is looking for ..."
+            },
+            {
+              "type": "textarea",
+              "id": "experience",
+              "label": "Experience Requirements",
+              "info": "Enter a brief summary of the experience requirements",
+			  "default": "Bachelor’s degree in [...] or related field from an accredited college or technical school; or equivalent combination or experience & education"
+            },
+            {
+              "type": "textarea",
+              "id": "responsibilities",
+              "label": "Position Responsibilities",
+              "info": "Enter a brief summary of the job responsibilities",
+			  "default": "Create customer engagement campaign themes/concepts and effectively communicate our marketing campaigns digitally across multiple platforms"
+            },
+			{
+              "type": "checkbox",
+              "id": "fulltime",
+              "label": "Full Time",
+              "info": "Will display 'part time' if unchecked"
+            }
+
+          ]
+        }
+	]
+  }
+{% endschema %}
+
+{% stylesheet 'scss' %}
+
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

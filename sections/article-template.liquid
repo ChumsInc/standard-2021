@@ -1,0 +1,288 @@
+{%- assign number_of_comments = article.comments_count -%}
+
+{% if comment %}
+  {%- assign number_of_comments = article.comments_count | plus: 1 -%}
+{% endif %}
+
+{% if article.image %}
+	{% render 'blog-hero-image' %}
+{% endif %}
+
+{%- assign title = article.title -%}
+{%- assign author = article.author -%}
+{%- assign title_parts = title | split: '|' -%}
+{%- if title_parts.size > 1 -%}
+	{%- assign title = title_parts[0] -%}
+	{%- assign author = title_parts[1] -%}
+{%- endif -%}
+
+
+<div class="page-width page-content">
+
+  <div class="grid">
+    <article class="grid__item widescreen--six-tenths widescreen--push-two-tenths medium-up--two-thirds medium-up--push-one-sixth article" itemscope itemtype="http://schema.org/Article">
+
+      {% render 'breadcrumbs' %}
+
+      <header class="section-header">
+        {% if section.settings.blog_show_date or article.tags.size > 0 or articles.comments_count > 0 %}
+          <div class="article__date">
+            {% if section.settings.blog_show_tags and article.tags.size > 0 %}
+              {% for tag in article.tags %}
+                {% if tag contains '_' %}
+                  {%- assign tag_starts_with = tag | slice: 0 -%}
+                  {% if tag_starts_with == '_' %}
+                    {% if tag_count %}
+                      {%- assign tag_count = tag_count | minus: 1 -%}
+                    {% endif %}
+                    {% continue %}
+                  {% endif %}
+                {% endif %}
+
+                <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a> &middot;
+              {% endfor %}
+            {% endif %}
+            {% if section.settings.blog_show_comments and article.comments_count > 0 %}
+              <a href="#comments">
+                {{ 'blogs.comments.with_count' | t: count: number_of_comments }}
+              </a> &middot;
+            {% endif %}
+            {% if section.settings.blog_show_date %}
+              {{ article.published_at | time_tag: format: 'month_day_year' }}
+            {% endif %}
+          </div>
+        {% endif %}
+        <h1 class="section-header__title">{{ title }}</h1>
+        {% if section.settings.blog_show_author %}
+          <div class="article__author">by {{ author }}</div>
+        {% endif %}
+      </header>
+
+      <div class="article__body rte" itemprop="articleBody">
+        {{ article.content }}
+      </div>
+
+      {% if section.settings.social_sharing_blog %}
+        {% render 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+      {% endif %}
+
+      {% if blog.comments_enabled? %}
+
+        {% if number_of_comments > 0 %}
+          <hr class="hr--large">
+          <h3>{{ 'blogs.comments.with_count' | t: count: number_of_comments }}</h3>
+          <hr class="hr--small hr--clear">
+        {% endif %}
+
+        {% paginate article.comments by 5 %}
+          {% comment %}
+            #comments is required, it is used as an anchor link by Shopify.
+          {% endcomment %}
+          <div id="comments">
+
+            {% if comment and comment.errors == blank %}
+              <hr class="hr--small hr--clear">
+              <p class="note note--success">
+                {% if blog.moderated? %}
+                  {{ 'blogs.comments.success_moderated' | t }}
+                {% else %}
+                  {{ 'blogs.comments.success' | t }}
+                {% endif %}
+              </p>
+            {% endif %}
+
+            {% if number_of_comments > 0 %}
+              <ul class="no-bullets">
+                {% comment %}
+                  If a comment was just submitted with no blank field, show it.
+                {% endcomment %}
+                {% if comment and comment.errors == blank %}
+                  <li id="{{ comment.id }}" class="comment first{% if article.comments_count == 0 %} last{% endif %}">
+                    {% render 'comment' %}
+                  </li>
+                {% endif %}
+
+                {% for comment in article.comments %}
+                  <li id="{{ comment.id }}" class="comment{% unless number_of_comments > article.comments_count %}{% if forloop.first %} first{% endif %}{% endunless %}{% if forloop.last %} last {% endif %}">
+                    {% render 'comment' %}
+                  </li>
+
+                  {% unless forloop.last %}
+                    <li><hr class="hr--clear"></li>
+                  {% endunless %}
+                {% endfor %}
+              </ul>
+
+              {% if paginate.pages > 1 %}
+                {% render 'pagination' %}
+              {% endif %}
+
+            {% endif %}
+
+            <hr class="hr--large">
+
+            <header class="section-header{% unless settings.type_headers_align_text %} section-header--with-link{% endunless %}">
+              <h3 class="section-header__title">{{ 'blogs.comments.title' | t }}</h3>
+            </header>
+
+            <div class="form-vertical">
+              {% form 'new_comment', article %}
+
+                {{ form.errors | default_errors }}
+
+                <div class="grid grid--small">
+                  <div class="grid__item medium-up--one-half">
+                    <label for="CommentAuthor">{{ 'blogs.comments.name' | t }}</label>
+                    <input class="input-full{% if form.errors contains 'author' %} error{% endif %}" type="text" name="comment[author]" id="CommentAuthor" value="{{ form.author }}" autocapitalize="words">
+                  </div>
+                  <div class="grid__item medium-up--one-half">
+                    <label for="CommentEmail">{{ 'blogs.comments.email' | t }}</label>
+                    <input class="input-full{% if form.errors contains 'email' %} error{% endif %}" type="email" name="comment[email]" id="CommentEmail" value="{{ form.email }}" autocorrect="off" autocapitalize="off">
+                  </div>
+                </div>
+
+                <label for="CommentBody">{{ 'blogs.comments.message' | t }}</label>
+                <textarea class="input-full{% if form.errors contains 'body' %} error{% endif %}" name="comment[body]" id="CommentBody">{{ form.body }}</textarea>
+
+                {% if blog.moderated? %}
+                  <p><small>{{ 'blogs.comments.moderated' | t }}</small></p>
+                {% endif %}
+
+                <button type="submit" class="btn btn--secondary">
+                  {{ 'blogs.comments.post' | t }}
+                </button>
+
+              {% endform %}
+            </div>
+
+          </div>
+        {% endpaginate %}
+      {% endif %}
+
+      <hr class="hr--large">
+
+    </article>
+
+  </div> 
+  
+  <div class="text-center">
+    <a href="{{ blog.url }}" class="btn btn--small return-link">{% render 'icon-arrow-left' %} {{ 'blogs.article.back_to_blog' | t: title: blog.title }}</a>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Article pages",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "blog_show_tags",
+        "label": "Show tags",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_date",
+        "label": "Show date",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_comments",
+        "label": "Show comment count",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_author",
+        "label": "Show author"
+      },
+      {
+        "type": "checkbox",
+        "id": "social_sharing_blog",
+        "label": "Show social sharing buttons",
+        "default": true
+      },
+		{
+            "type": "checkbox",
+            "id": "parallax",
+            "label": "Enable parallax",
+            "default": true
+          },
+          {
+            "type": "select",
+            "id": "focal_point",
+            "label": "Image focal point",
+            "info": "Used to keep the subject of your photo in view.",
+            "default": "center center",
+            "options": [
+              {
+                "value": "20% 0",
+                "label": "Top left"
+              },
+              {
+                "value": "top center",
+                "label": "Top center"
+              },
+              {
+                "value": "80% 0",
+                "label": "Top right"
+              },
+              {
+                "value": "20% 50%",
+                "label": "Left"
+              },
+              {
+                "value": "center center",
+                "label": "Center"
+              },
+              {
+                "value": "80% 50%",
+                "label": "Right"
+              },
+              {
+                "value": "20% 100%",
+                "label": "Bottom left"
+              },
+              {
+                "value": "bottom center",
+                "label": "Bottom center"
+              },
+              {
+                "value": "80% 100%",
+                "label": "Bottom right"
+              }
+            ]
+          },
+      {
+        "type": "select",
+        "id": "section_height",
+        "label": "Desktop height",
+        "default": "650px",
+        "options": [
+          {"label": "Natural","value": "natural"},
+          {"label": "450px","value": "450px"},
+          {"label": "550px","value": "550px"},
+          {"label": "650px","value": "650px"},
+          {"label": "750px","value": "750px"},
+          {"label": "Full screen","value": "100vh"}
+        ]
+      },
+      {
+        "type": "select",
+        "id": "mobile_height",
+        "label": "Mobile height",
+        "default": "auto",
+        "info": "Not used if desktop height is set to natural",
+        "options": [
+          {"label": "Auto","value": "auto"},
+          {"label": "250px","value": "250px"},
+          {"label": "300px","value": "300px"},
+          {"label": "400px","value": "400px"},
+          {"label": "500px","value": "500px"},
+          {"label": "Full screen","value": "100vh"}
+        ]
+      }
+    ]
+  }
+{% endschema %}

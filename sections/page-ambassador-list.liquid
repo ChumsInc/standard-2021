@@ -1,0 +1,199 @@
+{% style %}
+  .ambassador-list .ambassador-list__grid {
+    flex-wrap: {% if section.settings.allow_wrap %}wrap{% else %}nowrap{% endif %};
+  }
+
+
+  @media screen and (min-width: 960px) {
+    .ambassador-list .ambassador-list__grid .ambassador--padder {
+      flex-basis: {{ 1 | times: 100 | divided_by: section.settings.per_row}}%;
+    }
+  }
+
+  @media screen and (max-width: 589px) {
+	.ambassador-list .ambassador-list__grid {
+		flex-wrap: nowrap;
+	}	
+    .ambassador-list .ambassador-list__grid .ambassador--padder {
+      flex-basis: {{ 1 | times: 100 | divided_by: section.settings.per_row_mobile}}%;
+    }
+  }
+
+
+  .ambassador-list .ambassador-list__grid {
+    margin-top: -{{ section.settings.gutter_size }}px;
+    margin-left: -{{ section.settings.gutter_size }}px;
+    {% if section.settings.full_width %}
+      padding-left: {{ section.settings.gutter_size }}px;
+      padding-right: {{ section.settings.gutter_size }}px;
+    {% endif %}
+  }
+
+  .ambassador-list .ambassador-list__grid.ambassador-list__grid--gutters {
+    margin-top: -{{ section.settings.gutter_size }}px;
+    margin-left: -{{ section.settings.gutter_size }}px;
+  }
+
+
+  .ambassador-list .ambassador-list__grid.ambassador-list__grid--gutters .ambassador--padder {
+    padding-top: {{ section.settings.gutter_size }}px;
+    padding-left: {{ section.settings.gutter_size }}px;
+  }
+
+  @media only screen and (max-width: 589px) {
+    .ambassador-list .ambassador-list__grid {
+      margin-top: -{{ section.settings.gutter_size | divided_by: 2 }}px;
+      margin-left: -{{ section.settings.gutter_size | divided_by: 2 }}px;
+      {% if section.settings.full_width %}
+        padding-left: {{ section.settings.gutter_size | divided_by: 2 }}px;
+        padding-right: {{ section.settings.gutter_size | divided_by: 2 }}px;
+      {% endif %}
+    }
+
+    .ambassador-list .ambassador-list__grid .ambassador-list__grid--gutters {
+      margin-top: -{{ section.settings.gutter_size | divided_by: 2 }}px;
+      margin-left: -{{ section.settings.gutter_size | divided_by: 2 }}px;
+    }
+
+    .ambassador-list .ambassador-list__grid .ambassador--padder {
+      padding-top: {{ section.settings.gutter_size | divided_by: 2 }}px;
+      padding-left: {{ section.settings.gutter_size | divided_by: 2 }}px;
+    }
+  }
+{% endstyle %}
+
+{% assign ambassador_types = '' | split: ',' %}
+{% for ambassador in section.blocks %}
+	{% unless ambassador_types contains ambassador.settings.type %}
+		{% assign ambassador_type = ambassador.settings.type | split: ',' %}
+		{% assign ambassador_types = ambassador_types | concat: ambassador_type %}
+	{% endunless %}
+{% endfor %}
+
+<!-- {{ section.settings | json }} -->
+<main class="page-width {% unless section.settings.mobile_scrollable %}page-width--flush-small{% endunless %}">
+  {% for type in ambassador_types %}
+  <div class="ambassador-list" {% if section.settings.mobile_scrollable %}data-aos="overflow__animation"{% endif %}>
+  	<h2 style="text-align: center;">{{ type | append: 's' | capitalize }}</h2>
+    <div class="{% if section.settings.mobile_scrollable %}grid-overflow-wrapper {% endif %} {% if section.settings.allow_wrap == false %}grid-overflow-wrapper--forced{% endif %}">
+      <div data-section-id="{{ section.id }}" >
+        <div class="ambassador-list__grid ambassador-list__grid--gutters ambassador-list__grid--{{ section.settings.grid_align | default: 'left'}}">
+          {% for ambassador in section.blocks %}   
+          {% if ambassador.settings.type == type %}
+          {% include 'page-ambassador-link' link: ambassador.settings.link, ambassador_type: ambassador.settings.type %}
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+  {% endfor %}
+</main>
+{{ 'ambassador-scroll.js' | asset_url | script_tag }}
+
+{% schema %}
+  {
+    "name": "Ambassador-List Page",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "Full page width",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "gutter_size",
+        "label": "Spacing",
+        "default": 20,
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px"
+      },
+		{
+              "type": "checkbox",
+              "id": "mobile_scrollable",
+              "label": "Enable swipe on mobile",
+              "default": true
+          },
+          {
+            "type": "range",
+            "id": "per_row",
+            "label": "Ambassadors per row",
+            "default": 3.5,
+            "min": 1,
+            "max": 5,
+            "step": 0.5
+          },
+          {
+            "type": "range",
+            "id": "per_row_mobile",
+            "label": "Ambassadors per row (mobile)",
+            "default": 1.5,
+            "min": 1,
+            "max": 3,
+            "step": 0.5
+          },
+          {
+            "type": "checkbox",
+            "id": "allow_wrap",
+            "label": "Allow grid wrapping",
+            "default": true
+          },
+          {
+            "type": "select",
+            "id": "grid_align",
+            "label": "Grid alignment",
+            "default": "left",
+            "options": [
+              {"value": "left", "label": "Left"},
+              {"value": "center", "label": "Center"},
+              {"value": "right", "label": "Right"}
+            ]
+          }
+	],
+    "blocks": [
+      {
+        "type": "ambassador",
+        "name": "Ambassador",
+        "settings": [
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link"
+          },
+          {
+            "type": "select",
+            "id": "type",
+            "label": "Ambassador Type",
+            "options": [
+              {"value": "angler", "label": "Angler"},
+              {"value": "paddler", "label": "Paddler"},
+              {"value": "explorer", "label": "Explorer"},
+              {"value": "other", "label": "Other"}
+            ]
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Name"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image (optional)",
+			"info": "This image will override the default image saved in the linked page, stored in metafields.menu_image"
+          }          
+		]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet 'scss' %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
