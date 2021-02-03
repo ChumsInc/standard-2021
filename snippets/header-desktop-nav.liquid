@@ -33,7 +33,6 @@
 
         {%- assign menu_id = 'menu-' | append: link.title | handleize | append: '-' | append: forloop.index0 -%}
 
-        <!-- {{ link.type | json }} -->
         <li data-for-menu="{{ link.title | handleize }}"
             role="menuitem"
             aria-labelledby="{{ menu_id }}"
