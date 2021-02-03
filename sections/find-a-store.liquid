@@ -321,17 +321,26 @@
     }());
 
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_G18R6IdCF6T9vReDCY5HTz-VshZU49o"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ section.settings.google-maps-api-key }}"></script>
+
 
 {% schema %}
-  {
-    "name": "Section name",
-    "settings": []
-  }
+{
+    "name": "Find A Store",
+    "settings": [
+        {
+            "id": "google-maps-api-key",
+            "type": "text",
+            "label": "Google Maps API Key"
+        }
+    ]
+}
 {% endschema %}
+
 
 {% stylesheet %}
 {% endstylesheet %}
+
 
 {% javascript %}
 {% endjavascript %}
