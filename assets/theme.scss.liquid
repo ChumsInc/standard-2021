@@ -4971,7 +4971,11 @@ $color-blankstate-background: #e1e1e1;
 .site-header__search-container {
   .site-header__search-results {
     display: none;
-    
+
+    .site-header__search-results-count {
+      @extend .visually-hidden;
+    }
+
     .site-header__search-results-list {
       display: none;     
       margin-left: 70px;

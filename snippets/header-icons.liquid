@@ -5,22 +5,27 @@
 <div class="site-nav">
   <div class="site-nav__icons">
     {% if shop.customer_accounts_enabled %}
-      <a class="site-nav__link site-nav__link--icon small--hide" href="{{ routes.account_url }}">
+      <a class="site-nav__link site-nav__link--icon small--hide" href="{{ routes.account_url }}" aria-labelledby="site-nav--user-icon-fallback">
         {% render 'icon-user' %}
-        <span class="icon__fallback-text">
-          {% if customer %}
+        <span class="icon__fallback-text" id="site-nav--user-icon-fallback">
+          {%- if customer -%}
             {{ 'layout.customer.account' | t }}
-          {% else %}
+          {%- else -%}
             {{ 'layout.customer.log_in' | t }}
-          {% endif %}
+          {%- endif -%}
         </span>
       </a>
     {% endif %}
 
     {% if section.settings.header_search_enable %}
-      <a href="{{ routes.search_url }}" class="site-nav__link site-nav__link--icon js-search-header js-no-transition{% if section.settings.main_menu_alignment == 'center' or section.settings.main_menu_alignment == 'center-split' %} medium-up--hide{% endif %}">
+      <a href="{{ routes.search_url }}"
+         role="button"
+         aria-controls="site-nav--user-icon-fallback"
+         class="site-nav__link site-nav__link--icon js-search-header js-no-transition{% if section.settings.main_menu_alignment == 'center' or section.settings.main_menu_alignment == 'center-split' %} medium-up--hide{% endif %}"
+         aria-labelledby="site-nav--search-icon-fallback"
+      >
         {% render 'icon-search' %}
-        <span class="icon__fallback-text">{{ 'general.search.title' | t }}</span>
+        <span class="icon__fallback-text" id="site-nav--search-icon-fallback">{{ 'general.search.title' | t }}</span>
       </a>
     {% endif %}
 
