@@ -1,0 +1,19 @@
+{% render 'shogun-products', content: collection %}
+
+{{collection.metafields.shogun.above}}
+{% section 'collection-header' %}
+
+<div id="CollectionAjaxResult" class="collection-content">
+  <div id="CollectionAjaxContent">
+    <div class="page-width">
+      <div class="grid">
+        {% section 'collection-promotions' %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{{collection.metafields.shogun.below}}
+
+
