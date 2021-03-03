@@ -1,17 +1,29 @@
+{% comment %}
+required variables:
+  product
+  option
+  product_available
+  option_index
+  value
+  section_id
+  size_option_index
+{% endcomment %}
+
 <div class="variant-input {% unless product_available %}variant-input--disabled{% endunless %}"
      data-index="option{{ option_index }}"
      data-value="{{ value | escape }}">
-  <input type="radio"
-         {% if option.selected_value == value %} checked="checked"{% endif %}
-         value="{{ value | escape }}"
-         data-index="option{{ option_index }}"
-         name="{{ option.name }}"
-         class="variant__input-{{ section_id }}{% unless product_available %} disabled{% endunless %} variant__input--size-button-{{ section_id }}"
-         data-size-name="{{ value | escape }}"
-         data-size-index="{{ size_option_index }}"
-         id="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}">        
-  <label for="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}"
-         class="variant__button-label{% unless product_available %} disabled{% endunless %} size-button">
-    {%- include 'size-abbreviation' -%}
-  </label>        
+    <input type="radio"
+            {% if option.selected_value == value %} checked="checked"{% endif %}
+           value="{{ value | escape }}"
+           data-index="option{{ option_index }}"
+           name="{{ option.name }}"
+           class="variant__input-{{ section_id }}{% unless product_available %} disabled{% endunless %} variant__input--size-button-{{ section_id }}"
+           data-size-name="{{ value | escape }}"
+           data-size-index="{{ size_option_index }}"
+           id="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}">
+    <label for="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}"
+           aria-label="{{ option.name }}: {{ value | escape }}"
+           class="variant__button-label{% unless product_available %} disabled{% endunless %} size-button">
+        {%- render 'size-abbreviation', type: product.type, name: option.name, value: value -%}
+    </label>
 </div>

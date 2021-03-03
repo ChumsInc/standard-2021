@@ -1,0 +1,373 @@
+<style>
+    .custom-grid__item__col-1 {
+        --cgi-col-start: 1;
+    }
+    .custom-grid__item__col-2 {
+        --cgi-col-start: 2;
+    }
+    .custom-grid__item__col-3 {
+        --cgi-col-start: 3;
+    }
+    .custom-grid__item__col-4 {
+        --cgi-col-start: 4;
+    }
+    .custom-grid__item__col-5 {
+        --cgi-col-start: 5;
+    }
+    .custom-grid__item__col-6 {
+        --cgi-col-start: 6;
+    }
+    .custom-grid__item__col-span-1 {
+        --cgi-col-span: 1;
+    }
+    .custom-grid__item__col-span-2 {
+        --cgi-col-span: 2;
+    }
+    .custom-grid__item__col-span-3 {
+        --cgi-col-span: 3;
+    }
+    .custom-grid__item__col-span-4 {
+        --cgi-col-span: 4;
+    }
+    .custom-grid__item__col-span-5 {
+        --cgi-col-span: 5;
+    }
+    .custom-grid__item__col-span-6 {
+        --cgi-col-span: 6;
+    }
+    .custom-grid__item__row-1 {
+        --cgi-row-start: 1;
+    }
+    .custom-grid__item__row-2 {
+        --cgi-row-start: 2;
+    }
+    .custom-grid__item__row-3 {
+        --cgi-row-start: 3;
+    }
+    .custom-grid__item__row-4 {
+        --cgi-row-start: 4;
+    }
+    .custom-grid__item__row-5 {
+        --cgi-row-start: 5;
+    }
+    .custom-grid__item__row-6 {
+        --cgi-row-start: 6;
+    }
+    .custom-grid__item__row-span-1 {
+        --cgi-row-span: 1;
+    }
+    .custom-grid__item__row-span-2 {
+        --cgi-row-span: 2;
+    }
+    .custom-grid__item__row-span-3 {
+        --cgi-row-span: 3;
+    }
+    .custom-grid__item__row-span-4 {
+        --cgi-row-span: 4;
+    }
+    .custom-grid__item__row-span-5 {
+        --cgi-row-span: 5;
+    }
+    .custom-grid__item__row-span-6 {
+        --cgi-row-span: 6;
+    }
+    .custom-grid__item__sm-col-1 {
+        --cgi-sm-col-start: 1;
+    }
+    .custom-grid__item__sm-col-2 {
+        --cgi-sm-col-start: 2;
+    }
+    .custom-grid__item__sm-col-3 {
+        --cgi-sm-col-start: 3;
+    }
+    .custom-grid__item__sm-col-4 {
+        --cgi-sm-col-start: 4;
+    }
+    .custom-grid__item__sm-col-5 {
+        --cgi-sm-col-start: 5;
+    }
+    .custom-grid__item__sm-col-6 {
+        --cgi-sm-col-start: 6;
+    }
+    .custom-grid__item__sm-col-span-1 {
+        --cgi-sm-col-span: 1;
+    }
+    .custom-grid__item__sm-col-span-2 {
+        --cgi-sm-col-span: 2;
+    }
+    .custom-grid__item__sm-col-span-3 {
+        --cgi-sm-col-span: 3;
+    }
+    .custom-grid__item__sm-col-span-4 {
+        --cgi-sm-col-span: 4;
+    }
+    .custom-grid__item__sm-col-span-5 {
+        --cgi-sm-col-span: 5;
+    }
+    .custom-grid__item__sm-col-span-6 {
+        --cgi-sm-col-span: 6;
+    }
+    .custom-grid__item__sm-row-1 {
+        --cgi-sm-row-start: 1;
+    }
+    .custom-grid__item__sm-row-2 {
+        --cgi-sm-row-start: 2;
+    }
+    .custom-grid__item__sm-row-3 {
+        --cgi-sm-row-start: 3;
+    }
+    .custom-grid__item__sm-row-4 {
+        --cgi-sm-row-start: 4;
+    }
+    .custom-grid__item__sm-row-5 {
+        --cgi-sm-row-start: 5;
+    }
+    .custom-grid__item__sm-row-6 {
+        --cgi-sm-row-start: 6;
+    }
+    .custom-grid__item__sm-row-span-1 {
+        --cgi-sm-row-span: 1;
+    }
+    .custom-grid__item__sm-row-span-2 {
+        --cgi-sm-row-span: 2;
+    }
+    .custom-grid__item__sm-row-span-3 {
+        --cgi-sm-row-span: 3;
+    }
+    .custom-grid__item__sm-row-span-4 {
+        --cgi-sm-row-span: 4;
+    }
+    .custom-grid__item__sm-row-span-5 {
+        --cgi-sm-row-span: 5;
+    }
+    .custom-grid__item__sm-row-span-6 {
+        --cgi-sm-row-span: 6;
+    }
+    .custom-grid {
+        display: grid;
+        grid-gap: {{ section.settings.gutter }};
+        grid-template-columns: repeat({{ section.settings.grid_columns_sm }}, 1fr);
+    }
+
+    @media screen and (min-width: 768px) {
+        .custom-grid {
+            grid-template-columns: repeat({{ section.settings.grid_columns }}, 1fr);
+        }
+    }
+
+    .custom-grid__item {
+        grid-column: var(--cgi-sm-col-start) / span var(--cgi-sm-col-span);
+        grid-row: var(--cgi-sm-row-start) / span var(--cgi-sm-row-span);
+    }
+    @media screen and (min-width: 768px) {
+        .custom-grid__item {
+            grid-column: var(--cgi-col-start) / span var(--cgi-col-span);
+            grid-row: var(--cgi-row-start) / span var(--cgi-row-span);
+        }
+        
+    }
+    .custom-grid__item--bg-image {
+        background-size: cover;
+    }
+</style>
+
+
+<div class="index-section" style="margin-top: {{ section.settings.margin_y }}; margin-bottom: {{ section.settings.margin_y }};">
+    <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+        <!-- {{ section.settings |  json }} -->
+        <div class="custom-grid custom-grid--g-{{ section.settings.gutter | replace: '.', '_'}}">
+
+            {% for block in section.blocks %}
+                <!-- block.settings = {{ block.settings |  json }} -->
+                <div class="custom-grid__item
+                            custom-grid__item__col-{{ block.settings.item_col_start }} custom-grid__item__col-span-{{ block.settings.item_col_span }}
+                            custom-grid__item__row-{{ block.settings.item_row_start }} custom-grid__item__row-span-{{ block.settings.item_row_span }}
+                            custom-grid__item__sm-col-{{ block.settings.item_col_start_sm }} custom-grid__item__sm-col-span-{{ block.settings.item_col_span_sm }}
+                            custom-grid__item__sm-row-{{ block.settings.item_row_start_sm }} custom-grid__item__sm-row-span-{{ block.settings.item_row_span_sm }}
+                            {% if block.settings.alignment %}align--{{ block.settings.alignment }}{% endif %}"
+                    {{ block.shopify_attributes }}>
+                    <div class="custom-grid__item-inner custom-grid__item-inner--{{ block.type }} {% if block.settings.image == blank and block.type == 'image' %} custom-grid__item-inner--placeholder-image{% endif %}">
+                        {% case block.type %}
+                            {% when 'html' %}
+                                {% if block.settings.code != blank %}
+                                    <div class="rte" data-section-id="{{ section.id }}" data-section-type="featured-content-section">
+                                        {{ block.settings.code }}
+                                    </div>
+                                {% else %}
+                                    <div class="rte">
+                                        {{ 'home_page.onboarding.no_content' | t }}
+                                    </div>
+                                {% endif %}
+                            {% when 'image' %}
+                                {% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}
+                                    {% if block.settings.image != blank %}
+                                        {% assign img_size = 400 | times: block.settings.item_col_span | append: 'x' %}
+                                        <div class="custom-grid__item--bg-image" style="height: 0;
+                                                padding-bottom: calc({{ 100 | divided_by: block.settings.image.aspect_ratio }}% {% unless block.settings.item_col_span == 1 %} - {{ section.settings.gutter| default: '0px' }} / {{ block.settings.item_col_span }}{% endunless %});
+                                                background-image: url({{ block.settings.image | img_url: img_size }})">
+                                        </div>
+                                    {% else %}
+                                        <div class="custom-grid__item--bg-image" style="height: 0;
+                                                padding-bottom: calc({{ 100 | divided_by: block.settings.image.aspect_ratio }}% {% unless block.settings.item_col_span == 1 %} - {{ section.settings.gutter| default: '0px' }} / {{ block.settings.item_col_span }}{% endunless %});">
+                                            <div class="image-wrap">
+                                                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% if block.settings.link != blank %}</a>{% endif %}
+                        {% endcase %}
+                    </div>
+                </div>
+            {% endfor %}
+            {% if section.blocks.size == 0 %}
+                <div class="page-width">
+                    <div class="grid">
+                        <div class="grid__item">
+                            <div class="rte">
+                                {{ 'home_page.onboarding.no_content' | t }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% schema %}
+{
+    "name": "Image Grid",
+    "max_blocks": 12,
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "full_width",
+            "label": "Full page width",
+            "default": false
+        },
+        {
+            "type": "text",
+            "id": "margin_y",
+            "label": "Amount of margin above and below section",
+            "default": "2rem"
+        },
+        {
+            "type":"number",
+            "id":"grid_columns",
+            "label":"Number of columns (1-12)",
+            "default":4
+        },
+        {
+            "type":"number",
+            "id":"grid_columns_sm",
+            "label":"Number of columns (SM, 1-12)",
+            "default":2
+        },
+        {
+            "type": "text",
+            "id": "gutter",
+            "label": "Gutter size",
+            "default": "0.5rem"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "image",
+            "name": "Image",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Image"
+                },
+                {
+                    "type": "url",
+                    "id": "link",
+                    "label": "Link"
+                },
+                {
+                    "type": "number",
+                    "id": "item_col_start",
+                    "label": "Start Column",
+                    "default": 1
+                },
+                {
+                    "type": "number",
+                    "id": "item_col_span",
+                    "label": "Column Span",
+                    "default": 1
+                },
+                {
+                    "type": "number",
+                    "id": "item_row_start",
+                    "label": "Start Row",
+                    "default": 1
+                },
+                {
+                    "type": "number",
+                    "id": "item_row_span",
+                    "label": "Row Span",
+                    "default": 1
+                },
+                {
+                    "type": "number",
+                    "id": "item_col_start_sm",
+                    "label": "Start Column (SM)",
+                    "default": 1
+                },
+                {
+                    "type": "number",
+                    "id": "item_col_span_sm",
+                    "label": "Column Span (SM)",
+                    "default": 1
+                },
+                {
+                    "type": "number",
+                    "id": "item_row_start_sm",
+                    "label": "Start Row (SM)",
+                    "default": 1
+                },
+                {
+                    "type": "number",
+                    "id": "item_row_span_sm",
+                    "label": "Row Span (SM)",
+                    "default": 1
+                },
+                {
+                    "type": "select",
+                    "id": "alignment",
+                    "label": "Vertical alignment",
+                    "default": "top-middle",
+                    "info": "Aligns when next to other custom content",
+                    "options": [
+                        {"value": "top-middle","label": "Top"},
+                        {"value": "center","label": "Middle"},
+                        {"value": "bottom-middle","label": "Bottom"}
+                    ]
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+        "name": "Image Grid",
+        "category": "Advanced layout",
+        "blocks": [
+            {
+                "type": "image",
+                "settings": {
+                    "item_col_start": 1,
+                    "item_col_span": 1,
+                    "item_row_start": 1,
+                    "item_row_span":2,
+                    "item_col_start_sm": 1,
+                    "item_col_span_sm": 2,
+                    "item_row_start_sm": 1,
+                    "item_row_span_sm":2
+                }
+            }
+        ]
+        }
+    ]
+}
+{% endschema %}

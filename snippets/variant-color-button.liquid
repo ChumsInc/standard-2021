@@ -6,7 +6,8 @@ variables required for this snippet:
 - option_index
 - option
 - section_id
-- color_option_index
+- color_option_index,
+product_available
 {% endcomment %}
 
 
@@ -55,8 +56,9 @@ variables required for this snippet:
            class="variant__button-label 
                 color-swatch color-swatch--{{ color_code | handleize }} 
                 {% unless product_available %} disabled{% endunless %}"
-           title="{{value | upper}}">
-        <span class="sr-only">{{- value | escape -}}</span>
+           aria-label="{{value | upper}} {% unless product_available %}{{ 'products.product.sold_out' | t }}{% endunless %} "
+           title="{{value | upper}} {% unless product_available %}{{ 'products.product.sold_out' | t }}{% endunless %} ">
+        <span class="sr-only">{{- value | escape -}} {% unless product_available %}{{ 'products.product.sold_out' | t }}{% endunless %}</span>
     </label>
 
     {% render 'product-variant-ldjson',

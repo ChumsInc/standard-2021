@@ -29,6 +29,9 @@
 
   {% render 'social-meta-tags' %}
 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+        rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+        crossorigin="anonymous">
   {% render 'font-face' %}
   {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
   {{ 'swatches.scss.css' | asset_url | stylesheet_tag }}
@@ -104,10 +107,9 @@
   {%- endif -%}
   {% render 'judgeme_core' %}
 
-  
-
+  <!-- shogun-head -->
   {% render 'shogun-head' %}
-  {% include 'judgeme_core' %}
+  <!-- /shogun-head -->
 </head>
 
 <body class="template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}{% if settings.enable_currencies %} currencies-enabled{% endif %}" data-transitions="false">
@@ -179,5 +181,8 @@ _learnq.push(['track', 'Viewed Page',
   {% if template contains 'product' %}
     {% render 'recently-viewed-product-template' %}
   {% endif %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+          crossorigin="anonymous"></script>
 </body>
 </html>

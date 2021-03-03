@@ -8,68 +8,67 @@
 {%- assign productType = productType | handleize -%}
 
 {% if product %}
-  {%- assign blockId = block.id | append: product.id -%}
+    {%- assign blockId = block.id | append: product.id -%}
 {% endif %}
 
-{%- assign descriptionParts = product.description | split:"<!-- split -->" -%}
-<div class="tabs__wrapper">
-  <div class="tabs__tab-bar">
-    {% if descriptionParts.size >= 1 %}
-    <button type="button" 
-            class="tabs__tab-btn tabs__tab-btn--selected" 
-            aria-controls="ProductDescription-{{blockId}}-description" aria-expanded="true">
-      Description
-    </button>
-    {% endif %}
-    
-    {% if descriptionParts.size >= 2 %}
-    <button type="button" 
-            class="tabs__tab-btn" 
-            aria-controls="ProductDescription-{{blockId}}-details" aria-expanded="false">
-     Details
-    </button>
-    {% endif %}
+{%- assign descriptionParts = product.description | split: "<!-- split -->" -%}
+<!-- # tabs = {{ descriptionParts.size }} -->
 
-    {% if descriptionParts.size >= 3 %}
-    <button type="button" 
-            class="tabs__tab-btn" 
-            aria-controls="ProductDescription-{{blockId}}-other" aria-expanded="false">
-     {% if productType == 'apparel' %}Sizing{% else %}More{% endif %}
-    </button>
+<ul class="nav nav-tabs nav-fill nav-justified" role="tablist">
+    {% if descriptionParts.size >= 1 %}
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" href="#product-single__{{ blockId }}-description-bs"
+               id="product-single__{{ blockId }}-description-tab" data-bs-toggle="tab"
+               role="tab" aria-controls="product-single__{{ blockId }}-description-bs" aria-selected="true">
+                Description
+            </a>
+        </li>
     {% endif %}
-  </div>
-  
-  {% if descriptionParts.size >= 1 %}
-  <div id="ProductDescription-{{blockId}}-description" 
-       class="tabs__tab-content tabs__tab-content--selected">
-    <div class="tabs__tab-content--inner">
-      <div class="product-single__description rte">
-        {{ descriptionParts[0] }}
-      </div>    
-    </div>
-  </div>
-  {% endif %}
-  
-  {% if descriptionParts.size >= 2 %}
-  <div id="ProductDescription-{{blockId}}-details" 
-       class="tabs__tab-content">
-    <div class="tabs__tab-content--inner">
-      <div class="product-single__description rte">
-        {{ descriptionParts[1] }}
-      </div>
-    </div>
-  </div>
-  {% endif %}
-  
-  {% if descriptionParts.size >= 3 %}
-  <div id="ProductDescription-{{blockId}}-other" 
-       class="tabs__tab-content">
-    <div class="tabs__tab-content--inner">
-      <div class="product-single__description rte">
-        {{ descriptionParts[2] }}
-      </div>
-    </div>
-  </div>
-  {% endif %}
-  
+    {% if descriptionParts.size >= 2 %}
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" href="#product-single__{{ blockId }}-details-bs"
+               id="product-single__{{ blockId }}-details-tab" data-bs-toggle="tab"
+               role="tab" aria-controls="product-single__{{ blockId }}-details-bs" aria-selected="false">
+                Details
+            </a>
+        </li>
+    {% endif %}
+    {% if descriptionParts.size >= 3 %}
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" href="#product-single__{{ blockId }}-other-bs"
+               id="product-single__{{ blockId }}-other-tab" data-bs-toggle="tab"
+               role="tab" aria-controls="product-single__{{ blockId }}-other-bs" aria-selected="false">
+                {% if productType == 'apparel' %}Sizing{% else %}More{% endif %}
+            </a>
+        </li>
+    {% endif %}
+</ul>
+<div class="tab-content" id="product-single__{{ blockId }}-description-content">
+    {% if descriptionParts.size >= 1 %}
+        <div class="tab-pane fade show active" id="product-single__{{ blockId }}-description-bs"
+             role="tabpanel" tabindex="0"
+             aria-labelledby="product-single__{{ blockId }}-description-tab">
+            <div class="product-single__description rte">
+                {{ descriptionParts[0] }}
+            </div>
+        </div>
+    {% endif %}
+    {% if descriptionParts.size >= 2 %}
+        <div class="tab-pane fade" id="product-single__{{ blockId }}-details-bs"
+             role="tabpanel" tabindex="0"
+             aria-labelledby="product-single__{{ blockId }}-details-tab">
+            <div class="product-single__description rte">
+                {{ descriptionParts[1] }}
+            </div>
+        </div>
+    {% endif %}
+    {% if descriptionParts.size >= 3 %}
+        <div class="tab-pane fade" id="product-single__{{ blockId }}-other-bs"
+             role="tabpanel" tabindex="0"
+             aria-labelledby="product-single__{{ blockId }}-other-tab">
+            <div class="product-single__description rte">
+                {{ descriptionParts[2] }}
+            </div>
+        </div>
+    {% endif %}
 </div>

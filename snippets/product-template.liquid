@@ -1,6 +1,14 @@
 {% comment %}
-	2019-09-08/SM - Currently description_style is "default", not sure where this is changed?
+	Variables used in this snippet:
+	description_style: section.settings.description_style,
+    image_position: section.settings.image_position,
+    image_container_width: section.settings.image_size,
+    section_id: product.id,
+    social: section.settings.social_enable,
+    thumbnail_position: section.settings.thumbnail_position
 {% endcomment %}
+
+<!-- section.settings {{ section.settings | json }} -->
 
 {% unless thumbnail_position %}
   {%- assign thumbnail_position = 'beside' -%}
@@ -45,7 +53,12 @@
       <div class="grid{% unless image_position == 'left' %} grid--product-images-right{% endunless %}">
         {% if image_position == 'left' %}
           <div class="grid__item {{ product_image_width }}">
-            {% include 'product-images-2', section_id: section_id, isModal: isModal, thumbnail_position: thumbnail_position %}
+            {% include 'product-images-2',
+                    current_variant: current_variant,
+                    section_id: section_id,
+                    isModal: isModal,
+                    thumbnail_position: thumbnail_position
+            %}
           </div>
         {% endif %}
 
@@ -73,9 +86,9 @@
             {% render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: false, product: product %}
 
             {% if settings.sku_enable %}
-              <p id="Sku-{{ section_id }}" class="product-single__sku">
+              <p id="Sku-{{ section_id }}" class="product-single__sku" aria-live="polite" aria-atomic="true">
                 {% if current_variant.sku %}
-                  {{ current_variant.sku }}
+                  <span class="sr-only">SKU:</span> {{ current_variant.sku }}
                 {% endif %}
               </p>
             {% endif %}
@@ -104,6 +117,7 @@
             {% endif %}
 
             <span id="ProductPrice-{{ section_id }}"
+                  aria-live="polite" aria-atomic="true"
               class="product__price{% if current_variant.compare_at_price > current_variant.price %} on-sale{% endif %}">
               {{ current_variant.price | money }}
             </span>

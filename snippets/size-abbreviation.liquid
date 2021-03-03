@@ -1,11 +1,12 @@
-{%- assign productType = product.type | handleize -%}
-{%- assign optionName = option.name | handleize -%}
+{%- assign productType = type | handleize -%}
+{%- assign optionName = name | handleize -%}
 {%- assign optionValue = value | handleize -%}
 
 {%- case productType -%}
 	{%- when 'retainer' -%}
 		{%- case optionName -%}
 			{%- when 'end-size' -%}
+				<span class="sr-only">End Size: {{ optionValue }}</span>
 				{%- case optionValue -%}
 					{%- when 'regular' -%}
 						{{- 'R' -}}
@@ -19,6 +20,7 @@
 						{{- value | escape -}}
 				{%- endcase -%}
 			{%- when 'rope-size' -%}
+				<span class="sr-only">Rope Size: {{ optionValue }}</span>
 				{%- case optionValue -%}
 					{%- when '3mm' -%}
 						{{- '3' -}}
@@ -30,6 +32,7 @@
 						{{- value | escape -}}
 				{%- endcase -%}
 			{%- when 'length' -%}
+			<span class="sr-only">Length: {{ optionValue }}</span>
 				{%- case optionValue -%}
 					{%- when 'regular' -%}
 						{{- 'R' -}}
@@ -37,11 +40,13 @@
 						{{- 'L' -}}
 				{%- endcase -%}
 			{%- else -%}
+			<span class="sr-only">Size: {{ optionValue }}</span>
 			{{- value | escape -}}
 		{%- endcase -%}
 	{%- when 'apparel' -%}
 		{%- case optionName -%}
 			{%- when 'size' -%}
+				<span class="sr-only">Size: {{ optionValue }}</span>
 				{%- case optionValue -%}
 					{%- when 'small' -%}
 						{{- 'SM' -}}
@@ -60,6 +65,7 @@
 	{%- when 'outdoor-accessories' -%}
 		{%- case optionName -%}
 			{%- when 'width' -%}
+				<span class="sr-only">Width: {{ optionValue }}</span>
 				{%- case optionValue -%}
 					{%- when 'standard' -%}
 						{{- 'STD' -}}
@@ -73,6 +79,7 @@
 						{{- value | escape -}}
 				{%- endcase -%}
 			{%- when 'size' -%}
+				<span class="sr-only">Size: {{ optionValue }}</span>
 				{%- case optionValue -%}
 					{%- when 'small' -%}
 						{{- 'S' -}}
@@ -87,6 +94,7 @@
 	{%- when 'bags-cases' -%}
 		{%- case optionName -%}
 			{%- when 'size' -%}
+				<span class="sr-only">Size: {{ optionValue }}</span>
 				{%- case optionValue -%}
 					{%- when 'small' -%}
 						{{- 'S' -}}

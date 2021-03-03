@@ -26,7 +26,7 @@
     	{% else %}    	
         {% endif %}
       {% endif %}
-      <span class="divider" aria-hidden="true">&gt;</span>
+      <span class="divider" aria-hidden="true"></span>
       <span>{{ product.title }}</span>
       {% capture jsonldElement %}
         {"@type": "ListItem","position": {% increment elPosition %},"name": "{{ product.title }}","item": "{{ shop.url }}{{ product.url }}"}
@@ -44,7 +44,7 @@
         {"@type": "ListItem", "position": {% increment elPosition %}, "name": "Products", "item": "{{ shop.url }}{{ routes.root_url }}"}
       {% endcapture %}
       {% assign jsonld = jsonld | append: jsonldElement %} 
-      <span class="divider" aria-hidden="true">/</span>
+      <span class="divider" aria-hidden="true"></span>
 
       {% if current_tags %}
 
@@ -55,7 +55,7 @@
           {% endcapture %}
           {% assign jsonld = jsonld | append: ", " | append: jsonldElement %} 
 
-        <span class="divider" aria-hidden="true">&gt;</span>
+        <span class="divider" aria-hidden="true"></span>
 
         {% for tag in current_tags %}
           {% include 'filter-out-custom-tags' %}
@@ -93,10 +93,10 @@
         {"@type": "ListItem","position": {% increment elPosition %},"name": "{{ blog.title }}","item": "{{ shop.url }}{{ blog.url }}"}
       {% endcapture %}
       {% assign jsonld = jsonld | append: ", " | append: jsonldElement %} 
-      <span class="divider" aria-hidden="true">&gt;</span>
+      <span class="divider" aria-hidden="true"></span>
       {% if current_tags %}
         {{ blog.title | link_to: blog.url }}
-        <span class="divider" aria-hidden="true">&gt;</span>
+        <span class="divider" aria-hidden="true"></span>
         <span>{{ current_tags | join: " + " }}</span>
       {% else %}
     	{{ blog.title }}
@@ -117,9 +117,9 @@
         {"@type": "ListItem","position": {% increment elPosition %},"name": "{{ blog.title }}","item": "{{ shop.url }}{{ blog.url }}"}
       {% endcapture %}
       {% assign jsonld = jsonld | append: ", " | append: jsonldElement %} 
-      <span class="divider" aria-hidden="true">&gt;</span>
+      <span class="divider" aria-hidden="true"></span>
       {{ blog.title | link_to: blog.url }}
-      <span class="divider" aria-hidden="true">&gt;</span>
+      <span class="divider" aria-hidden="true"></span>
     	{{ article.title | split: '|' | first }}
         {% capture jsonldElement %}
           {"@type": "ListItem","position": {% increment elPosition %},"name": "{{ article.title }}","item": "{{ shop.url }}{{ article.url }}"}
@@ -141,7 +141,7 @@
       {% endcapture %}
       {% assign jsonld = jsonld | append: jsonldElement %} 
       {% if page_parent %}
-        <span class="divider" aria-hidden="true">&gt;</span>
+        <span class="divider" aria-hidden="true"></span>
         <span>{{ page_parent.title | link_to: page_parent.url }}</span>
         {% capture jsonldElement %}
           {"@type": "ListItem","position": {% increment elPosition %},"name": "{{ page_parent.title }}","item": "{{ shop.url }}{{ page_parent.url }}"}
@@ -153,7 +153,7 @@
         {"@type": "ListItem","position": {% increment elPosition %},"name": "{{ page_title }}","item": "{{ shop.url }}{{ page.url }}"}
       {% endcapture %}
       {% assign jsonld = jsonld | append: ", " | append: jsonldElement %} 
-      <span class="divider" aria-hidden="true">&gt;</span>
+      <span class="divider" aria-hidden="true"></span>
       <span>{{ page_title }}</span>
       <script type="application/ld+json">
               {"@context": "https://schema.org","@type": "BreadcrumbList","itemListElement": [{{ jsonld }}]}

@@ -43,6 +43,7 @@ variables required for this snippet
     <label class="variant__label
                 {% if option.name == 'Default' or option.name == 'Title' %} hidden-label{% endif %}
                 {% unless settings.variant_labels_enable %} hidden-label{% endunless %}"
+           aria-live="polite" aria-atomic="true"
            for="ProductSelect-{{ section_id }}-option-{{ option_index0 }}">
         {{ option.name }}
         {% if is_color %}
@@ -66,12 +67,20 @@ variables required for this snippet
     {% assign product_available = true %}
 
     <fieldset class="variant-input-wrap {% if is_color %}variant-input-wrap--colors{% endif %}"
+              aria-live="polite" aria-atomic="true"
               name="{{ option.name }}"
               data-index="option{{ option_index }}"
               id="ProductSelect-{{ section_id }}-option-{{ option_index0 }}">
         {% for value in option.values %}
           {% if is_size %}
-            {% include 'variant-size-button' %}
+            {% render 'variant-size-button', product: product,
+                    option: option,
+                    product_available: product_available,
+                    option_index: option_index,
+                    value: value,
+                    section_id: section_id,
+                    size_option_index: size_option_index
+            %}
           {% elsif is_color %}
       		{% assign variantField = 'option' | append: option_index %}
             {% if product.options.size == 1 %}      		
@@ -84,7 +93,15 @@ variables required for this snippet
       			{% assign variantField = 'option' | append: option_index %}
       			{% assign variant = product.variants | where: variantField, value | first %}
             {% endif %}
-            {% include 'variant-color-button' %}
+            {% render 'variant-color-button',
+                    variant: variant,
+                    product: product,
+                    value: value,
+                    option_index: option_index,
+                    option: option,
+                    section_id: section_id,
+                    color_option_index: color_option_index,
+                    product_available: product_available %}
           {% else %}
           <label for="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}"
                  class="variant__button-label{% unless product_available %} disabled{% endunless %}">

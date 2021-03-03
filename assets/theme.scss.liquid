@@ -1726,7 +1726,7 @@ h6 {
 }
 
 /*================ Partials | Lists ================*/
-
+/*
 ul, ol {
   margin: 0 0 ($gutter / 2) ($gutter);
   padding: 0;
@@ -1743,7 +1743,7 @@ ul ul, ul ol,
 ol ol, ol ul { margin: 4px 0 5px 20px; }
 
 li { margin-bottom: 0.25em; }
-
+*/
 ul.square { list-style: square outside; }
 
 ul.disc { list-style: disc outside; }
@@ -5196,6 +5196,9 @@ $color-blankstate-background: #e1e1e1;
   flex: 1 1 100%;
   color: $colorHeroText;
   margin-bottom: 0;
+  .breadcrumb {
+    justify-content: center;
+  }
 
   a {
     color: $colorHeroText;
@@ -5843,7 +5846,9 @@ $color-blankstate-background: #e1e1e1;
   @include baseSmallFontStack;
   margin: 10px 0;
   cursor: default;
-  
+  background-color: transparent;
+  justify-content: flex-start;
+
   .page-content & {
     margin-top: -45px;
     margin-bottom: 45px;    
@@ -5861,7 +5866,6 @@ $color-blankstate-background: #e1e1e1;
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
-    color: transparent;
   }
 }
 
@@ -11957,6 +11961,32 @@ iframe.zoid-component-frame {
 }
 
 /*================ Tabs ==================================*/
+.nav.nav-tabs {
+  border-width: 0;
+  justify-content: space-evenly;
+  .nav-item {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+  .nav-link {
+    border-width: 0;
+    width: 100%;
+    &:after {
+      content: '';
+      display: block;
+      margin: 0 auto;
+      margin-top: 0.25rem;
+      width: 0;
+      border-bottom: 2px solid transparent;
+      transition: all 250ms ease-in-out;
+    }
+    &.active:after {
+      width: 80%;
+      border-color: black;
+    }
+  }
+}
+
 .tabs__wrapper {
   
   .tabs__tab-bar {

@@ -2991,6 +2991,7 @@ lazySizesConfig.expFactor = 4;
   
         addToCart: '#AddToCart-' + sectionId,
         addToCartText: '#AddToCartText-' + sectionId,
+        soldOutAlert: '#ProductSelect-' + sectionId + '__sold-out-alert',
   
         originalSelectorId: '#ProductSelect-' + sectionId,
         singleOptionSelector: '.variant__input-' + sectionId,
@@ -3540,7 +3541,8 @@ lazySizesConfig.expFactor = 4;
   
       updateCartButton: function(evt) {
         var variant = evt.variant;
-  
+        document.querySelectorAll(this.selectors.soldOutAlert).forEach(el => el.innerText = '');
+
         if (variant) {
           if (variant.available) {
             // Available, enable the submit button and change text
@@ -3550,6 +3552,7 @@ lazySizesConfig.expFactor = 4;
             // Sold out, disable the submit button and change text
             $(this.selectors.addToCart).addClass(classes.disabled).prop('disabled', true);
             $(this.selectors.addToCartText).html(theme.strings.soldOut);
+            document.querySelectorAll(this.selectors.soldOutAlert).forEach(el => el.innerText = theme.strings.soldOut)
           }
         } else {
           // The variant doesn't exist, disable submit button
