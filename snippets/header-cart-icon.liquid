@@ -1,0 +1,8 @@
+<a href="{{ routes.cart_url }}" class="site-nav__link site-nav__link--icon js-drawer-open-cart js-no-transition"
+   aria-controls="CartDrawer">
+    <span class="cart-link">
+        {% render 'icon-bag' %}
+        <span class="icon__fallback-text">{{ 'layout.cart.title' | t }}</span>
+        <span class="cart-link__bubble{% if cart.item_count > 0 %} cart-link__bubble--visible{% endif %}"></span>
+    </span>
+</a>

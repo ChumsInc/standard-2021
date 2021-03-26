@@ -4,20 +4,7 @@
         {%- assign header_logo_size = block.settings.desktop_logo_width | append: 'x' -%}
         {%- assign header_logo_size_mobile = block.settings.mobile_logo_width | append: 'x' -%}
 
-        {% style %}
-            .navbar-brand a.navbar-brand__logo {
-                width: {{ block.settings.mobile_logo_width }}px;
-            }
-            @media only screen and (min-width: 769px) {
-                .navbar-brand a.navbar-brand__logo {
-                    width: {{ block.settings.desktop_logo_width }}px;
-                    padding-left: 2rem;
-                    padding-right: 2rem;
-                }
-            }
-        {% endstyle %}
-
-        <div class="navbar-brand" itemscope itemtype="//schema.org/Organization">
+        <div>
             {% if block.settings.logo %}
                 {% comment %}
                   .logo--has-inverted is only applied to the default logo if the inverted logo exists. That way it'll only be hidden on the slider when it has a backup.
