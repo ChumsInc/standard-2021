@@ -1,0 +1,34 @@
+<div class="site-header__search-container">
+    <div class="site-header__search">
+        <div class="screen-width">
+            <form action="/search" method="get" class="site-header__search-form" role="search"
+                  aria-label="Products"
+                  aria-controls="site-header__search-results"
+                  id="site-header__search-form"
+                  autocomplete="off">
+                <input type="hidden" name="type" value="{{ settings.search_type }}">
+                <button type="submit" class="text-link site-header__search-btn">
+                    {% render 'icon-search' %}
+                    <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
+                </button>
+                <input type="search" name="q" value="{{ search.terms | escape }}"
+                       placeholder="{{ 'general.search.placeholder' | t }}"
+                       autocomplete="off"
+                       class="site-header__search-input"
+                       aria-label="{{ 'general.search.placeholder' | t }}">
+            </form>
+
+            <button type="button" class="js-search-header-close text-link site-header__search-btn" tabindex="-1">
+                {% render 'icon-close' %}
+                <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
+            </button>
+        </div>
+    </div>
+    <div class="site-header__search-results" id="site-header__search_results" role="region">
+        <div class="screen-width">
+            <div class="site-header__search-results-count" aria-live="polite"></div>
+            <ul class="site-header__search-results-list" aria-live="polite" aria-atomic="true">
+            </ul>
+        </div>
+    </div>
+</div>
