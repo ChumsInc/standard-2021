@@ -76,6 +76,7 @@
   </div>
 
   <div class="hero__text-wrap">
+    {% if section.settings.video_link %}<a href="{{section.settings.video_link}}">{% endif %}
     <div class="page-width">
       <div class="hero__text-content {{ section.settings.text_align }}">
         <div class="hero__text-shadow">
@@ -122,6 +123,8 @@
         </div>
       </div>
     </div>
+    {% if section.settings.video_link %}</a>{% endif %}
+
   </div>
 
 </div>
@@ -208,6 +211,12 @@
         "label": "Background video link",
         "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
         "info": "Supports YouTube, .MP4 and Vimeo. Not all features supported by Vimeo. [Learn more](https://archetypethemes.co/blogs/impulse/how-do-i-add-background-videos)"
+      },
+	  {
+        "type": "url",
+        "id": "video_link",
+        "label": "Video link",
+        "info": "Link the video to somewhere, use if you want the video to link to a particular page. Works best for local .mp4 videos"
       },
       {
         "type": "select",

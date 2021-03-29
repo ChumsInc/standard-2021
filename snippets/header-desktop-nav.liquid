@@ -70,10 +70,12 @@
                             <div role="group" aria-labelledby="{{ child_menu_id }}"
                                  class="grid__item medium-up--one-fifth appear-animation appear-delay-{{ animation_column }}">
                                 {%- assign subcollection_drop = false -%}
+                                {%- assign  subcollection_image = false -%}
                                 {% if childlink.levels > 0 and childlink.url contains '/collections/' %}
                                     {%- assign subcollection_handle = childlink.url | remove: '/collections/' -%}
                                     {%- assign subcollection_drop = collections[subcollection_handle] -%}
                                     {% if subcollection_drop.image != blank %}
+                                        {%- assign  subcollection_image = true -%}
                                         <a href="{{ childlink.url }}" role="menuitem"
                                            {% if current_url == childlink.url %}aria-current="page"{% endif %}
                                            aria-label="{{ ariaLabel }}"
@@ -89,7 +91,7 @@
                                     {% assign submenu_image = linkObject.metafields.chums.menu_image %}
                                 {% endif %}
 
-                                {% if submenu_image %}
+                                {% if submenu_image and subcollection_image == false %}
                                     {%- assign previous_column_type = 'full' -%}
                                     <a href="{{ childlink.url }}" id="{{ child_menu_id }}" role="menuitem"
                                        {% if current_url == childlink.url %}aria-current="page"{% endif %}
