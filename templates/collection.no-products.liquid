@@ -1,12 +1,14 @@
-{% include 'shogun-products', content: collection %}
+{% render 'shogun-products', content: collection %}
+
 {{collection.metafields.shogun.above}}
-{% section 'collection-header' %}
+{% comment %}{% section 'collection-header' %}{% endcomment %}
 
 <div id="CollectionAjaxResult" class="collection-content">
   <div id="CollectionAjaxContent">
     <div class="page-width">
       <div class="grid">
         {% section 'collection-promotions' %}
+        {% section 'collection-filterable-products2' %}
       </div>
     </div>
   </div>

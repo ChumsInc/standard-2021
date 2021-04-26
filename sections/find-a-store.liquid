@@ -200,7 +200,7 @@
 
             init: function () {
                 map.options = {
-                    zoom: 12,
+                    zoom: 10,
                     center: ui.getCenter(),
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 };
@@ -294,6 +294,7 @@
         init = function () {
             ui.init();
             map.init();
+          	map.search();
         };
 
 
