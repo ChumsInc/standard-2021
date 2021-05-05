@@ -27,22 +27,12 @@
   data-product-url="{{ product.url | within: collection }}"
   data-aspect-ratio="{{ 100 | divided_by: product.featured_image.aspect_ratio }}"
   data-img-url="{{ product_img_structure }}"
-  {% if settings.product_zoom_enable %}
-    data-image-zoom="true"
-  {% endif %}
-  {% if settings.inventory_enable %}
-    data-inventory="true"
-  {% endif %}
-  {% unless isModal %}
-    data-enable-history-state="true"
-  {% endunless %}
-  {% if isModal %}
-    data-lazyload-content="true"
-  {% endif %}>
+  {% if settings.product_zoom_enable %}data-image-zoom="true"{% endif %}
+  {% if settings.inventory_enable %}data-inventory="true"{% endif %}
+  {% unless isModal %}data-enable-history-state="true"{% endunless %}
+  {% if isModal %}data-lazyload-content="true"{% endif %}>
     <div class="page-width">
-      {% if settings.show_breadcrumbs and isModal != true %}
-      {% include 'breadcrumbs' %}
-      {% endif %}
+      {% if settings.show_breadcrumbs and isModal != true %}{% include 'breadcrumbs' %}{% endif %}
     </div>
 
   {% include 'product-template-variables' %}

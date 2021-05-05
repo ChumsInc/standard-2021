@@ -1,0 +1,109 @@
+
+.drawer {
+  display: none;
+  position: fixed;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  top: 0;
+  bottom: 0;
+  padding: 0 var(--chums-drawerGutterSmall) var(--chums-drawerGutterSmall);
+  max-width: 95%;
+  z-index: var(--chums-zindexDrawer);
+  color: var(--chums-colorDrawerText);
+  background-color: var(--chums-colorDrawers);
+  box-shadow: 0 0 150px rgba(0,0,0,0.1);
+  transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+  @include media-breakpoint-up(md) {
+    padding: 0 var(--chums-drawerGutterLarge) var(--chums-drawerGutterLarge);
+  }
+
+  a:not(.btn) {
+    color: var(--chums-colorDrawerText);
+
+    &:hover {
+      color: var(--chums-colorDrawerText);
+    }
+  }
+
+  input,
+  textarea {
+    border-color: var(--chums-colorDrawerBorder);
+  }
+
+  .btn {
+    background-color: var(--chums-colorDrawerButton);
+    color: var(--chums-colorDrawerButtonText);
+  }
+}
+
+.drawer--left {
+  width: var(--chums-drawerNavWidth);
+  left: calc(-1 * var(--chums-drawerNavWidth));
+
+  &.drawer--is-open {
+    display: block;
+    transform: translateX(var(--chums-drawerNavWidth));
+    transition-duration: 0.45s;
+  }
+}
+
+.drawer--right {
+  width: var(--chums-drawerCartWidth);
+  right: calc(-1 * var(--chums-drawerCartWidth));
+
+  @include media-breakpoint-up(md) {
+    width: var(--chums-drawerCartWidthLarge);
+    right: calc(-1 * var(--chums-drawerCartWidthLarge));
+  }
+
+  &.drawer--is-open {
+    display: block;
+    transform: translateX(calc(-1 * var(--chums-drawerCartWidth)));
+    transition-duration: 0.45s;
+
+    @include media-breakpoint-up(md) {
+      transform: translateX(calc(-1 * var(--chums-drawerCartWidthLarge)));
+    }
+  }
+}
+
+.js-drawer--main-content-after {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--chums-colorModalBg);
+  opacity: 0;
+  z-index: var(--chums-zindexDrawerOverlay);
+
+}
+.js-drawer {
+  &-open {
+    overflow: hidden;
+    .main-content::after {
+      @extend .js-drawer--main-content-after;
+      animation: overlay-on 0.35s forwards;
+    }
+    .appear-animation {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+    &--search & {
+      z-index: var(--chums-z-index-header-search);
+    }
+  }
+  &-closing {
+    .main-content::after {
+      @extend .js-drawer--main-content-after;
+      animation: overlay-off 0.25s forwards;
+    }
+    .appear-animation {
+      transition-duration: 0s;
+      transition-delay: 0.5s;
+    }
+  }
+}

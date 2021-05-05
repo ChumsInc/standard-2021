@@ -4978,12 +4978,11 @@ $color-blankstate-background: #e1e1e1;
 
     .site-header__search-results-list {
       display: none;     
-      margin-left: 70px;
       list-style-type: none;
       padding: 10px;
       background-color: white;
-      box-shadow: 0 0 3px black;
-      max-width: 350px;    
+      box-shadow: 0 2px 3px black;
+      max-width: 100vw;
       &.has-results {
         display: block;
       }
@@ -9098,11 +9097,13 @@ $label-bottom-margin: 12px;
   opacity: 0;
   transform: translateY(5px);
   transition: opacity 0.15s ease, transform 0.15s ease-out, background 0.3s ease;
+  display: block;
+  width: 100%;
 
   .no-js & {
     display: none;
   }
-
+  .grid-product__content:focus-within &,
   .grid-product__content:hover & {
     opacity: 1;
     transform: translateY(0);
@@ -12967,4 +12968,9 @@ body {
 
 .jdgm-preview-badge .jdgm-star {
     color: #808080 !important;
+}
+
+#judgeme_product_reviews .jdgm-rev__timestamp {
+  opacity: 0.75;
+  margin-left: 0.5rem;
 }

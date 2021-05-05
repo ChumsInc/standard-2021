@@ -201,6 +201,7 @@
                             {% when 'image' %}
                                 {% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}
                                     {% if block.settings.image != blank %}
+                                        <span class="visually-hidden">{{ block.settings.image.alt }}</span>
                                         {% assign img_size = 400 | times: block.settings.item_col_span | append: 'x' %}
                                         <div class="custom-grid__item--bg-image" style="height: 0;
                                                 padding-bottom: calc({{ 100 | divided_by: block.settings.image.aspect_ratio }}% {% unless block.settings.item_col_span == 1 %} - {{ section.settings.gutter| default: '0px' }} / {{ block.settings.item_col_span }}{% endunless %});

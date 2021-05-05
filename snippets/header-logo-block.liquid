@@ -12,12 +12,12 @@
                 <a href="{{ routes.root_url }}"
                    itemprop="url"
                    class="navbar-brand__logo {% if block.settings.logo-inverted %}navbar-brand__logo-inverted{% endif %}">
-                    <img class="small--hide"
+                    <img class="navbar-brand__logo--large"
                          src="{{ block.settings.logo | img_url: header_logo_size }}"
                          srcset="{{ block.settings.logo | img_url: header_logo_size }} 1x, {{ block.settings.logo | img_url: header_logo_size, scale: 2 }} 2x"
                          alt="{{ block.settings.logo.alt | default: shop.name }}"
                          itemprop="logo">
-                    <img class="medium-up--hide"
+                    <img class="navbar-brand__logo--small"
                          src="{{ block.settings.logo | img_url: header_logo_size_mobile }}"
                          srcset="{{ block.settings.logo | img_url: header_logo_size_mobile }} 1x, {{ block.settings.logo | img_url: header_logo_size_mobile, scale: 2 }} 2x"
                          alt="{{ block.settings.logo.alt | default: shop.name }}">

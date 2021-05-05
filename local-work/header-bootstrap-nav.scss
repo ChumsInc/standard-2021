@@ -1,16 +1,6 @@
+@import "required-mixins";
 
 .navbar {
-  --navbar-z-index: 5;
-  --chums-red: #ce0e2d;
-
-  --navbar-light-color: rgba(0,0,0,1);
-  --navbar-light-underline: rgba(0,0,0,0.5);
-  --navbar-light-underline-active: rgba(0,0,0,0.75);
-  --navbar-dark-color: rgba(255,255,255,1);
-  --navbar-dark-show-color: rgba(0,0,0,1);
-  --navbar-dark-show-bg: rgba(255,255,255,0.75);
-  --navbar-dark-underline: rgba(255,255,255,0.5);
-  --navbar-dark-underline-active: rgba(255,255,255,0.75);
 
   flex-wrap: nowrap;
 
@@ -32,6 +22,20 @@
     }
     @media (max-width: 991.5px) {
       margin-right: auto !important;
+    }
+
+    &__logo {
+      &--large {
+        display: none;
+      }
+      @include media-breakpoint-up(md) {
+        &--large {
+          display: inline;
+        }
+        &--small {
+          display: none;
+        }
+      }
     }
   }
 
@@ -56,7 +60,6 @@
     top: 0;
     left: -100vw;
     height: auto;
-    z-index: var(--navbar-z-index);
     background-color: white;
     min-width: 75vw;
     transition: left 0.35s ease;
@@ -84,7 +87,6 @@
       top: unset;
       left: unset;
       height: unset;
-      z-index: var(--navbar-z-index);
       background-color: unset;
       min-width: unset;
 
@@ -237,6 +239,7 @@
         position: relative;
         transition: all 0.35s ease;
         padding: 0.75rem 1rem;
+        text-decoration: none;
 
         @media (min-width: 992px) {
           padding-left: 1rem;

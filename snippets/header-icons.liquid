@@ -1,3 +1,4 @@
+
 {% if settings.enable_currencies and section.settings.toolbar_currencies == false %}
     {% render 'currency-picker', picker_id: 'header', currency_class: 'small--hide' %}
 {% endif %}
@@ -22,6 +23,8 @@
             <a href="{{ routes.search_url }}"
                role="button"
                aria-controls="site-nav--user-icon-fallback"
+               id="chums--search-trigger"
+               data-bs-toggle="modal" data-bs-target="#chums__search-container"
                class="site-nav__link site-nav__link--icon js-search-header js-no-transition{% if section.settings.main_menu_alignment == 'center' or section.settings.main_menu_alignment == 'center-split' %} medium-up--hide{% endif %}"
                aria-labelledby="site-nav--search-icon-fallback">
                 {% render 'icon-search' %}

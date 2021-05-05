@@ -1,0 +1,22 @@
+/**
+NOTE: THIS FILE SHOULD NOT BE EDITED ON SHOPIFY CODE EDITOR
+---
+ This should really be edited in a system with a valid scss compiler
+ and bootstrap 5
+ */
+
+a, a:hover, a:not(.btn) {
+  color: var(--chums-colorLink);
+  text-decoration: none;
+}
+
+@import "../local-work/required-mixins";
+@import "../local-work/drawer";
+
+
+
+.site-header {
+  @import "../local-work/site-nav";
+  @import "../local-work/header-bootstrap-nav";
+  @import "../local-work/search-modal";
+}

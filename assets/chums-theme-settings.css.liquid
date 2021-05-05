@@ -1,0 +1,266 @@
+:root {
+    --chums-red: {{ settings.color_button | default: '#CE0E2D' }};
+    
+    --chums-colorBtnPrimary: {{ settings.color_button | default: '#000' }};
+    --chums-colorBtnPrimaryText: {{ settings.color_button_text | default: '#FFF' }};
+    --chums-colorCartDot: {{ settings.color_cart_dot | default: '#ff4f33' }};
+    
+    /* 
+    Text link colors 
+    */
+    --chums-colorLink: {{ settings.color_body_text | default: '#1c1d1d' }};
+
+    /* 
+    Text colors 
+    */
+    --chums-colorTextBody: {{ settings.color_body_text | default: '#1c1d1d' }};
+    --chums-colorPrice: {{ settings.color_price | default: '#1c1d1d' }};
+    --chums-colorTextSavings: {{ settings.color_savings_text | default: '#1c1d1d' }};
+
+    /**
+    Backgrounds
+    **/
+    --chums-colorBody: {{ settings.color_body_bg | default: '#fff' }};
+    --chums-colorInputBg: {{ settings.color_body_bg | default: '#1c1d1d' }};
+
+    /**
+    Footer
+    **/
+    --chums-colorFooter: {{ settings.color_footer | default: '#111' }};
+    --chums-colorFooterText: {{ settings.color_footer_text | default: '#fff' }};
+
+    /**
+    Border colors
+    **/
+    --chums-colorBorder: {{ settings.color_borders | default: '#1c1d1d' }};
+
+    /**
+    Nav and dropdown link background
+    **/
+    --chums-colorNav: {{ settings.color_header | default: '#fff' }};
+    --chums-colorNavText: {{ settings.color_header_text | default: '#000' }};
+    --chums-colorAnnouncement: {{ settings.color_announcement | default: '#1c1d1d' }};
+    --chums-colorAnnouncementText: {{ settings.color_announcement_text | default: '#fff' }};
+    --chums-colorStickyNavLinks: #fff;
+
+    /**
+    Hero text color
+    **/
+    --chums-colorHeroText: {{ settings.color_image_text | default: '#fff' }};
+
+    
+    /**
+    Helper colors
+    **/
+    --chums-disabledGrey: #f6f6f6;
+    --chums-disabledBorder: #b6b6b6;
+    --chums-disabledText: #717171;
+
+    --chums-errorRed: #d02e2e;
+    --chums-errorRedBg: #fff6f6;
+    --chums-successGreen: #56ad6a;
+    --chums-successGreenBg: #ecfef0;
+    
+    /*
+    General Size Variables
+     */
+    --chums-gutter: 30px;
+    --chums-page-width: 1500px;
+    --chums-input-radius: 0;
+    --chums-page-width-gutter-small: 17px;
+    --chums-page-width-gutter-large: 40px;
+    --chums-grid-gutter: 22px;
+    --chums-grid-gutter-small: 17px;
+    --chums-drawerGutterLarge: --chums-gutter;
+    --chums-drawerGutterSmall: calc(--chums-gutter / 2);
+
+
+    /**
+    Content spacing
+    **/
+    --chums-contentTopMargin: 70px;
+    --chums-contentTopMarginSmall: 40px;
+
+    /**
+    Section header & collection image
+    **/
+    --chums-sectionHeaderBottom: 50px;
+    --chums-sectionHeaderBottomSmall: 30px;
+
+    /**
+    Slideshow colors
+    **/
+    --chums-slideshow-text-light: #fff;
+    --chums-slideshow-text-dark: #000;
+
+    /**
+    Modal
+    **/
+    --chums-colorModalBg: {{ settings.color_modal_overlays | default: '#000' }};
+    --chums-colorModalText: #fff;
+
+    /**
+    Image overlays
+    **/
+    --chums-colorImageOverlay: {{ settings.color_image_overlay | default: '#000' }};
+    --chums-colorImageOverlayOpacity: {{ settings.color_image_overlay_opacity | divided_by: 100.0 }};
+    --chums-colorImageOverlayTextShadow: {{ settings.color_image_overlay_text_shadow | divided_by: 100.0 }};
+    --chums-colorSmallImageBg: {{ settings.color_small_image_bg | default: '#eee' }};
+    --chums-colorLargeImageBg: {{ settings.color_large_image_bg | default: '#1c1d1d' }};
+    --chums-colorGridOverlay: {{ settings.collection_grid_tint | default: '#000' }};
+    --chums-colorGridOverlayOpacity: {{ settings.collection_grid_opacity | divided_by: 100.0 }};
+
+    /**
+    Button style
+    **/
+    --chums-buttonStyle: {{ settings.button_style | default: 'square' }};
+    --chums-buttonSkew: 12;
+    {% case settings.button_style %}
+    {% when  'round-slight' %}
+        --chums-button-radius: 3px;
+    {% when 'round' %}
+        --chums-button-radius: 50px;
+    {% else %}
+        --chums-button-radius: 0;
+    {% endcase %}
+
+    /**
+    Icon sizes
+    **/
+    --chums-desktopMenuIconSize: 30px;
+    --chums-desktopMenuChevronSize: 10px;
+    --chums-colorSwatchCollectionSize: 30px;
+    --chums-colorSwatchCollectionSizeLarge: 19px;
+    --chums-colorSwatchSidebarSize: 35px;
+    --chums-swatchStyle: {{ settings.swatch_style | default: 'square' }};
+    --chums-siteNavItemPadding: 15px;
+    --chums-siteNavIconPadding: 12px;
+    
+    /**
+    // Z-index ... now aligning with BootStrap 5
+    **/
+    --chums-zindexNavDropdowns: 1000;
+    --chums-zindexDrawer: 1068;
+    --chums-zindexDrawerOverlay: 1065;
+    --chums-zindexModal: 1060;
+    --chums-zindexSkipToContent: 2000;
+    --chums-z-index-sticky-header: 1020;
+    --chums-z-index-stuck-header: 1030;
+    --chums-z-index-header-search: 1035;
+    --chums-z-index-loader: 1005;
+
+/*================ Typography ================*/
+    /* Font-face header styles */
+    --chums-type_header_family: {{ settings.type_header_font_family.family }};
+    --chums-type_header_fallback: {{ settings.type_header_font_family.fallback_families }};
+    --chums-type_header_stack: #{"'" + --chums-type_header_family + "', " + --chums-type_header_fallback};
+    --chums-type_header_weight: {{ settings.type_header_font_family.weight }};
+
+    /* Non font-face header styles */
+    --chums-type_header_line_height: {{ settings.type_header_line_height | default: 1.4 }};
+    --chums-type_header_text_center: {{ settings.type_headers_align_text | default: false }};
+    --chums-type_header_base_size: {{ settings.type_header_base_size | default: 32 }}px;
+    --chums-type_header_spacing: {{ settings.type_header_spacing | default: "25" | divided_by: 1000.00 }}em;
+    --chums-type_header_capitalize: {{ settings.type_header_capitalize | default: false }};
+
+    /* Font-face base styles */
+    --chums-type_base_family: {{ settings.type_base_font_family.family }};
+    --chums-type_base_fallback: {{ settings.type_base_font_family.fallback_families }};
+    --chums-type_base_stack: #{"'" + --chums-type_base_family + "', " + --chums-type_base_fallback};
+    --chums-type_base_weight: {{ settings.type_base_font_family.weight }};
+
+    /* Non font-face base styles */
+    --chums-type_body_text_center: {{ settings.type_body_align_text | default: false }};
+    --chums-type_base_spacing: {{ settings.type_base_spacing | default: "50" | divided_by: 1000.00 }}em;
+    --chums-type_base_line_height: {{ settings.type_base_line_height | default: 1.4 }};
+    --chums-type_base_size: {{ settings.type_base_size | default: 16 }}px;
+    --chums-icon_weight: {{ settings.icon_weight | default: '5px' }};
+    --chums-icon_linecaps: {{ settings.icon_linecaps | default: 'miter' }};
+
+    /*============================================================================
+  Animations
+  - --chums-animate_page_transition_style options:
+      page-fade-in-up
+      page-slow-fade
+      page-slide-reveal-across
+      page-slide-reveal-down
+  - --chums-animate_sections_background_style options:
+      fade-in
+      zoom-fade
+      paint-across
+  - --chums-animate_sections_text_style options:
+      fade-in
+      rise-up
+      paint-across
+  - --chums-animate_images_style
+      fade-in
+      zoom-fade
+      paint-across
+==============================================================================*/
+    --chums-animate_page_transitions: false;
+    --chums-animate_page_transition_style: page-slow-fade;
+    --chums-animate_sections: true;
+    --chums-animate_sections_background_style: zoom-fade;
+    --chums-animate_sections_text_style: rise-up;
+    --chums-animate_images: true;
+    --chums-animate_images_style: fade-in;
+    --chums-animate_underlines: true;
+
+    /*================ Drawers ================*/
+    --chums-drawerNavWidth: 300px;
+    --chums-drawerCartWidth: 300px;
+    --chums-drawerCartWidthLarge: 400px;
+        /* small-up width */
+    --chums-drawerHeaderHeight: 70px;
+    --chums-drawerHeaderHeightLarge: 119px;
+    --chums-drawerCartFooterHeight: 130px;
+    /* default, overwritten by JS */
+    --chums-colorDrawers: {{ settings.color_drawer_background | default: '#1c1d1d' }};
+    --chums-colorDrawerBorder: {{ settings.color_drawer_border | default: '#343535' }};
+    --chums-colorDrawerText: {{ settings.color_drawer_text | default: '#fff' }};
+    --chums-colorDrawerButton: {{ settings.color_drawer_button | default: '#a26b25' }};
+    --chums-colorDrawerButtonText: {{ settings.color_drawer_button_text | default: '#fff' }};
+    --chums-fixedHeightLimit: 400px;
+
+    /*================ Misc sizing vars ================*/
+    --chums-indexSectionMarginSmall: calc(--chums-gutter * 0.85);
+    --chums-indexSectionMarginLarge: calc(--chums-gutter * 2.5);
+    --chums-textFrameMarginSmall: 7px;
+    --chums-textFrameMarginLarge: 10px;
+
+    /*
+    Buttons
+     */
+    --chums-btnPrimaryFontSize: --chums-type_base_size;
+    --chums-btnPrimaryPadding: 11px 20px;
+    --chums-btnPrimaryPaddingSmall: 9px 17px;
+    --chums-btnMinHeightWhenQuickCheckout: 50px;
+
+    /*
+    Form element and tertiary button padding
+     */
+    --chums-formElementPadding: 8px 10px;
+
+    /*================ Collapsible icon sizing and animations ================*/
+    --chums-collapsible-trigger-icon-width-small: 10px;
+    --chums-collapsible-trigger-icon-width: 12px;
+    --chums-collapsible-trigger-circle-width: 28px;
+    --chums-collapsible-open-transition: opacity 1s cubic-bezier(.25,.46,.45,.94), height 0.35s cubic-bezier(.25,.46,.45,.94);
+    --chums-collapsible-close-transition: opacity 0.3s cubic-bezier(.25,.46,.45,.94), height 0.3s cubic-bezier(.25,.46,.45,.94);
+    --chums-collapsible-content-open-transition: transform 0.5s cubic-bezier(.25,.46,.45,.94);
+    --chums-collapsible-content-close-transition: transform 0.3s cubic-bezier(.25,.46,.45,.94);
+
+
+    /**
+    Bootstrap Nav Bar settings
+     */
+    --navbar-light-color: rgba(0,0,0,1);
+    --navbar-light-underline: rgba(0,0,0,0.5);
+    --navbar-light-underline-active: rgba(0,0,0,0.75);
+    --navbar-dark-color: rgba(255,255,255,1);
+    --navbar-dark-show-color: rgba(0,0,0,1);
+    --navbar-dark-show-bg: rgba(255,255,255,0.75);
+    --navbar-dark-underline: rgba(255,255,255,0.5);
+    --navbar-dark-underline-active: rgba(255,255,255,0.75);
+
+}

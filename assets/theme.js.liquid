@@ -5921,160 +5921,241 @@ lazySizesConfig.expFactor = 4;
   
     return Photoswipe;
   })();
-  
-  theme.SiteSearch = (function () {
-    var selectors = {
-      list: '.site-header__search-results-list',
-      input: '.site-header__search-input',
-      count: '.site-header__search-results-count',
-    };
-    var classNames = {
-      onSale: 'search-result__prices--sale',
-      hasResults: 'has-results',   
-      item: 'site-header__search-results-item'
-    };
-    var searchURL = '/search/suggest.json?s=:SEARCH:&resources%5Btype%5D=product&resources%5Blimit%5D=5&resources%5Boptions%5D%5Bunavailable_products%5D=bury&resources%5Boptions%5D%5Bfields%5D=title%2Cproduct_type%2Cvariants.title%2Ctag%2Cvariants.barcode%2Cvariants.sku';
-    
-    var template = '<div class="search-result">' 
-    	+ '<div class="search-result__image" tabindex="-1"><a href=":URL:"><img data-src=":SRC:" data-widths="[80, 120]" alt=":TITLE:" class="lazyload"></a></div>'
-        + '<div class="search-result__detail">'
-    	+ '<div><a href=":URL:">:TITLE:</a></div>'
-    + '<div class="search-result__prices :PRICE_CLASS:">:PRICE_INDICATOR:: <span class="search-result__prices--original">$ :COMPARE_AT_PRICE_MIN:</span><span class="search-result__prices--current">$ :PRICE_MIN:</span></div>'
-        + '</div></div>';
 
-    
-    function SiteSearch() {
-      this.results = [];
-      this.loading = false;
-      this.timer = null;
-      this.elements = {
-        list: document.querySelector(selectors.list),
-        search: document.querySelector(selectors.input),
-        count: document.querySelector(selectors.count) || document.createElement('div'),
-      };
-      this.lastSearch = '';
-      
-      this.search = this.search.bind(this);
-      this.load = this.load.bind(this);
-      this.displayResults = this.displayResults.bind(this);
-      this.displaySearchAll = this.displaySearchAll.bind(this);
-
-      this.init();     
+  theme.SiteSearch = (function() {
+    const searchURL = '/search/suggest.json?s=:SEARCH:' +
+            '&resources%5Btype%5D=product,collection,page,article' +
+            '&resources%5Blimit%5D=10' +
+            '&resources%5Boptions%5D%5Bunavailable_products%5D=last';
+    const searchElements = {
+      form: document.querySelector('#site-header__search-form'),
+      input: document.querySelector('#site-header__search-form input[type="search"]'),
+      results: document.querySelector('#site-header__search_results'),
+      resultsCount: document.querySelector('#site-header__search_results .site-header__search-results-count'),
+      resultsList: document.querySelector('#site-header__search_results .site-header__search-results-list'),
+      loadingSpinner: document.querySelector('#site-header__search_results .site-header__search-results--loading'),
     }
-    
-    SiteSearch.prototype.displayResults = function () {
-      while (this.elements.list.firstChild) {
-        this.elements.list.removeChild(this.elements.list.firstChild);
-      }
-      var visible = this.elements.search.value.trim().length > 2 || this.results.length > 0;
+    const response = {
+      search: '',
+      results: {},
+    }
 
-      this.elements.list.classList.toggle(classNames.hasResults, visible);
-      if (!visible) {
-        return;
-      }
-      
-      if (this.results.length === 0) {
-        var li = document.createElement('li');
-        li.innerHTML = 'No matching products found.';
-        this.elements.list.appendChild(li);                                         
-      }
+    function showSearchLoading(isLoading = false) {
+      searchElements.loadingSpinner.classList.toggle('show', isLoading);
+      searchElements.resultsList.setAttribute('aria-busy', isLoading ? 'true' : 'false');
+    }
 
-      this.elements.count.innerText = this.results.length + " results found";
-      this.results.forEach(item => {
-        var priceClass = Number(item.price_min) < Number(item.compare_at_price_min) ? classNames.onSale : '';
-        var html = template.replace(/:URL:/g, item.url)
-          .replace(':SRC:', theme.Images.getSizedImageUrl(item.image, '80x'))
-          .replace(/:TITLE:/g, item.title)
-          .replace(':PRICE_CLASS:', priceClass)
-          .replace(':PRICE_INDICATOR:', item.price_min === item.price_max ? 'Price' : 'From')
-          .replace(':COMPARE_AT_PRICE_MIN:', item.compare_at_price_min)
-          .replace(':PRICE_MIN:', item.price_min);       
-        var li = document.createElement('li');
-        li.classList.add(classNames.item);
-        li.innerHTML = html;        
-        this.elements.list.appendChild(li);
-      });
-      this.displaySearchAll();
-    };
-    
-    SiteSearch.prototype.displaySearchAll = function () {
-      var searchSiteLink = document.createElement('a');
-      searchSiteLink.setAttribute('href', '/search?type=product%2Carticle&q=' + encodeURIComponent(this.lastSearch));
-      searchSiteLink.innerHTML = 'Search entire site for <strong>' + this.lastSearch.replace('<', '&lt;') + '</strong>';
-      
-      var div = document.createElement('div');
-      div.appendChild(searchSiteLink);
-      
-      var li = document.createElement('li');
-      li.appendChild(div);
-      
-      this.elements.list.appendChild(li);                                       
-    };
-    
-    SiteSearch.prototype.load = function (search) {
-      if (this.loading) {
-        return;
-      }    
-      
-      this.loading = true;
-      this.lastSearch = search;
+    function fetchSearchResults(search) {
       try {
-//         var searchObject = {
-//           q: search,
-//           resources: {
-//             type: 'product',
-//             limit: 5,
-//             options: {
-//               unavailable_products: 'bury',
-//               fields: 'title,product_type,variants.title,tag,variants.barcode,variants.sku'
-//             }
-//           }
-//         };
-//         jQuery.getJSON('/search/suggest.json', searchObject).done(res => console.log(res));
-        
+        showSearchLoading(true);
+        response.search = search;
         var url = searchURL.replace(':SEARCH:', encodeURIComponent(search));
-        fetch(url)
-            .then(res => res.json())
-            .then(res => {
-				this.results = res.resources.results.products;
-          		this.displayResults();
-          		this.loading = false;
-            });
-      } catch (err) {
-        console.log(err);
+        fetch(url, {credentials: 'same-origin', cache: 'no-cache'})
+                .then(res => res.json())
+                .then(res => {
+                  response.results = res.resources.results;
+                  displayResults(res.resources.results);
+                  showSearchLoading(false);
+                });
+
+      } catch(err) {
+          console.log("SiteSearch.fetchSearch()", err.message);
       }
-    };
-    
-    SiteSearch.prototype.search = function (ev) {
-      clearTimeout(this.timer);
-      if (!ev.currentTarget || ev.currentTarget.value === undefined) {
+    }
+
+    function handleSearchKeydown(ev) {
+      if (ev.isComposing || ev.keyCode === 229) {
         return;
       }
-      if (ev.currentTarget.value.trim().length > 2) {
-        var search = ev.currentTarget.value;
-        
-        if (this.lastSearch.trim() === search.trim()) {
-          return;
-        }
-        this.timer = setTimeout(() => this.load(search.trim()), 350)        
+      if (searchElements.resultsList.classList.contains('has-results') && response.search === ev.target.value) {
+        return;
+      }
+      if (ev.target.value.trim().length === 0) {
+        return;
+      }
+      fetchSearchResults(ev.target.value);
+    }
+
+    /**
+     *
+     * @param {Object} results
+     * @param {Object[]} results.products
+     * @param {Object[]} results.collections
+     * @param {Object[]} results.articles
+     * @param {Object[]} results.pages
+     */
+    function displayResults(results = {}) {
+      searchElements.resultsList.innerText = '';
+      searchElements.resultsList.classList.toggle('has-results', true);
+      displayProducts(results.products || []);
+      displayCollections(results.collections || []);
+      displayArticles(results.articles || []);
+      displayPages(results.pages || []);
+      buildSectionTitle('Dig Deeper');
+      const link = document.createElement('a');
+      link.href = '#';
+      link.innerText = "Search entire site for '" + searchElements.input.value.trim() + "'";
+      link.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        searchElements.form.submit();
+      })
+      searchElements.resultsList.appendChild(link);
+    }
+
+    function buildSectionTitle(title) {
+      const li = document.createElement('li');
+      li.className = 'search-result__section-title';
+      li.innerText = title;
+      searchElements.resultsList.appendChild(li);
+
+    }
+
+    function buildProductImage(product) {
+      const imgContainer = document.createElement('div');
+      imgContainer.className = 'search-result__image';
+      const img = document.createElement('img');
+      img.dataset.src = theme.Images.getSizedImageUrl(product.image, '80x');
+      img.dataset.widths="[80,120]";
+      img.className = 'img-fluid lazyload';
+      img.setAttribute('aria-describedby', 'product-' + product.id + '-title')
+      imgContainer.appendChild(img);
+      return imgContainer;
+    }
+
+    function buildProductPrice(product) {
+      const min = product.price_min;
+      const max = product.price_max;
+      const caMin = product.compare_at_price_min;
+      const caMax = product.compare_at_price_max;
+      const price = product.price;
+      const hasSale = min < caMin || max < caMax;
+      const hasPriceRange = caMin < caMax;
+
+      const priceContainer = document.createElement('div');
+      priceContainer.classList.toggle('search-result__detail-price', true);
+
+      const priceEl = document.createElement('span');
+      priceEl.innerText = hasPriceRange ? 'From:' : 'Price:';
+      priceContainer.appendChild(priceEl);
+
+      const priceVal = document.createElement('span');
+      priceVal.classList.toggle('price--on-sale', hasSale);
+      if (hasPriceRange) {
+        priceVal.innerText = '$ ' + caMin;
       } else {
-        this.results = [];
-        this.displayResults();
+        priceVal.innerText = '$ ' + (caMin || price);
       }
-    };
-      
-    SiteSearch.prototype.init = function () {    
-      if (!this.elements.search || !this.elements.list) {
-        return;
+      priceContainer.appendChild(priceVal);
+
+      if (hasSale) {
+        const salePrice = document.createElement('span');
+        salePrice.classList.toggle('price--sale-price');
+        if (hasPriceRange) {
+          salePrice.innerText = '$ ' + caMin;
+        } else {
+          salePrice.innerText = '$ ' + price;
+        }
+        priceContainer.appendChild(salePrice)
       }
-      if (typeof window.fetch !== 'function') {
-        return;
+      return priceContainer;
+    }
+
+    function buildProductTitle(product) {
+      const infoContainer = document.createElement('div');
+      infoContainer.className = 'search-result__detail';
+      const title = document.createElement('div');
+      title.className = 'search-result__detail-title';
+      title.innerText = product.title;
+      title.id = 'product-' + product.id + '-title';
+      infoContainer.appendChild(title);
+      infoContainer.appendChild(buildProductPrice(product));
+      return infoContainer;
+    }
+
+    function buildProductResult(product) {
+      const a = document.createElement('a');
+      a.href = product.url;
+      a.setAttribute('aria-describedby', 'product-' + product.id + '-title');
+      const div = document.createElement('div');
+      div.className = 'search-result';
+      div.appendChild(buildProductImage(product));
+      div.appendChild(buildProductTitle(product));
+      a.appendChild(div);
+      return a;
+    }
+
+    function displayProducts(products) {
+      if (products.length) {
+        buildSectionTitle('Products');
       }
-      this.elements.search.addEventListener('keydown', this.search);
-    };   
-  	return new SiteSearch();
-  })();
-  
+      products.forEach(product => {
+        const li = document.createElement('li');
+        li.className = 'site-header--search-results-item';
+        li.appendChild(buildProductResult(product));
+        searchElements.resultsList.appendChild(li);
+      })
+    }
+
+    function displayCollections(collections) {
+      if (collections.length) {
+        buildSectionTitle('Collections');
+      }
+      collections.forEach(collection => {
+        const li = document.createElement('li');
+        li.className = 'site-header--search-results-item search-result__collection-title';
+        const a = document.createElement('a');
+        a.href = collection.url;
+        a.innerText = collection.title;
+        li.appendChild(a);
+        searchElements.resultsList.appendChild(li);
+      })
+    }
+
+    function displayArticles(articles) {
+      if (articles.length) {
+        buildSectionTitle('Articles');
+      }
+      articles.forEach(article => {
+        const li = document.createElement('li');
+        li.className = 'site-header--search-results-item search-result__article';
+        const a = document.createElement('a');
+        a.href = article.url;
+        a.innerText = article.title;
+        a.className = 'search-result__article-title';
+        li.appendChild(a);
+        const date = new Date(article.published_at);
+        const div = document.createElement('div');
+        div.innerText = date.toLocaleDateString();
+        div.className = 'search-result__article-date';
+        li.appendChild(div);
+        searchElements.resultsList.appendChild(li);
+      });
+    }
+
+    function displayPages(pages) {
+      if (pages.length) {
+        buildSectionTitle('Pages');
+      }
+      pages.forEach(page => {
+        const li = document.createElement('li');
+        li.className = 'site-header--search-results-item search-result__article';
+        const a = document.createElement('a');
+        a.href = page.url;
+        a.innerText = page.title;
+        a.className = 'search-result__article-title';
+        li.appendChild(a);
+        searchElements.resultsList.appendChild(li);
+      });
+    }
+
+
+    searchElements.input.addEventListener('keydown', debounce(handleSearchKeydown, 350));
+    return {
+      elements: searchElements,
+      results: response.results,
+      displayResults: displayResults,
+    }
+  }());
   
 
   // Medium breakpoint is also set in theme.scss.liquid and inline throughout some templates.
@@ -6181,7 +6262,6 @@ lazySizesConfig.expFactor = 4;
     theme.collapsibles.init();
     theme.tabs.init();
     theme.fixShopifyPoweredByLink();
-//     theme.SiteSearch();
 
     slate.rte.init();
 

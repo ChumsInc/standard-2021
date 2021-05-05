@@ -1,0 +1,128 @@
+
+.site-header__search {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 2rem;
+  justify-content: space-between;
+  align-items: center;
+
+  &-modal {
+    height: 167px;
+  }
+
+  &-form {
+    flex: 1 0 auto;
+    padding-right: 3rem;
+  }
+
+  &-results {
+    &--loading {
+      min-width: 30rem;
+    }
+    &-list {
+      padding-left: 0;
+      margin: auto 1.5rem;
+      &.has-results {
+        max-height: calc(100vh - 140px - 2rem);
+        max-width: 100vw;
+        overflow: auto;
+      }
+    }
+
+    &-item {
+      a.search-link {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.site-header__search-container {
+  .modal-dialog {
+    height: 167px
+  }
+}
+.search-result {
+  display: flex;
+  flex-direction: row;
+
+  &__item {
+    margin-top: 0.25rem;
+
+    a.search-link {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  &__section-title {
+    font-size: small;
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    margin-top: 1rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  &__section-title:first-of-type {
+    margin-top: auto;
+  }
+
+  .search-result__image {
+    flex: 0 0 25%;
+    min-width: 80px;
+  }
+  .search-result__detail {
+    flex: 0 0 75%;
+    padding: 0.5rem;
+
+    &-title {
+      font-weight: bold;
+      &:hover {
+        color: var(--chums-red);
+      }
+    }
+    &-price {
+      font-size: 92%;
+      span {
+        margin-right: 0.5rem;
+      }
+      .price--on-sale {
+        text-decoration: line-through;
+      }
+      .price--sale-price {
+        color: var(--chums-red);
+      }
+    }
+
+  }
+
+  &__article {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &-date {
+      font-size:small;
+      color: var(--chums-red);
+      padding-left: 0.5rem;
+    }
+  }
+
+}
+
+/*
+.site-header__search-results .screen-width {
+  padding: 0;
+}
+@media (min-width: 768px) {
+  .site-header__search-results .screen-width {
+    padding: 0 50px;
+  }
+  .site-header__search-results-list {
+    margin-left: 70px;
+    max-width: 350px;
+  }
+}
+
+ */
+

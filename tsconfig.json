@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "es5",
+    "sourceMap": true,
+    "preserveConstEnums": true,
+//    "outFile": "./assets/chums-theme.js",
+//    "sourceRoot": "./local-work/",
+//    "rootDir": "./local-work/"
+  }
+}

@@ -1,3 +1,24 @@
+
+{% case section.settings.image_size %}
+  {% when 'small' %}
+    {%- assign product_image_width = '40%' -%}
+    {%- assign product_image_size = '480px' -%}
+  {% when 'medium' %}
+    {%- assign product_image_width = '50%' -%}
+    {%- assign product_image_size = '620px' -%}
+  {% when 'large' %}
+    {%- assign product_image_width = '60%' -%}
+    {%- assign product_image_size = '740px' -%}
+{% endcase %}
+
+<style>
+  #shopify-section-product-template {
+    --image-order: {% if block.settings.image_position == 'right'%}1{% else %}0{% endif %};
+    --image-size: {{ product_image_size }};
+    --image-container-width: {{ product_image_width }};
+    --image-flex-direction: {% if block.settings.thumbnail_position == 'beside'%}row{% else %}column{% endif %}
+  }
+</style>
 {% include 'product-template',
   description_style: section.settings.description_style,
   image_position: section.settings.image_position,

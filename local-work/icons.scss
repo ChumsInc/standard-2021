@@ -1,0 +1,100 @@
+@import "required-mixins";
+
+.icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  fill: currentColor;
+
+  .no-svg & {
+    display: none;
+  }
+
+  &--full-color {
+    fill: initial;
+  }
+}
+
+
+svg,
+symbol {
+  &.icon:not(.icon--full-color) {
+    circle,
+    ellipse,
+    g,
+    line,
+    path,
+    polygon,
+    polyline,
+    rect {
+      fill: inherit;
+      stroke: inherit;
+    }
+  }
+}
+
+/* Override the above for our stroke-only icons */
+
+.icon-cart,
+.icon-bag,
+.icon-search,
+.icon-close,
+.icon-chevron-down,
+.icon-email,
+.icon-user,
+.icon-hamburger,
+.icon-filter {
+  circle,
+  ellipse,
+  g,
+  line,
+  path,
+  polygon,
+  polyline,
+  rect {
+    fill: none !important;
+    stroke-width: var(--chums-icon_weight);
+    stroke: currentColor !important;
+    stroke-linecap: var(--chums-icon_linecaps);
+    stroke-linejoin: var(--chums-icon_linecaps);
+  }
+}
+
+.icon-cart circle {
+  fill: currentColor !important;
+}
+
+.icon__fallback-text {
+  @extend .visually-hidden;
+}
+
+/*================ Payment Icons ================*/
+
+.payment-icons {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+  margin-bottom: calc(var(--chums-gutter) / 2);
+
+  @include media-breakpoint-up(md) {
+    margin-top: var(--chums-gutter);
+    margin-bottom: 0;
+  }
+
+  li {
+    cursor: default;
+    margin: 0 4px 0;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .icon__fallback-text {
+    text-transform: capitalize;
+  }
+}

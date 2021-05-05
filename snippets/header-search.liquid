@@ -1,34 +1,38 @@
-<div class="site-header__search-container">
-    <div class="site-header__search">
-        <div class="screen-width">
-            <form action="/search" method="get" class="site-header__search-form" role="search"
-                  aria-label="Products"
+<div class="site-header__search-container modal" tabindex="-1" id="chums__search-container">
+    <div class="site-header--search-modal modal-dialog modal-fullscreen">
+        <div class="site-header__search modal-content">
+            <form action="/search" method="get" class="site-header__search-form dropdown"
                   aria-controls="site-header__search-results"
                   id="site-header__search-form"
                   autocomplete="off">
                 <input type="hidden" name="type" value="{{ settings.search_type }}">
-                <button type="submit" class="text-link site-header__search-btn">
-                    {% render 'icon-search' %}
-                    <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
-                </button>
-                <input type="search" name="q" value="{{ search.terms | escape }}"
-                       placeholder="{{ 'general.search.placeholder' | t }}"
-                       autocomplete="off"
-                       class="site-header__search-input"
-                       aria-label="{{ 'general.search.placeholder' | t }}">
+                <div class="input-group input-group-lg">
+                    <button type="submit" class="btn btn-secondary" data-bs-toggle="dropdown">
+                        {% render 'icon-search' %}
+                        <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
+                    </button>
+                    <label for="site-header__search-input" class="visually-hidden">Search Chums.com</label>
+                    <input type="search" name="q" value="{{ search.terms | escape }}"
+                           required id="site-header__search-input"
+                           placeholder="{{ 'general.search.placeholder' | t }}"
+                           autocomplete="off"
+                           class="form-control"
+                           aria-label="{{ 'general.search.placeholder' | t }}">
+                </div>
+                <div class="site-header__search-results dropdown-menu" id="site-header__search_results" role="region">
+                    <div class="site-header__search-results--loading progress fade" style="height: 5px;">
+                        <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar"
+                             aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                    </div>
+                    <div class="site-header__search-results-count" aria-live="polite"></div>
+                    <ul class="site-header__search-results-list" aria-live="polite" aria-atomic="true">
+                    </ul>
+                </div>
             </form>
-
-            <button type="button" class="js-search-header-close text-link site-header__search-btn" tabindex="-1">
-                {% render 'icon-close' %}
-                <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
+            <button type="button" class="btn btn-lg btn-close" data-bs-dismiss="modal"
+                    aria-label="{{ 'general.accessibility.close_modal' | t | json  }}">
             </button>
         </div>
-    </div>
-    <div class="site-header__search-results" id="site-header__search_results" role="region">
-        <div class="screen-width">
-            <div class="site-header__search-results-count" aria-live="polite"></div>
-            <ul class="site-header__search-results-list" aria-live="polite" aria-atomic="true">
-            </ul>
-        </div>
+
     </div>
 </div>
