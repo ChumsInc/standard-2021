@@ -7,7 +7,8 @@
                 <div class="ajaxcart__row">
                     <div class="grid">
                         <div class="grid__item one-third">
-                            <a href="{{url}}" tabindex="-1" class="ajaxcart__product-image"><img src="{{img}}" alt="{{name}}"></a>
+                            <a href="{{url}}" tabindex="-1" class="ajaxcart__product-image"><img src="{{img}}"
+                                                                                                 alt="{{name}}"></a>
                         </div>
                         <div class="grid__item two-thirds">
                             <div class="ajaxcart__product-name--wrapper">
@@ -87,12 +88,22 @@
                 <textarea name="note" class="input-full" id="CartSpecialInstructions">{{note}}</textarea>
                 </div>
             {% endraw %}{% endif %}{% raw %}
+            <div>
+                {% endraw %}
+                {% if settings.cart_promo_link != blank %}
+                    {% render 'cart-promo-link' %}
+                {% endif %}
+                {% raw %}
+            </div>
+            {% endraw %}
+            {% raw %}
         </div>
         <div class="drawer__footer drawer__footer--fixed appear-animation appear-delay-{{lastAnimationRow}}">
             {{#if cartDiscounts }}
             <div class="grid grid--full">
                 <div class="grid__item one-half">
-                    <p class="ajaxcart__subtotal" tabindex="0">{% endraw %}{{ 'cart.general.discounts' | t }}{% raw %}</p>
+                    <p class="ajaxcart__subtotal"
+                       tabindex="0">{% endraw %}{{ 'cart.general.discounts' | t }}{% raw %}</p>
                 </div>
                 <div class="grid__item one-half text-right">
                     {{#each cartDiscounts}}
@@ -105,17 +116,23 @@
             {{/if}}
             <div class="grid grid--full">
                 <div class="grid__item one-half">
-                    <p class="ajaxcart__subtotal" tabindex="0">{% endraw %}{{ 'cart.general.subtotal' | t }}{% raw %}</p>
+                    <p class="ajaxcart__subtotal"
+                       tabindex="0">{% endraw %}{{ 'cart.general.subtotal' | t }}{% raw %}</p>
                 </div>
                 <div class="grid__item one-half text-right">
                     <p class="ajaxcart__price" tabindex="0">{{{totalPrice}}}</p>
                 </div>
             </div>
             <p class="ajaxcart__note">
-            {% endraw %}
-            <div class="ajaxcart__shipping-alert" tabindex="0">{% render 'cart-shipping-alert' %}</div>{% raw %}
+                {% endraw %}
+            {% if settings.cart_shipping_alert != blank %}
+            <div class="ajaxcart__shipping-alert" tabindex="0">{% render 'cart-shipping-alert' %}</div>
+            {% endif %}
+            {% raw %}
             {% endraw %}{% if settings.cart_message %}
                 <div class="ajaxcart__message" tabindex="0">{{ settings.cart_message }}</div>{% endif %}{% raw %}
+            {% endraw %}
+            {% raw %}
             {% endraw %}{{ 'cart.general.shipping_at_checkout' | t }}{% raw %}
             {% endraw %}{% if settings.enable_currencies %}{% raw %}
             {% endraw %}{{ 'cart.general.orders_processed_in_currency_html' | t: currency: shop.currency }}{% raw %}
@@ -147,3 +164,4 @@
     </form>
     {% endraw %}
 </script>
+

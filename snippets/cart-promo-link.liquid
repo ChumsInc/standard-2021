@@ -1,0 +1,91 @@
+{% comment %}
+no variables required for render
+{% endcomment %}
+<div class="ajaxcart__promo_link mt-3 mb-5" tabindex="0">
+    <style>
+        .cart-promo--link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: space-around;
+        }
+    </style>
+    <div>
+        {{ settings.cart_promo_text | link_to: settings.cart_promo_link }}
+    </div>
+    {% assign promo_image_size = '350x' %}
+    {% assign cart_promo_link_type = settings.cart_promo_link | remove_first: '/' | split: '/' | first %}
+    {% assign cart_promo_link_to = settings.cart_promo_link | split: '/' | last %}
+    {% if cart_promo_link_type == 'collections' %}
+        {% for collection in collections %}
+            {% if collection.url == settings.cart_promo_link %}
+                <div class="cart-promo--link">
+                    <a href="{{ collection.url }}" rel="noopener">
+                        {% if collection.image != blank %}
+                            <div>
+                                <img src="{{ collection.image | img_url: promo_image_size }}"
+                                     alt="{{ collection.title }}" class="img-fluid">
+                            </div>
+                        {% endif %}
+                        <div>
+                            {{ collection.title }}
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% elsif cart_promo_link_type == 'products' %}
+        {% assign product = all_products[cart_promo_link_to] %}
+        <div class="cart-promo--link">
+            <a href="{{ product.url }}" rel="noopener">
+                {% if product.featured_image != blank %}
+                    <div>
+                        <img src="{{ product.featured_image | img_url: promo_image_size }}" alt="{{ product.title }}"
+                             class="img-fluid">
+                    </div>
+                {% endif %}
+                <div>
+                    {{ product.title }}
+                </div>
+                <div>
+                    {% if on_sale %}
+                        <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+                        <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
+                    {% endif %}
+                    {% if product.price_varies %}
+                        {%- assign price = product.price_min | money -%}
+                        {{ product.price_min | money }} &ndash; {{ product.price_max | money }}
+                    {% else %}
+                        {{ product.price | money }}
+                    {% endif %}
+                    {% if on_sale %}
+                        {% if settings.product_save_amount %}
+                            {% if settings.product_save_type == 'dollar' %}
+                                {% capture saved_amount %}{{ product.compare_at_price | minus: product.price | money }}{% endcapture %}
+                            {% else %}
+                                {% capture saved_amount %}{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}%{% endcapture %}
+                            {% endif %}
+                            <span class="grid-product__price--savings">{{ 'products.general.save_html' | t: saved_amount: saved_amount }}</span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+    {% elsif cart_promo_link_type == 'pages' %}
+        {% for page in pages %}
+            {% if page.url == settings.cart_promo_link %}
+                <div class="cart-promo--link">
+                    <a href="{{ page.url }}" rel="noopener">
+                        {% if pasge.image != blank %}
+                            <img src="{{ page.image | img_url: promo_image_size }}" alt="{{ page.title }}"
+                                 class="img-fluid">
+                        {% else %}
+                            {{ page.title }}
+                        {% endif %}
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>
