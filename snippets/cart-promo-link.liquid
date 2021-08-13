@@ -18,36 +18,50 @@ no variables required for render
     {% assign cart_promo_link_type = settings.cart_promo_link | remove_first: '/' | split: '/' | first %}
     {% assign cart_promo_link_to = settings.cart_promo_link | split: '/' | last %}
     {% if cart_promo_link_type == 'collections' %}
-        {% for collection in collections %}
-            {% if collection.url == settings.cart_promo_link %}
-                <div class="cart-promo--link">
-                    <a href="{{ collection.url }}" rel="noopener">
-                        {% if collection.image != blank %}
-                            <div>
-                                <img src="{{ collection.image | img_url: promo_image_size }}"
-                                     alt="{{ collection.title }}" class="img-fluid">
-                            </div>
-                        {% endif %}
-                        <div>
-                            {{ collection.title }}
-                        </div>
-                    </a>
+        {% assign collection = collections[cart_promo_link_to] %}
+        {% assign link_title = settings.cart_promo_link_text | default: collection.title %}
+        {% assign link_classname = '' %}
+
+        {% if settings.cart_promo_link_button %}
+            {% assign link_classname = 'btn btn--full' %}
+        {% endif %}
+        <div class="cart-promo--link">
+            <a href="{{ collection.url }}" rel="noopener" class="{{ link_classname }}">
+                {% if settings.cart_promo_show_image and collection.image != blank %}
+                    <div>
+                        <img src="{{ collection.image | img_url: promo_image_size }}"
+                             alt="{{ collection.title }}" class="img-fluid">
+                    </div>
+                {% endif %}
+                <div>
+                    {{ link_title }}
                 </div>
-            {% endif %}
-        {% endfor %}
+            </a>
+        </div>
     {% elsif cart_promo_link_type == 'products' %}
         {% assign product = all_products[cart_promo_link_to] %}
+        {% assign link_title = settings.cart_promo_link_text | default: product.title %}
+        {% assign link_classname = '' %}
+
+        {% if settings.cart_promo_link_button %}
+            {% assign link_classname = 'btn btn--full' %}
+        {% endif %}
+
         <div class="cart-promo--link">
-            <a href="{{ product.url }}" rel="noopener">
-                {% if product.featured_image != blank %}
+            <a href="{{ product.url }}" rel="noopener" class="{{ link_classname }}">
+                {% if settings.cart_promo_show_image and product.featured_image != blank %}
                     <div>
                         <img src="{{ product.featured_image | img_url: promo_image_size }}" alt="{{ product.title }}"
                              class="img-fluid">
                     </div>
+                    <div>
+                        {{ link_title }}
+                    </div>
+                {% else %}
+                    <div>
+                        {{ link_title }}
+                    </div>
                 {% endif %}
-                <div>
-                    {{ product.title }}
-                </div>
                 <div>
                     {% if on_sale %}
                         <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
@@ -73,19 +87,23 @@ no variables required for render
             </a>
         </div>
     {% elsif cart_promo_link_type == 'pages' %}
-        {% for page in pages %}
-            {% if page.url == settings.cart_promo_link %}
-                <div class="cart-promo--link">
-                    <a href="{{ page.url }}" rel="noopener">
-                        {% if pasge.image != blank %}
-                            <img src="{{ page.image | img_url: promo_image_size }}" alt="{{ page.title }}"
-                                 class="img-fluid">
-                        {% else %}
-                            {{ page.title }}
-                        {% endif %}
-                    </a>
-                </div>
-            {% endif %}
-        {% endfor %}
+        {% assign page = pages[cart_promo_link_to] %}
+        {% assign link_title = settings.cart_promo_link_text | default: page.title %}
+        {% assign link_classname = '' %}
+
+        {% if settings.cart_promo_link_button %}
+            {% assign link_classname = 'btn btn--full' %}
+        {% endif %}
+
+        <div class="cart-promo--link">
+            <a href="{{ page.url }}" rel="noopener" class="{{ link_classname }}">
+                {% if settings.cart_promo_show_image and page.image != blank %}
+                    <img src="{{ page.image | img_url: promo_image_size }}" alt="{{ page.title }}"
+                         class="img-fluid">
+                {% else %}
+                    {{ link_title }}
+                {% endif %}
+            </a>
+        </div>
     {% endif %}
 </div>

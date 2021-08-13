@@ -1068,6 +1068,24 @@
         "label": "Promo Link"
       },
       {
+        "type": "checkbox",
+        "id": "cart_promo_show_image",
+        "label": "Show Link Image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_promo_link_button",
+        "label": "Show link as button",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "cart_promo_link_text",
+        "label": "Promo Link Text",
+        "info": "Overrides the title of the link"
+      },
+      {
         "type": "text",
         "id": "cart_promo_text",
         "label": "Promo Text",
