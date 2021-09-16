@@ -1,0 +1,84 @@
+<script src="https://apis.google.com/js/platform.js?onload=renderOptIn" async defer></script>
+<script>
+    window.renderOptIn = function() {
+        window.gapi.load('surveyoptin', function() {
+            window.gapi.surveyoptin.render(
+                {
+                    // REQUIRED FIELDS
+                    "merchant_id": 156128366,
+                    "order_id": "{{ order_number }}",
+                    "email": "{{ order.email }}",
+                    "delivery_country": "{{ shipping_address.country_code }}",
+                    "estimated_delivery_date": "{{ order.created_at | date:'%s' | plus:604800 | date:'%F' }}",
+
+                    // OPTIONAL FIELDS
+                    "products": [{% for item in order.line_items %}{"gtin":"{{ item.variant.barcode }}"}{% unless forloop.last %}, {% endunless %}{% endfor %}]
+                });
+        });
+    }
+</script>
+<!-- Global site tag (gtag.js) - Google Ads: 1016178158 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-1016178158"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'AW-1016178158');
+</script>
+<!-- Event snippet for Purchase - Shopify Google Ads conversion page -->
+<script>
+    gtag('event', 'conversion', {
+        'send_to': 'AW-1016178158/m6RzCPKp5b8BEO7LxuQD',
+        'value': {{ subtotal_price | money_without_currency }},
+        'currency': 'USD',
+        'transaction_id': '{{ order_number }}'
+    });
+</script>
+<!-- Voyage Purchase Tag - JD - 6-21-21 -->
+{% if first_time_accessed %}
+    <script async src="https://assets.voyagetext.com/voyage.production.js"></script>
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        (function(){if(window.voyage)return;window.voyage={q:[]};var fns=['init','event','track'];
+            for(var i=0;i<fns.length;i++){(function(fn){window.voyage[fn]=function(){
+                this.q.push([fn,arguments]);}})(fns[i])}})();voyage.init('74ac98d0fa', { popup: true });
+        /* ]]> */
+    </script>
+    <script type="text/javascript">
+        voyage.track('Purchase', { amountCents: {{ order.total_price }} });
+        {% if order.customer.accepts_marketing == true %}
+        const marketingPhone = '{{ order.customer.phone}}' || '{{shipping_address.phone }}' || '{{billing_address.phone }}';
+        marketingPhone && marketingPhone.length > 9 && voyage.track('MarketingPhone', { marketingPhone });
+        {% endif %}
+    </script>
+{% endif %}
+<!-- End Voyage Purchase Tag-->
+
+<!--GA4 / steve montgomery, 25 Aug 2021 -->
+<script>
+    gtag('config', 'UA-3648826-3');
+    var gtag_data = {
+        currency: 'USD',
+        transaction_id: "{{order.name}}",
+        value: {{ order.subtotal_price | money_without_currency }},
+        items:  [
+            {% for item in order.line_items %}
+            {
+                item_id: "{{ item.sku}}",
+                item_name: "{{ item.title}}",
+                affiliation: 'Chums',
+                item_brand: 'Chums',
+                item_category: "{{ item.product.product_type }}",
+                item_category2: "{{ item.product.title }}",
+                item_category3: "{{ item.variant.option1 }}",
+                price: {{ item.price | money_without_currency }},
+                quantity: {{ item.quantity }}
+            }
+            {% unless forloop.last %}, {% endunless %}
+            {% endfor %}
+        ]
+    };
+    // console.debug(gtag_data);
+    gtag("event", "purchase", gtag_data);
+</script>

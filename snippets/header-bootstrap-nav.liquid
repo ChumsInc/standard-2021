@@ -70,14 +70,12 @@ variables required for render:
                                 {% if link.object.metafields.chums.menu_image and images[link.object.metafields.chums.menu_image] %}
                                     {% assign dropdown_image = images[link.object.metafields.chums.menu_image] %}
                                 {% endif %}
-
                                 <div class="dropdown-menu {% if dropdown_image %}dropdown-menu--has-image{% endif %}" aria-labelledby="{{ link_id }}">
                                     {% if dropdown_image %}
-                                        <div class="dropdown-menu--image" style="background-image: url('{{ link.object.metafields.chums.menu_image | file_img_url: '400x400' }}')"></div>
+                                        <div class="dropdown-menu--image" style="background-image: url('{{ dropdown_image | img_url: '400x400' }}')"></div>
                                     {% endif %}
                                     <ul class="dropdown-menu--container">
                                         {% for child_link in link.links %}
-                                            <!-- link is current: {{ child_link.current | json }} -->
                                             <li>
                                                 <a class="dropdown-item {% if child_link.current %}active{% endif %}"
                                                    {% if child_link.current %}aria-current="true" {% endif %}
