@@ -95,7 +95,7 @@ function buildSearchResultImage(_a, describedBy) {
     var featured_image = _a.featured_image, image = _a.image, id = _a.id, title = _a.title;
     var imgContainer = document.createElement('div');
     imgContainer.className = 'search-result__image';
-    var img = chums_theme__images_1.buildImage(featured_image || image, { width: 80, className: 'img-fluid' });
+    var img = (0, chums_theme__images_1.buildImage)(featured_image || image, { width: 80, className: 'img-fluid' });
     if (!!describedBy) {
         img.setAttribute('aria-describedby', describedBy);
     }
@@ -238,5 +238,5 @@ function displayPages(pages) {
         exports.searchResponse.elements.push(li);
     });
 }
-exports.searchElements.input.addEventListener('keydown', lodash_1.debounce(handleSearchKeydown, 350));
+exports.searchElements.input.addEventListener('keydown', (0, lodash_1.debounce)(handleSearchKeydown, 350));
 //# sourceMappingURL=chums-theme--search.js.map

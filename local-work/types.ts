@@ -1,3 +1,36 @@
+export interface ThemeSettings {
+    dynamicVariantsEnable: boolean,
+    dynamicVariantType: string,
+    cartType: string,
+    currenciesEnabled: boolean,
+    moneyFormat: string,
+    saveType: string,
+    recentlyViewedEnabled: boolean,
+    inventoryThreshold: number,
+    quickView: boolean,
+    themeVersion: string
+}
+
+export interface ThemeStrings {
+    addToCart: string,
+    soldOut: string,
+    unavailable: string,
+    stockLabel: string,
+    savePrice: string,
+    cartEmpty: string,
+    cartTermsConfirmation: string,
+}
+
+declare global {
+    export interface Window {
+        theme: {
+            settings: ThemeSettings,
+            strings: ThemeStrings
+        },
+        Shopify: any,
+    }
+}
+
 export interface SearchResult {
     featured_image?: FeaturedImage,
     image?: string,
@@ -39,8 +72,12 @@ export interface SearchResults {
     products?: SearchProduct[]
 }
 
-export interface DiscountAllocation {
+export interface ItemDiscountAllocation {
     amount: number;
+    formattedAmount?: string,
+}
+export interface CartDiscountAllocation {
+    total_allocated_amount: number;
     formattedAmount?: string,
 }
 
@@ -68,7 +105,7 @@ export interface CartItem {
     final_line_price: number,
     featured_image: FeaturedImage,
     image:string,
-    line_level_discount_allocations: DiscountAllocation[],
+    line_level_discount_allocations: ItemDiscountAllocation[],
     line_level_total_discount: number,
     url:string,
     product_title: string,
@@ -83,6 +120,7 @@ export interface Cart {
     note: null|string,
     attributes: object,
     original_total_price: number,
+    total_price: number,
     total_discount: number,
     total_weight: number,
     item_count: number,
@@ -90,5 +128,6 @@ export interface Cart {
     requires_shipping: boolean,
     currency: string,
     items_subtotal_price: number,
-    cart_level_discount_applications: DiscountAllocation[]
+    cart_level_discount_applications: CartDiscountAllocation[]
 }
+

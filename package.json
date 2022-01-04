@@ -2,6 +2,8 @@
   "name": "standard-2021",
   "version": "1.0.27",
   "dependencies": {
+    "@shopify/theme-cart": "^4.1.1",
+    "@shopify/theme-currency": "^4.1.1",
     "@types/lodash.debounce": "^4.0.6",
     "@types/numeral": "^2.0.1",
     "aos": "^2.3.4",

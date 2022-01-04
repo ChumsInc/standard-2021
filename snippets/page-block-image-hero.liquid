@@ -1,10 +1,14 @@
-<div
-  data-subsection
-  data-section-id="{{ block.id }}"
-  data-section-type="slideshow-section"
-  data-align-top="true"
-  class="hero-slideshow"
-  {% if block.settings.parallax %}data-parallax="true"{% endif %}>
+<div data-subsection
+     data-section-id="{{ block.id }}"
+     data-section-type="slideshow-section"
+     data-align-top="true"
+     {% if block.settings.parallax %}data-parallax="true"{% endif %}
+     class="hero-slideshow">
+
+    <div class="carousel slide" data-bs-ride="carousel">
+        <!-- carousel block settings: {{ block.settings | json }} -->
+    </div>
+
   <div class="slideshow-wrapper">
     {%- assign natural_height = false -%}
     {% if block.settings.section_height == 'natural' %}

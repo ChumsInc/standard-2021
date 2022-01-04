@@ -20,7 +20,7 @@ function buildImage(image, options) {
         var _2x = getSizedImageUrl(img.src, options.width * 2);
         img.srcset = img.src + ", " + _2x + " 2x";
     }
-    img.className = classnames_1.default(options === null || options === void 0 ? void 0 : options.className);
+    img.className = (0, classnames_1.default)(options === null || options === void 0 ? void 0 : options.className);
     if (options === null || options === void 0 ? void 0 : options.lazy) {
         img.loading = 'lazy';
     }

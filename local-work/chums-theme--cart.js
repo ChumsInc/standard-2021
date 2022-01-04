@@ -1,7 +1,18 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var chums_theme__images_1 = require("./chums-theme--images");
-var chums_theme__currency_1 = require("./chums-theme--currency");
+var handlebars_1 = require("handlebars");
+var theme_currency_1 = require("@shopify/theme-currency");
 var theme = window.theme;
 var config = {
     namespace: '.ajaxcart',
@@ -26,7 +37,7 @@ var status = {
     loading: false
 };
 var source = document.querySelector(selectors.template).innerHTML;
-var template = Handlebars.compile(source);
+var template = (0, handlebars_1.compile)(source);
 var missingImage = '//cdn.shopify.com/s/assets/admin/no-image-medium-cc9732cb976dd349a0df1d39816fbcc7.gif';
 function setLoading(state) {
     status.loading = state;
@@ -44,12 +55,9 @@ function buildCartInner(cart) {
                 delete properties[key];
             }
         });
-        var amount = 0;
-        if (line_level_discount_allocations.length) {
-            line_level_discount_allocations.forEach(function (disc) {
-                disc.formattedAmount = chums_theme__currency_1.formatMoney(disc.amount, theme.settings.moneyFormat);
-            });
-        }
+        var discounts = line_level_discount_allocations.map(function (discount) {
+            return __assign(__assign({}, discount), { formattedAmount: (0, theme_currency_1.formatMoney)(discount.amount, theme.settings.moneyFormat) });
+        });
         return {
             key: key,
             url: url,
@@ -58,26 +66,42 @@ function buildCartInner(cart) {
             variation: variant_title,
             properties: properties,
             itemQty: quantity,
-            price: chums_theme__currency_1.formatMoney(price, theme.settings.moneyFormat),
-            discountedPrice: chums_theme__currency_1.formatMoney(price - (total_discount / quantity), theme.settings.moneyFormat),
-            discounts: line_level_discount_allocations,
-            discountsApplied: !!line_level_discount_allocations.length,
+            price: (0, theme_currency_1.formatMoney)(price, theme.settings.moneyFormat),
+            discountedPrice: (0, theme_currency_1.formatMoney)(price - (total_discount / quantity), theme.settings.moneyFormat),
+            discounts: discounts,
+            discountsApplied: !!discounts.length,
             vendor: vendor,
         };
     });
-    // @todo - Finish Implenting CartDrawer
+    var cartDiscounts = cart.cart_level_discount_applications.map(function (discount) {
+        return __assign(__assign({}, discount), { formattedAmount: (0, theme_currency_1.formatMoney)(discount.total_allocated_amount, theme.settings.moneyFormat) });
+    });
+    var templateData = {
+        items: items,
+        note: cart.note,
+        cartDiscounts: cartDiscounts,
+        cartDiscountsApplied: !!cartDiscounts.length,
+        totalPrice: (0, theme_currency_1.formatMoney)(cart.total_price, theme.settings.moneyFormat),
+    };
+    var html = template(templateData);
+    var div = document.createElement('div');
+    div.innerHTML = html;
+    return div;
 }
-function buildCart(cart) {
+function buildCart(cart, openDrawer) {
     var _a, _b;
     setLoading(true);
     if (cart.items.length === 0) {
         var p = document.createElement('p');
         p.innerText = (_b = (_a = window.theme) === null || _a === void 0 ? void 0 : _a.strings) === null || _b === void 0 ? void 0 : _b.cartEmpty;
+        elements.container.appendChild(p);
     }
     else {
+        elements.container.appendChild(buildCartInner(cart));
     }
     status.loaded = true;
     setLoading(false);
+    // @TODO: add script for theme.settings.currenciesEnabled
     // if (window.theme.settings.currenciesEnabled) {
     //     window.theme.currencySwitcher.ajaxrefresh();
     // }
@@ -85,6 +109,9 @@ function buildCart(cart) {
         window.Shopify.StorefrontExpressButtons.initialize();
         // Resize footer after arbitrary delay for buttons to load
         setTimeout(function () { return sizeFooter(); }, 800);
+    }
+    if (openDrawer) {
+        //@todo implement cartDrawer modal
     }
 }
 function sizeFooter() {
@@ -98,43 +125,5 @@ function sizeFooter() {
     var cartFooterHeight = cartFooter.offsetHeight;
     cartInner.style.bottom = cartFooterHeight + 'px';
     cartFooter.style.height = cartFooterHeight + 'px';
-}
-var cartItemId = function (id) { return "cart-item--" + id; };
-function buildCartItemImage(_a, describedBy) {
-    var featured_image = _a.featured_image, image = _a.image, id = _a.id, url = _a.url;
-    var imgContainer = document.createElement('div');
-    imgContainer.className = 'cart-item__image';
-    var a = document.createElement('a');
-    a.href = url;
-    var img = chums_theme__images_1.buildImage(featured_image || image, { width: 180, className: 'img-fluid' });
-    if (!!describedBy) {
-        img.setAttribute('aria-describedby', cartItemId(id));
-    }
-    a.appendChild(img);
-    imgContainer.appendChild(a);
-    return imgContainer;
-}
-function buildCartQty(_a) {
-    var key = _a.key, quantity = _a.quantity;
-    var el = document.createElement('div');
-    el.className = 'cart-item__quantity';
-    var label = document.createElement('label');
-    label.className = 'visually-hidden';
-    label.innerText = 'Quantity';
-    el.appendChild(label);
-    var wrapper = document.createElement('div');
-    wrapper.className = 'cart-item__input-wrapper form-group form-group-sm';
-    var decButton = document.createElement('button');
-    decButton.className = 'btn btn-outline-secondary cart-item__adjust--minus';
-    decButton.innerText = '-';
-    // decButton.setAttribute('')
-    return el;
-}
-function buildCartItem(item) {
-    var div = document.createElement('div');
-    div.className = 'cart-item__details';
-    var titleEl = document.createElement('div');
-    div.className = 'cart-item__title';
-    div.innerText = item.title;
 }
 //# sourceMappingURL=chums-theme--cart.js.map

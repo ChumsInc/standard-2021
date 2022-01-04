@@ -1,19 +1,13 @@
-import {Cart, CartItem, SearchResult} from "./types";
 import {buildImage} from "./chums-theme--images";
 import {compile} from 'handlebars';
-import {formatMoney} from "./chums-theme--currency";
+import {formatMoney} from "@shopify/theme-currency";
+import {CartItem, Cart, DiscountAllocation, ItemDiscountAllocation} from '@shopify/theme-cart';
 
-interface KeyedObject {
-    [key:string]: any
+interface ItemDiscount extends ItemDiscountAllocation{
+    formattedAmount: string,
 }
-declare global {
-    interface Window {
-        theme: {
-            settings: KeyedObject,
-            strings: KeyedObject
-        },
-        Shopify: any,
-    }
+interface CartDiscount extends DiscountAllocation{
+    formattedAmount: string,
 }
 
 const theme = window.theme;
@@ -50,7 +44,7 @@ const status:CartStatus = {
 }
 
 const source = document.querySelector(selectors.template).innerHTML;
-const template = Handlebars.compile(source);
+const template = compile(source);
 
 const missingImage = '//cdn.shopify.com/s/assets/admin/no-image-medium-cc9732cb976dd349a0df1d39816fbcc7.gif';
 
@@ -63,7 +57,7 @@ function emptyCart() {
     elements.container.innerText = '';
 }
 
-function buildCartInner(cart:Cart) {
+function buildCartInner(cart:Cart):HTMLElement {
     const items = cart.items.map(item => {
         const {key, url, title, variant_title, properties, quantity, price, vendor, total_discount, image, line_level_discount_allocations} = item;
 
@@ -74,12 +68,12 @@ function buildCartInner(cart:Cart) {
             }
         });
 
-        let amount = 0;
-        if (line_level_discount_allocations.length) {
-            line_level_discount_allocations.forEach(disc => {
-                disc.formattedAmount = formatMoney(disc.amount, theme.settings.moneyFormat);
-            })
-        }
+        const discounts:ItemDiscount[] = line_level_discount_allocations.map((discount) => {
+            return {
+                ...discount,
+                formattedAmount: formatMoney(discount.amount, theme.settings.moneyFormat)
+            }
+        })
 
         return {
             key,
@@ -91,26 +85,47 @@ function buildCartInner(cart:Cart) {
             itemQty: quantity,
             price: formatMoney(price, theme.settings.moneyFormat),
             discountedPrice: formatMoney(price - (total_discount / quantity), theme.settings.moneyFormat),
-            discounts: line_level_discount_allocations,
-            discountsApplied: !!line_level_discount_allocations.length,
+            discounts,
+            discountsApplied: !!discounts.length,
             vendor,
         }
+    });
+
+    const cartDiscounts =  cart.cart_level_discount_applications.map(discount => {
+        return {
+            ...discount,
+            formattedAmount: formatMoney(discount.total_allocated_amount, theme.settings.moneyFormat)
+        }
     })
-    // @todo - Finish Implenting CartDrawer
+
+    const templateData = {
+        items,
+        note: cart.note,
+        cartDiscounts: cartDiscounts,
+        cartDiscountsApplied: !!cartDiscounts.length,
+        totalPrice: formatMoney(cart.total_price, theme.settings.moneyFormat),
+    }
+
+    const html:string = template(templateData);
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div;
 }
 
 
-function buildCart(cart:Cart) {
+function buildCart(cart:Cart, openDrawer?:boolean) {
     setLoading(true);
     if (cart.items.length === 0) {
         const p = document.createElement('p');
         p.innerText = window.theme?.strings?.cartEmpty;
+        elements.container.appendChild(p);
     } else {
-
+        elements.container.appendChild(buildCartInner(cart));
     }
     status.loaded = true;
     setLoading(false);
 
+    // @TODO: add script for theme.settings.currenciesEnabled
     // if (window.theme.settings.currenciesEnabled) {
     //     window.theme.currencySwitcher.ajaxrefresh();
     // }
@@ -120,6 +135,10 @@ function buildCart(cart:Cart) {
 
         // Resize footer after arbitrary delay for buttons to load
         setTimeout(() => sizeFooter(),800);
+    }
+
+    if (openDrawer) {
+        //@todo implement cartDrawer modal
     }
 }
 
@@ -136,54 +155,4 @@ function sizeFooter() {
     const cartFooterHeight = cartFooter.offsetHeight;
     cartInner.style.bottom = cartFooterHeight + 'px';
     cartFooter.style.height = cartFooterHeight + 'px';
-}
-
-const cartItemId = (id:number) => `cart-item--${id}`;
-
-function buildCartItemImage({featured_image, image, id, url}:CartItem, describedBy?: string):HTMLElement {
-    const imgContainer = document.createElement('div');
-    imgContainer.className = 'cart-item__image';
-
-    const a = document.createElement('a');
-    a.href = url;
-
-    const img = buildImage(featured_image || image, {width: 180, className: 'img-fluid'});
-    if (!!describedBy) {
-        img.setAttribute('aria-describedby', cartItemId(id));
-    }
-
-    a.appendChild(img)
-
-    imgContainer.appendChild(a);
-    return imgContainer;
-}
-
-
-function buildCartQty({key, quantity}:CartItem):HTMLElement {
-    const el = document.createElement('div');
-    el.className = 'cart-item__quantity';
-
-    const label = document.createElement('label');
-    label.className = 'visually-hidden';
-    label.innerText = 'Quantity';
-    el.appendChild(label)
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'cart-item__input-wrapper form-group form-group-sm';
-    const decButton = document.createElement('button');
-    decButton.className = 'btn btn-outline-secondary cart-item__adjust--minus';
-    decButton.innerText = '-'
-    // decButton.setAttribute('')
-    return el;
-}
-
-function buildCartItem(item:CartItem) {
-    const div = document.createElement('div');
-    div.className = 'cart-item__details';
-    const titleEl = document.createElement('div');
-    div.className = 'cart-item__title';
-    div.innerText = item.title;
-
-
-
 }
