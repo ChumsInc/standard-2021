@@ -25,7 +25,7 @@
         {% if include_page.title != blank %}
           <button type="button" class="label collapsible-trigger collapsible-trigger-btn collapsible-trigger-btn--borders collapsible--auto-height" aria-controls="Product-content-{{ include_page_handle.last }}-{{ section_id }}">
             {{ include_page.title }}
-            {% include 'collapsible-icons' %}
+            {% render 'collapsible-icons' %}
           </button>
           <div id="Product-content-{{ include_page_handle.last }}-{{ section_id }}" class="collapsible-content collapsible-content--all">
             <div class="collapsible-content__inner rte">
@@ -40,7 +40,7 @@
       {% if settings.product_content_collapse_1 %}
         <button type="button" class="label collapsible-trigger collapsible-trigger-btn collapsible-trigger-btn--borders" aria-controls="Product-content-1-{{ section_id }}">
           {{ pages[settings.product_content_1].title }}
-          {% include 'collapsible-icons' %}
+          {% render 'collapsible-icons' %}
         </button>
       {% else %}
         <div class="label collapsible-trigger-btn collapsible-trigger-btn--borders">
@@ -58,7 +58,7 @@
       {% if settings.product_content_collapse_2 %}
         <button type="button" class="label collapsible-trigger collapsible-trigger-btn collapsible-trigger-btn--borders" aria-controls="Product-content-2-{{ section_id }}">
           {{ pages[settings.product_content_2].title }}
-          {% include 'collapsible-icons' %}
+          {% render 'collapsible-icons' %}
         </button>
       {% else %}
         <div class="label collapsible-trigger-btn collapsible-trigger-btn--borders">
@@ -76,7 +76,7 @@
       {% if settings.product_content_collapse_3 %}
         <button type="button" class="label collapsible-trigger collapsible-trigger-btn collapsible-trigger-btn--borders" aria-controls="Product-content-3-{{ section_id }}">
           {{ pages[settings.product_content_3].title }}
-          {% include 'collapsible-icons' %}
+          {% render 'collapsible-icons' %}
         </button>
       {% else %}
         <div class="label collapsible-trigger-btn collapsible-trigger-btn--borders">
@@ -95,7 +95,7 @@
       {% form 'contact' %}
         <button type="button" class="label collapsible-trigger collapsible-trigger-btn collapsible-trigger-btn--borders" aria-controls="Product-content-4-{{ section_id }}">
           {{ settings.product_contact_title }}
-          {% include 'collapsible-icons' %}
+          {% render 'collapsible-icons' %}
         </button>
 
         <div id="Product-content-4-{{ section_id }}" class="collapsible-content collapsible-content--all">
@@ -148,7 +148,7 @@
     {% if reviews_as_tab %}
       <button type="button" class="label collapsible-trigger collapsible-trigger-btn collapsible-trigger-btn--borders collapsible--auto-height" aria-controls="Product-content-5-{{ section_id }}">
         <span class="shopify-product-reviews-badge" data-id="{{ product.id }}">Reviews</span>
-        {% include 'collapsible-icons' %}
+        {% render 'collapsible-icons' %}
       </button>
 
       <div id="Product-content-5-{{ section_id }}" class="collapsible-content collapsible-content--all">

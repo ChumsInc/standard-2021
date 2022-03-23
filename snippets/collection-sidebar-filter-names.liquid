@@ -1,10 +1,15 @@
+{% comment %}
+Renders a customized title for various tag names
+Required for render:
+	tag_name
+{% endcomment %}
 {% case tag_name %}
 	{% when 'regular end' %}
-		Normal Frames (5-10 mm)
+		Normal Frames <small>(5-10 mm)</small>
 	{% when 'large end' %}
-		Large Frames (10-20mm)
+		Large Frames <small>(10-20mm)</small>
 	{% when 'small end' %}
-		Small Frames (2-4 mm)
+		Small Frames <small>(2-4 mm)</small>
 	{% when 'mono' %}
 		Mono Filament (fishing line)
 	{% when 'floating accessories' %}

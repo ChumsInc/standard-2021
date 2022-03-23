@@ -9,7 +9,7 @@ required variables:
   size_option_index
 {% endcomment %}
 
-<div class="variant-input {% unless product_available %}variant-input--disabled{% endunless %}"
+<div class="variant-input {%- unless product_available %}variant-input--disabled{% endunless -%}"
      data-index="option{{ option_index }}"
      data-value="{{ value | escape }}">
     <input type="radio"
@@ -17,7 +17,7 @@ required variables:
            value="{{ value | escape }}"
            data-index="option{{ option_index }}"
            name="{{ option.name }}"
-           class="variant__input-{{ section_id }}{% unless product_available %} disabled{% endunless %} variant__input--size-button-{{ section_id }}"
+           class="variant__input-{{ section_id }} {%- unless product_available %} disabled{% endunless -%} variant__input--size-button-{{ section_id }}"
            data-size-name="{{ value | escape }}"
            data-size-index="{{ size_option_index }}"
            id="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}">

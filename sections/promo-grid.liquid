@@ -5,7 +5,7 @@
     <div class="page-width">
   {% endunless %}
 
-  {% include 'promo-grid' %}
+  {% render 'promo-grid', section: section %}
 
   {% if section.blocks.size == 0 %}
     <div class="page-width text-center">

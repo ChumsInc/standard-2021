@@ -1,0 +1,207 @@
+{% comment %}
+variables required in product-images-2.liquid:
+    current_variant
+    section_id
+
+{% endcomment %}
+
+{% assign featured_media = current_variant.featured_media | default: product.media | first %}
+<!-- featured_media: {{ featured_media |  json }} -->
+{% unless featured_media %}
+    {% for media in product.media %}
+        {% if media.src == current_variant.featured_image.src %}
+            {% assign featured_media = media %}
+        {% endif %}
+    {%endfor%}
+{%endunless%}
+{% assign sku = current_variant.sku | default: product.sku %}
+{% assign currentHashSKU = sku | prepend: '#' %}
+<script>
+    const product_{{ section_id }} = {{ product | json }};
+    const currentVariant_{{ section_id }} = {{ current_variant |  json }};
+    const featured_media_{{ section_id }} = {{ featured_media | json }};
+    const currentHashSKU_{{ section_id }} = {{ currentHashSKU | json }};
+</script>
+
+
+{% unless product.empty? %}
+    {% if product.media.size == 1 %}
+        <div id="product-image-{{ section_id }}" class="product-image--single">
+            {% for media in product.media %}
+                {% render 'product-media', media: media, className: 'img-fluid', section_id: section_id %}
+            {% endfor %}
+        </div>
+    {% else %}
+        {% assign active_images = "" | split: '' %}
+        {% for media in product.media %}
+            {% assign hashSKU = '' %}
+            {% assign altWords = media.alt | split: ' ' %}
+            {% for word in altWords %}
+                {% assign isHash =  word | slice: 0 %}
+                {% if isHash == '#' %}{% assign hashSKU = word %}{% endif %}
+            {% endfor %}
+            {% if hashSKU == '' %}
+                {% for variant in product.variants %}
+                    {% if variant.featured_media == media %}
+                        {% assign hashSKU = variant.sku | prepend: '#' %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if media == featured_media or hashSKU == currentHashSKU or hashSKU == '' %}
+                {% assign media_id = media.id | split: ' ' %}
+                {% assign active_images = active_images | concat: media_id | uniq %}
+            {% endif %}
+        {% endfor %}
+        {% capture __product_thumbs %}
+
+        {%endcapture%}
+        <div id="product-carousel-{{ section_id }}" class="carousel carousel-dark slide product-carousel"
+             data-bs-ride="carousel" data-bs-interval="false">
+
+            <template class="carousel-inner-template">
+                {% for media in product.media %}
+                    <div class="carousel-item" data-media-id="{{ media.id }}">
+                        {% render 'product-media', media: media, className: 'd-block w-100 img-fluid' %}
+                    </div>
+                {% endfor %}
+            </template>
+            <template class="carousel-thumbs-template">
+                {% for media in product.media %}
+                    {% assign defaultLabel = '' %}
+                    {% assign hashSKU = '' %}
+                    {% assign altWords = media.alt | split: ' ' %}
+                    {% for word in altWords %}
+                        {% assign isHash =  word | slice: 0 %}
+                        {% if isHash == '#' %}{% assign hashSKU = word %}{% endif %}
+                    {% endfor %}
+                    {% if hashSKU == '' %}
+                        {% for variant in product.variants %}
+                            {% if variant.featured_media == media %}
+                                {% assign hashSKU = variant.sku | prepend: '#' %}
+                                {% assign defaultLabel = variant.name | append: ' // ' | append: variant.sku %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <div class="product-carousel-thumb thumb--{{ media.media_type -}}" data-media-id="{{ media.id }}"
+                         data-chums-sku="{{ hashSKU | default: 'all' }}">
+                        <button type="button" data-bs-target="#product-carousel-{{ section_id }}" data-bs-slide-to=""
+                                class="product-carousel-button"
+                                aria-label="{{ media.alt | default: defaultLabel }}">
+                            {% if media.media_type == 'external_video' %}
+                                <span class="product-carousel-thumb--play-icon">{% render 'icon-play' %}</span>
+                            {% endif %}
+                            {% render 'product-media', media: media, className: 'img-thumbnail', width: 96, height: 96 %}
+                        </button>
+                    </div>
+                {% endfor %}
+            </template>
+
+            <div class="carousel-inner" data-active-images="{{ active_images | join: ',' }}">
+                <!-- active_images: {{ active_images | json }} -->
+                {% for media in product.media %}
+                    {% assign active_image = 0 %}
+                    {% assign media_id = media.id | append: '' %}
+                    {% for id in active_images %}
+                        {% if media_id == id %}
+                            {% assign active_image = 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% assign currentImage = 0 %}
+                    {% if featured_media == media %}
+                        {% assign currentImage = 1 %}
+                    {% endif %}
+                    {% assign loading = 'lazy' %}
+                    {% if currentImage == 1 %}
+                        {% assign loading = 'eager' %}
+                    {% endif %}
+                    {% if active_image == 1 %}
+                        <div class="carousel-item {% if currentImage == 1 %}active{% endif %}" data-media-id="{{ media.id }}">
+                            {% render 'product-media', media: media, className: 'd-block w-100 img-fluid', loading: loading %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div id="product-carousel-thumbs-{{ section_id }}" class="product-carousel-thumbs mt-3">
+            {% for media in product.media %}
+                {% assign active_image = 0 %}
+                {% assign media_id = media.id | append: '' %}
+                {% for id in active_images %}
+                    {% if media_id == id %}
+                        {% assign active_image = 1 %}
+                    {% endif %}
+                {% endfor %}
+                {% assign currentImage = 0 %}
+                {% if featured_media == media %}
+                    {% assign currentImage = 1 %}
+                {% endif %}
+                {% if active_image == 1 %}
+                    {% capture __bsSlideTo %}{% increment bsSlideTo %}{%endcapture%}
+                    <div class="product-carousel-thumb thumb--{{ media.media_type -}} {% if __bsSlideTo == '0' %} thumb--active{% endif %}"
+                         data-media-id="{{ media.id }}"
+                         data-chums-sku="{{ hashSKU | default: 'all' }}">
+                        <button type="button" data-bs-target="#product-carousel-{{ section_id }}"
+                                data-bs-slide-to="{{ __bsSlideTo }}"
+                                class="product-carousel-button"
+                                aria-label="{{ media.alt | default: defaultLabel }}">
+                            {% if media.media_type == 'external_video' %}
+                                <span class="product-carousel-thumb--play-icon">{% render 'icon-play' %}</span>
+                            {% endif %}
+                            {% render 'product-media', media: media, className: 'img-thumbnail', width: 96, height: 96 %}
+                        </button>
+                    </div>
+                {% endif %}
+                {% assign defaultLabel = 'Slide ' | concat: forloop.index %}
+                {% assign hashSKU = '' %}
+                {% assign altWords = media.alt | split: ' ' %}
+                {% for word in altWords %}
+                    {% assign isHash =  word | slice: 0 %}
+                    {% if isHash == '#' %}{% assign hashSKU = word %}{% endif %}
+                {% endfor %}
+                {% if hashSKU == '' %}
+                    {% for variant in product.variants %}
+                        {% if variant.featured_media == media %}
+                            {% assign hashSKU = variant.sku | prepend: '#' %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if media == featured_media or hashSKU == currentHashSKU or hashSKU == '' %}
+                    {% assign media_id = media.id | split: ' ' %}
+                    {% assign active_images = active_images | concat: media_id | uniq %}
+                {% endif %}
+                {% comment %}
+                <div class="product-carousel-thumb thumb--{{ media.media_type -}}
+                            {%- if media == featured_media %} thumb--active{%- endif -%}
+                            {%- if hashSKU == currentHashSKU %} thumb--current-sku{%- endif -%}
+                            {%- if hashSKU == '' %} thumb--all-skus{%- endif -%}"
+                     data-chums-sku="{{ hashSKU }}">
+
+                    <button type="button" data-bs-target="#product-carousel-{{ section_id }}" data-bs-slide-to="{{ forloop.index0 }}"
+                            class="product-carousel-button {% if forloop.index0 == 0 %}active{% endif %}"
+                            {% if forloop.index0 == 0 %}aria-current="true" {% endif %}
+                            aria-label="{{ media.alt | default: defaultLabel }}">
+                        {% if media.media_type == 'external_video' %}
+                            <span class="product-carousel-thumb--play-icon">
+                          {% render 'icon-play' %}
+                        </span>
+                        {% endif %}
+                        {% render 'product-media', media: media, className: 'img-thumbnail', width: 96, height: 96 %}
+                    </button>
+                </div>
+                {% endcomment %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% else %}
+    <div class="product__photos product__photos-{{ section_id }}">
+        <div class="product__main-photos" style="width: 100%">
+            <div id="ProductPhotos-{{ section_id }}">
+                <div data-index="{{ forloop.index0 }}">
+                    <a href="#">
+                        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endunless %}

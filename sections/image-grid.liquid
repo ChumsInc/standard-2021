@@ -174,7 +174,7 @@
 
 <div class="index-section" style="margin-top: {{ section.settings.margin_y }}; margin-bottom: {{ section.settings.margin_y }};">
     <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
-        <!-- {{ section.settings |  json }} -->
+        {% comment %}<!-- {{ section.settings |  json }} -->{% endcomment %}
         <div class="custom-grid custom-grid--g-{{ section.settings.gutter | replace: '.', '_'}}">
 
             {% for block in section.blocks %}

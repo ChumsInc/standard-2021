@@ -8,7 +8,7 @@
 
     {% if section.settings.filter_style == 'sidebar' %}
       <div class="collection-sidebar">
-        {% include 'collection-sidebar-filters', location: 'CollectionSidebar' %}
+        {% render 'collection-sidebar-filters', location: 'CollectionSidebar', section: section, current_tags: current_tags %}
       </div>
     {% endif %}
   </div>

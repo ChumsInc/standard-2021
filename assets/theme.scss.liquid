@@ -5,6 +5,7 @@
   http://archetypethemes.co
 */
 
+
 /*============================================================================
   #Sass Mixins
 ==============================================================================*/
@@ -526,7 +527,7 @@ $zindexDrawer: 30;
 
 $zindexDrawerOverlay: 26;
 
-$zindexModal: 25;
+$zindexModal: 1055;
 
 $zindexSkipToContent: 10000;
 
@@ -8645,35 +8646,10 @@ $tagActiveIconSize: 16px;
 
 .tag-list a {
   display: block;
-  line-height: 2;
 }
 
 .tag--active > a {
   font-weight: 900;
-}
-
-.tag-list--checkboxes a {
-  position: relative;
-  padding-left: 25px;
-
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  &:before {
-    border: 1px solid $colorBorder;
-    height: $tagActiveIconSize;
-    width: $tagActiveIconSize;
-  }
-}
-
-.tag-list--checkboxes .tag--active a:before {
-  background-color: $colorTextBody;
-  border-color: $colorTextBody;
 }
 
 // Remove tags (top of sidebar)
@@ -11878,6 +11854,7 @@ iframe.zoid-component-frame {
   }
 }
 
+/*
 .product__lifestyle {
   display: flex; 
   flex-wrap: wrap;
@@ -11960,7 +11937,7 @@ iframe.zoid-component-frame {
     }
   }
 }
-
+*/
 .product-section.is-modal {
   .product__photo-zoom {
     cursor: default;

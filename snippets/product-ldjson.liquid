@@ -1,3 +1,8 @@
+{% comment %}
+Required for render:
+    product,
+    current_variant,
+{% endcomment %}
 <script type="application/ld+json">
   {
     "@context": "http://schema.org",
@@ -11,7 +16,7 @@
     },
     "brand": {{ product.vendor | json }},
     {% if current_variant.sku %}"sku": "{{ current_variant.sku }}",{% endif %}
-    {% if current_variant.barcode %}"gtin12": "{{ current_variant.barcode }}",{% endif %}    
+    {% if current_variant.barcode %}"gtin": "{{ current_variant.barcode }}",{% endif %}
     "name": {{ product.title | json }},
     "description": {{ product.description | split: '<!-- split -->' | first | strip_html | strip_newlines | json }},
     "category": "",

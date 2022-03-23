@@ -3310,6 +3310,26 @@ lazySizesConfig.expFactor = 4;
 
             updateVariantImage: function(evt) {
                 var variant = evt.variant;
+                const productSection = evt.target;
+                const carouselEl = productSection.querySelector('.product-carousel');
+                if (!carouselEl) {
+                    return;
+                }
+                const carousel = new bootstrap.Carousel(carouselEl, {interval: false});
+
+                productSection.querySelectorAll('.product-carousel-thumb.thumb--current-sku')
+                    .forEach(el => el.classList.toggle('thumb--current-sku', false));
+                productSection.querySelectorAll('.product-carousel-thumb.thumb-active')
+                    .forEach(el => el.classList.tiggle('thumb-active', false));
+
+                const currentThumbs = productSection.querySelectorAll(`.product-carousel-thumb[data-chums-sku="#${variant.sku}"]`);
+                currentThumbs.forEach(el => el.classList.toggle('thumb--current-sku', true));
+                if (currentThumbs.length > 0) {
+                    const to = currentThumbs[0].querySelector('button')?.dataset.bsSlideTo || 0;
+                    carousel.to(to);
+                    currentThumbs[0].classList.toggle('thumb-active', true);
+                }
+
                 var sizedImgUrl = theme.Images.getSizedImageUrl(variant.featured_image.src, this.settings.imageSize);
 
                 var $newImage = $('.product__thumb[data-id="' + variant.featured_image.id + '"]');

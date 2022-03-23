@@ -1,21 +1,29 @@
-<div id="QuickShopModal-{{ product.id }}" class="modal modal--square modal--quick-shop" data-product-id="{{ product.id }}">
-  <div class="modal__inner">
-    <div class="modal__centered">
-      <div class="modal__centered-content">
-        {% include 'product-template',
-          description_style: 'default',
-          image_position: 'right',
-          image_container_width: 'medium',
-          section_id: product.id,
-          social: false,
-          isModal: true
-        %}
-      </div>
+{% comment %}
+Required for render:
+    product
+    thumbnail_position
+    description_style
+    section_id
+    isModal
+    collection
+    image_position
+{% endcomment %}
+<div id="QuickShopModal-{{ product.id }}" class="modal modal--square modal--quick-shop"
+     data-product-id="{{ product.id }}">
+    <div class="modal__inner">
+        <div class="modal__centered">
+            <div class="modal__centered-content">
+                {% render 'product-template',
+                        product: product,
+                        section_id: product.id,
+                        isModal: true
+                %}
+            </div>
 
-      <button type="button" class="modal__close js-modal-close text-link">
-        {% include 'icon-close' %}
-        <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
-      </button>
+            <button type="button" class="modal__close js-modal-close text-link">
+                {% render 'icon-close' %}
+                <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
+            </button>
+        </div>
     </div>
-  </div>
 </div>

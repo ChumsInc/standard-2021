@@ -1,12 +1,25 @@
-{% if product.metafields.chums.lifestyle_image && product.metafields.chums.lifestyle_image.size %}
-<div class="product__lifestyle product__lifestyle--{{product.metafields.chums.lifestyle_layout | handleize}}">
-  {% for image in product.metafields.chums.lifestyle_image %}
-  {% assign lifestyle_alt_text = image | replace: '-', ' '| replace: '_', ' ' | replace: '.png', '' | replace: '.jpeg', '' | replace: '.jpg', '' %}
-  <div class="product__lifestyle-image">
-    {%- assign img_url = image | file_img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
-    <img class="lazyload product__lifestyle-image" data-src="{{img_url}}" data-sizes="auto" alt="{{product.title}} lifestyle: {{ lifestyle_alt_text }}"/>
-  </div>
-  {% endfor %}
-</div>
+{% if product.metafields.chums.lifestyle_image and product.metafields.chums.lifestyle_image.size %}
+    <div class="product__lifestyle product__lifestyle--{{ product.metafields.chums.lifestyle_layout | handleize }}">
+        <!-- layout: {{ product.metafields.chums.lifestyle_layout }} -->
+        {% for image in product.metafields.chums.lifestyle_image %}
+            {% assign lifestyle_alt_text = image | replace: '-', ' ' | replace: '_', ' ' | replace: '.png', '' | replace: '.jpeg', '' | replace: '.jpg', '' %}
+            <div class="product__lifestyle-image">
+                {% assign url_360 = image | file_img_url: '360x' %}
+                {% assign url_720 = image | file_img_url: '720x' %}
+                {% assign url_1080 = image | file_img_url: '1080x' %}
+                {% assign url_1500 = image | file_img_url: '1500x' %}
+                {% assign url_2000 = image | file_img_url: '2000x' %}
+                {% assign url_3000 = image | file_img_url: '3000x' %}
+                <img class="product__lifestyle-image" loading="lazy" src="{{ image | file_img_url: '1920x' }}"
+                     srcset="{{ url_360 }}  360w,
+                             {{ url_720 }}  720w,
+                             {{ url_1080 }}  1080w,
+                             {{ url_1500 }}  1500w,
+                             {{ url_2000 }}  2000w,
+                             {{ url_3000 }}  3000w, {{ image | file_img_url: '1920x' }}"
+                     alt="{{ product.title }} lifestyle: {{ lifestyle_alt_text }}"/>
+            </div>
+        {% endfor %}
+    </div>
 {% endif %}
 

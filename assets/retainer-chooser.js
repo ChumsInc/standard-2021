@@ -28,7 +28,7 @@ if (window.NodeList && !NodeList.prototype.forEach) {
     tagActive: 'tag--active',
     tagHidden: 'tag--hidden',
     tagItem: 'tag',
-    tagRemove: 'tag--remove-url',
+    tagRemove: 'tag--remove-filter',
     tagRemoveFilters: 'tag--remove-filters',
     tagSwatch: 'tag--swatch',    
     hasFilters: 'has-filters',
@@ -67,7 +67,8 @@ if (window.NodeList && !NodeList.prototype.forEach) {
     this.swatchList = [];
     this.swatchContainer = this.container.querySelector(selectors.swatchList);
 
-    this.onClickTag = this.onClickTag.bind(this);
+    this.onClickLink = this.onClickLink.bind(this);
+    this.changeHandler = this.changeHandler.bind(this);
     this.updateEnabledProuducts = this.updateEnabledProducts.bind(this);
     this.updateProductGroup = this.updateProductGroup.bind(this);
     this.intersectGroups = this.intersectGroups.bind(this);
@@ -86,36 +87,85 @@ if (window.NodeList && !NodeList.prototype.forEach) {
     });
     
     this.updateSelectedTagCount();
-    
-    this.container.addEventListener('click', this.onClickTag);
+
+    // this.container.addEventListener('click', this.onClickLink);
+    this.container.addEventListener('change', this.changeHandler);
     var clearFilters = this.container.querySelector(selectors.tagRemoveFilters);
     if (clearFilters) {
       clearFilters.addEventListener('click', this.onClearFilters);
     }
   };
-  
-  RetainerChooser.prototype.onClickTag = function (ev) {
+
+  RetainerChooser.prototype.onClickLink = function (ev) {
     var el = ev.target.classList.contains(classes.tagItem) ? ev.target : ev.target.closest(selectors.tagItem);
     // if the clicked element does not have a parent 'tag' className then it's not the element we are listening for
     // * also, if it's got a 'tag--remove' className then we want to allow so that we can remove assigned tags from menu navigation.
     if (!el || el.classList.contains(classes.tagRemove)) {
       return;
     }
-    // * also, if it's got a 'tag--active' className and it's data-attribute is in the this.urlFilters array, then allow default action.
-    if (this.urlFilters.includes(el.dataset.attribute)) {
+    ev.preventDefault();
+  }
+
+  RetainerChooser.prototype.changeHandler = function (ev) {
+    // console.log(ev.target);
+    var el = ev.target;
+    if (!el) {
       return;
     }
 
-    ev.preventDefault();
-    if (el.classList.contains(classes.tagSwatch)) {
-      this.onClickColorTag(el);
-    } else {
-      el.classList.toggle(classes.tagActive);      
-    }
-    this.updateEnabledProducts();
+    this.productGroups = {};
+    const filters = this.container.querySelectorAll('input[type="checkbox"]:checked');
+
+    filters.forEach(el => {
+      const key = el.dataset.filter;
+      let products = [];
+      try {
+          products = JSON.parse(el.dataset.products);
+      } catch(err) {
+          console.log("changeHandler()", err.message);
+      }
+      if (!key) {
+        return;
+      }
+      if (!this.productGroups[key]) {
+        this.productGroups[key] = [];
+      }
+      products.forEach(p => {
+        if (this.productGroups[key].indexOf(p) === -1) {
+          this.productGroups[key].push(p)
+        }
+      });
+    });
+    console.log(this.productGroups);
+    Object.keys(this.productGroups).forEach(key => {
+
+    })
+    // return;
+    // // if (el.classList.contains(classes.tagSwatch)) {
+    // //   this.onClickColorTag(el);
+    // // } else {
+    // //   el.classList.toggle(classes.tagActive);
+    // // }
+    // this.enabledProducts = [];
+    // try {
+    //   this.enabledProducts = JSON.parse(el.dataset.products);
+    // } catch(err) {
+    //     console.log("changeHandler()", err.message);
+    //     return;
+    // }
+    // // this.updateEnabledProducts();
     this.showProducts();
-    this.showClearFilters();
+    // this.showClearFilters();
   };
+
+
+  RetainerChooser.prototype.shouldShowProduct = function (product) {
+    let shouldShow = true;
+    Object.keys(this.productGroups).forEach(key => {
+      shouldShow = shouldShow && (this.productGroups[key].indexOf(product) !== -1);
+    })
+    return shouldShow;
+  }
   
   RetainerChooser.prototype.onClickColorTag = function (el) {
     var isActive = el.classList.contains(classes.tagActive);
@@ -188,6 +238,8 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   RetainerChooser.prototype.updateEnabledProducts = function () {
     this.enabledProducts = [];
     this.productGroups = {};
+
+
     
     var tagLists = this.container.querySelectorAll(selectors.tagList);
     tagLists.forEach(this.updateProductGroup);
@@ -232,37 +284,15 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   };
   
   RetainerChooser.prototype.showProducts = function () {
-    var products = Array.from(this.productsContainer.querySelectorAll(selectors.product));
-    var enabledProducts = this.enabledProducts;
-
-    products.forEach(function (el) {
-      el.classList.remove(classes.productHidden);
-    });
-    
-    var tagGroups = this.tagGroups;
-    var hasFilteredTags = Object.keys(tagGroups).filter(function (key) {
-      return !!tagGroups[key] && tagGroups[key].hasProducts;
-    }).length > 0;
-    
-    this.productsContainer.querySelector(selectors.noProductsWarning)
-    .classList[!hasFilteredTags || enabledProducts.length > 0 ? 'add' : 'remove']('hidden');
-    
-    if (enabledProducts.length === 0) {
-      this.selectColors();
-      this.showColorSwatches(true);
-      return;
+    if (Object.keys(this.productGroups).length === 0) {
+      this.productsContainer.querySelectorAll(selectors.product)
+          .forEach(el => el.classList.toggle(classes.productHidden, false));
     }
-    
-    products
-    .filter(function (el) {
-    	return enabledProducts.includes(el.dataset.product || 'n/a') === false;
-    })
-    .map(function (el) {
-      el.classList.add(classes.productHidden);
-    });
-    
-    this.selectColors();
-    this.hideColorSwatches();
+    this.productsContainer.querySelectorAll(selectors.product)
+        .forEach(el => el.classList.toggle(classes.productHidden, !this.shouldShowProduct(el.dataset.product)));
+
+    const allHidden = this.productsContainer.querySelectorAll('.grid-product:not(.grid-product--hidden)').length === 0;
+    this.productsContainer.querySelectorAll('#product-grid--all-filtered').forEach(el => el.classList.toggle('d-none', !allHidden));
     var top = this.productsContainer.querySelector('.collection-filter');
     if (top) {
       top.scrollIntoView();
@@ -354,6 +384,9 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   
   RetainerChooser.prototype.buildColors = function () {
     var swatchContainer = this.container.querySelector(selectors.swatchList);
+    if (!swatchContainer) {
+      return;
+    }
     var selectedColors = Array.from(swatchContainer.querySelectorAll(selectors.tagItemActive))
     .map(function (el) {
       return el.dataset.colorCode;

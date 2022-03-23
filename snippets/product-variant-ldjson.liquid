@@ -24,7 +24,7 @@ variables required for render:
     },
     "brand": {{ product.vendor | json }},
     {% if _variant.sku %}"sku": "{{ _variant.sku }}",{% endif %}
-    {% if _variant.barcode %}"gtin12": "{{ _variant.barcode }}",{% endif %}    
+    {% if _variant.barcode %}"gtin": "{{ _variant.barcode }}",{% endif %}
     "name": {{ product.title | json }},
     "description": {{ product.description | split: '<!-- split -->' | first | strip_html | json }},
     "disambiguatingDescription": {{ _optionNames | json }},

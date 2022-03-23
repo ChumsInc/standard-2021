@@ -1,5 +1,7 @@
+<!--
+    product.json = {{ product |  json }}
+-->
 {%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
-
 {% unless product.empty? %}
   <div
     data-product-images

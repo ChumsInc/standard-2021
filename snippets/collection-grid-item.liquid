@@ -1,3 +1,12 @@
+{% comment %}
+Required for render:
+    block
+    collection
+    collection_title (optional)
+    grid_item_width (optional)
+    background_position (optional)
+{% endcomment %}
+
 {% unless grid_item_width %}
     {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
 {% endunless %}
@@ -18,7 +27,7 @@
     {% endif %}
 {% endif %}
 
-<div class="grid__item {{ grid_item_width }}">
+<div class="grid__item {{ grid_item_width }}" data-snippet="collection-grid-item">
     <a href="{{ collection.url }}" class="collection-item collection-item--{{ settings.collection_grid_style }}" data-aos="row-of-{{ per_row }}">
 
         {% if settings.collection_grid_image == 'collection' and collection.image %}
@@ -32,9 +41,8 @@
             <div class="collection-image collection-image--{{ settings.collection_grid_shape }} collection-image--placeholder">{{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}</div>
         {% else %}
             <div class="image-wrap">
-                <div
-                        class="collection-image collection-image--{{ settings.collection_grid_shape }} lazyload"
-                        data-bgset="{% include 'bgset', image: collection_image %}"
+                <div class="collection-image collection-image--{{ settings.collection_grid_shape }} lazyload"
+                        data-bgset="{% render 'bgset', image: collection_image %}"
                         data-sizes="auto"
                         style="background-position: {{ background_position }};">
                 </div>

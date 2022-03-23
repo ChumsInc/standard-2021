@@ -1,7 +1,4 @@
-<div
-  data-section-id="{{ section.id }}"
-  data-section-type="promo-grid">
-
+<div data-section-id="{{ section.id }}" data-section-type="promo-grid">
   {% if section.blocks.size > 0 %}
     {% style %}
       .flex-grid--{{ section.id }} {
@@ -9,7 +6,7 @@
       }
     {% endstyle %}
 
-    {% include 'promo-grid', collection_page: true %}
+    {% render 'promo-grid', collection_page: true, section: section %}
   {% endif %}
 </div>
 

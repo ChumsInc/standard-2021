@@ -1,11 +1,11 @@
 {% comment %}
-	Copyright Chums Inc
-	By Steve Montgomery
-	2019-09-08
+	required for render:
+	    block
+	    product
 {% endcomment %}
 
 {%- assign blockId = block.id -%}
-{%- assign productType = productType | handleize -%}
+{%- assign productType = product.type | handleize -%}
 
 {% if product %}
     {%- assign blockId = block.id | append: product.id -%}

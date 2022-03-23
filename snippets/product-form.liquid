@@ -1,4 +1,11 @@
+{% comment %}
+    Required for render:
+        product
+        section_id,
+        current_variant
+{% endcomment %}
 {% capture form_id %}AddToCartForm-{{ section_id }}{% endcapture %}
+
 {% form 'product', product, id: form_id, class: 'product-single__form' %}
     {%- assign is_default_variant = false -%}
     {% if product.variants[0].title == 'Default Title' or product.variants[0].title == 'Default' %}
@@ -8,13 +15,15 @@
         {% for option in product.options_with_values %}
             <!-- index = {{ forloop.index0 | json }} -->
             {% if settings.variant_type == 'button' %}
-                {% include 'variant-button',
+                {% render 'variant-button',
+                        product: product,
                         section_id: section_id,
+                        option: option,
                         option_drop: option,
                         option_index: forloop.index,
                         option_index0: forloop.index0 %}
             {% else %}
-                {% include 'variant-dropdown', section_id: section_id %}
+                {% render 'variant-dropdown', section_id: section_id %}
             {% endif %}
         {% endfor %}
     {% endunless %}
@@ -25,11 +34,11 @@
                 <option {% if variant == product.selected_or_first_available_variant %}
                     selected="selected" {% endif %}
                         value="{{ variant.id }}">
-                    {{ variant.title }} - {{ variant.price | money_with_currency }}
+                    {{- variant.title }} - {{ variant.price | money_with_currency -}}
                 </option>
             {% else %}
                 <option disabled="disabled">
-                    {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+                    {{- variant.title }} - {{ 'products.product.sold_out' | t -}}
                 </option>
             {% endif %}
         {% endfor %}
@@ -40,16 +49,17 @@
     {% if settings.quantity_enable %}
         <div class="product__quantity product__quantity--{{ settings.variant_type }}">
             <label for="Quantity-{{ section_id }}">{{ 'products.product.quantity' | t }}</label>
-            {% include 'quantity-input', id: section_id, qty: 1, min: 1 %}
+            {% render 'quantity-input', id: section_id, qty: 1, min: 1 %}
         </div>
     {% endif %}
 
-    <div id="ProductInventory-{{ section_id }}"
-            class="product__inventory {% unless inventory_visible %}hide{% endunless %}">
-        {% if current_variant.available %}
-            {{ 'products.product.stock_label' | t: count: current_variant.inventory_quantity }}
-        {% endif %}
-    </div>
+    {% if settings.inventory_enable %}
+        <div id="ProductInventory-{{ section_id }}" class="product__inventory">
+            {% if current_variant.available %}
+                {{ 'products.product.stock_label' | t: count: current_variant.inventory_quantity }}
+            {% endif %}
+        </div>
+    {% endif %}
 
     {%- assign enable_dynamic_buttons = false -%}
     {% if settings.enable_payment_button and template != 'product.preorder' %}
@@ -61,23 +71,22 @@
     {% endif %}
 
 
-    <button
-            {% if product.empty? %}type="button" {% else %}type="submit"{% endif %}
+    <button type="{% if product.empty? %}button{% else %}submit{% endif %}"
             name="add"
             id="AddToCart-{{ section_id }}"
             class="btn btn--full add-to-cart{% if enable_dynamic_buttons %} btn--secondary{% endif %}"
-    {% unless current_variant.available %} disabled="disabled"{% endunless %}>
-      <span id="AddToCartText-{{ section_id }}">
-        {% if current_variant.available %}
-            {% if template == 'product.preorder' %}
-                {{ 'products.product.preorder' | t }}
+            {% unless current_variant.available %} disabled="disabled"{% endunless %}>
+        <span id="AddToCartText-{{ section_id }}">
+            {% if current_variant.available %}
+                {%- if template == 'product.preorder' %}
+                    {{- 'products.product.preorder' | t -}}
+                {% else %}
+                    {{- 'products.product.add_to_cart' | t -}}
+                {% endif-%}
             {% else %}
-                {{ 'products.product.add_to_cart' | t }}
+                {{- 'products.product.sold_out' | t -}}
             {% endif %}
-        {% else %}
-            {{ 'products.product.sold_out' | t }}
-        {% endif %}
-      </span>
+        </span>
     </button>
 
     {% if enable_dynamic_buttons %}

@@ -1,0 +1,23 @@
+/**
+    CSS Custom properties defined here are only helpers for the chums-theme.css.liquid file
+    because phpstorm does not properly parse the variables in .css.liquid files.
+ */
+:root {
+    /**
+    global settings
+     */
+    --chums-red: '#ce0e2d';
+    --chums-red-rgb: 206, 14, 45;
+    --chums-body-bg-color: '#fff';
+    --chums-body-color: '#1c1d1d';
+    --chums-body-color-rgb: 28, 29, 29;
+
+    /**
+    Product settings
+     */
+    --chums-swatch-sold-out-opacity: 0.5;
+    --chums-thumb-height: 96px;
+    --chums-thumb-rows: 2.5;
+    --chums-thumb-padding: 0.25rem;
+
+}

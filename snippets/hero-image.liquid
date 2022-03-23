@@ -1,0 +1,30 @@
+{% comment %}
+Required for render:
+    block
+{% endcomment %}
+
+<!-- snippets/hero-image.liquid -->
+<a href="{% if block.settings.link %}{{ block.settings.link }}{% else %}#hero-image-{{ block.id }}{% endif %}">
+    <picture>
+        {% if block.settings.image_portrait %}
+            <source media="(max-width: 425px)" srcset="{{ block.settings.image_portrait.src | image_url: width: 425 }}" >
+            <source media="(max-width: 768px)" srcset="{{ block.settings.image_portrait.src | image_url: width: 768 }}" >
+        {% else %}
+            <source media="(max-width: 425px)" srcset="{{ block.settings.image.src | image_url: width: 425 }}" >
+            <source media="(max-width: 768px)" srcset="{{ block.settings.image.src | image_url: width: 768 }}" >
+        {% endif %}
+        <source media="(max-width: 1200px)" srcset="{{ block.settings.image.src | image_url: width: 1200 }}" >
+        <source media="(max-width: 1920px)" srcset="{{ block.settings.image.src | image_url: width: 1920 }}" >
+        <source media="(max-width: 2560px)" srcset="{{ block.settings.image.src | image_url: width: 2560 }}" >
+        <img class="d-block w-100" src="{{ block.settings.image.src | image_url }}"
+             loading="lazy"
+             alt="{{ block.settings.image.alt | default: block.settings.title | escape }}">
+    </picture>
+    <div class="hero-caption">
+        {% if block.settings.title != blank %}<h4>{{ block.settings.title | newline_to_br }}</h4>{% endif %}
+        {% if block.settings.subheading != blank %}<p>{{ block.settings.subheading | newline_to_br }}</p>{% endif %}
+        {% if block.settings.link == blank and block.settings.button_text != blank and block.settings.button_link != blank %}
+            <a href="{{ block.settings.button_link }}" class="btn">{{ block.settings.button_text }}</a>
+        {% endif %}
+    </div>
+</a>

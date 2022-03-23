@@ -1,4 +1,15 @@
-<button type="button" class="collapsible-trigger collapsible-trigger-btn collapsible--auto-height{% unless collapsed_state %} is-open{% endunless %} tag-list__header" aria-controls="{{ location }}-{{ index }}{% if id %}-{{ id }}{% endif %}">
+{% comment %}
+Required for render:
+    title
+    index
+    id
+    location
+    collapsed_state
+{% endcomment %}
+
+<button type="button"
+        class="collapsible-trigger collapsible-trigger-btn collapsible--auto-height{% unless collapsed_state %} is-open{% endunless %} tag-list__header"
+        aria-controls="{{ location }}-{{ index }}{% if id %}-{{ id }}{% endif %}">
   {{ title }}
-  {% include 'collapsible-icons' %}
+  {% render 'collapsible-icons' %}
 </button>
