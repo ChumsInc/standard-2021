@@ -42,7 +42,7 @@
     {% endfor %}
 {% endif %}
 <!-- section.settings = {{ section.settings | json }} -->
-<div class="grid-product {{ grid_item_width }}{% if settings.quick_shop_enable and sold_out == false %} grid-product__has-quick-shop{% endif %} {% if section.settings.swatches_on_hover %}grid-product--hover-for-swatches{% endif %} {% if section.settings.reviews_on_hover %}grid-product--hover-for-reviews{% endif %}"
+<div class="grid-product {{ grid_item_width }}{% if false and settings.quick_shop_enable and sold_out == false %} grid-product__has-quick-shop{% endif %} {% if section.settings.swatches_on_hover %}grid-product--hover-for-swatches{% endif %} {% if section.settings.reviews_on_hover %}grid-product--hover-for-reviews{% endif %}"
      data-product-id="{{ product.id }}"
      data-product="{{ product.handle }}">
     <div class="grid-product__content">
@@ -76,7 +76,7 @@
         <a href="{{ product.url | within: collection }}"
            class="grid-product__link {% if sold_out %} grid-product__link--disabled{% endif %}">
             <div class="grid-product__image-mask">
-                {% if settings.quick_shop_enable and sold_out == false %}
+                {% if false and settings.quick_shop_enable and sold_out == false %}
                     <div class="quick-product__btn js-modal-open-quick-modal-{{ product.id }} small--hide"
                          data-product-id="{{ product.id }}">
                         <span class="quick-product__label">{{ settings.quick_shop_text }}</span>

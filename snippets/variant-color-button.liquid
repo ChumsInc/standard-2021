@@ -55,8 +55,7 @@ product_available
            title="{{value | upper}} {% unless product_available %}{{ 'products.product.sold_out' | t }}{% endunless %} ">
         <span class="sr-only">{{- value | escape -}} {% unless product_available %}{{ 'products.product.sold_out' | t }}{% endunless %}</span>
     </label>
-
     {% render 'product-variant-ldjson',
-              matchingVariants: product.variants | where: variantField, value,
+              variant: matchingVariant,
               product: product %}
 </div>

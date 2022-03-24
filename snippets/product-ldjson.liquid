@@ -14,7 +14,10 @@ Required for render:
       "priceCurrency": "{{ shop.currency }}",
       "url": "{{ shop.url }}{{ product.url | split: '?' | first }}"
     },
-    "brand": {{ product.vendor | json }},
+    "brand": {
+        "@type": "Brand",
+        "name": {{ product.vendor | json }}
+    },
     {% if current_variant.sku %}"sku": "{{ current_variant.sku }}",{% endif %}
     {% if current_variant.barcode %}"gtin": "{{ current_variant.barcode }}",{% endif %}
     "name": {{ product.title | json }},
