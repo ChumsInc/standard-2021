@@ -105,8 +105,7 @@ lazySizesConfig.expFactor = 4;
     theme.Sections = function Sections() {
         this.constructors = {};
         this.instances = [];
-
-        $(document)
+       $(document)
             .on('shopify:section:load', this._onSectionLoad.bind(this))
             .on('shopify:section:unload', this._onSectionUnload.bind(this))
             .on('shopify:section:select', this._onSelect.bind(this))
@@ -256,45 +255,55 @@ lazySizesConfig.expFactor = 4;
         }
     });
 
-
-    /**
-     * Currency Helpers
-     * -----------------------------------------------------------------------------
-     * A collection of useful functions that help with currency formatting
-     *
-     * Current contents
-     * - formatMoney - Takes an amount in cents and returns it as a formatted dollar value.
-     *
-     * Alternatives
-     * - Accounting.js - http://openexchangerates.github.io/accounting.js/
-     *
-     */
-
     theme.Currency = (function () {
-        var moneyFormat = '${{ amount }}';
 
+        /**
+         * @see https://github.com/Shopify/theme-scripts/blob/master/packages/theme-currency/currency.js
+         *
+         * Currency Helpers
+         * -----------------------------------------------------------------------------
+         * A collection of useful functions that help with currency formatting
+         *
+         * Current contents
+         * - formatMoney - Takes an amount in cents and returns it as a formatted dollar value.
+         *
+         */
+
+        const moneyFormat = '${{amount}}';
+
+        /**
+         * Format money values based on your shop currency settings
+         * @param  {Number|string} cents - value in cents or dollar amount e.g. 300 cents
+         * or 3.00 dollars
+         * @param  {String} format - shop money_format setting
+         * @return {String} value - formatted value
+         */
         function formatMoney(cents, format) {
             if (typeof cents === 'string') {
                 cents = cents.replace('.', '');
             }
-            var value = '';
-            var placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
-            var formatString = (format || moneyFormat);
+            let value = '';
+            const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+            const formatString = format || moneyFormat;
 
-            function formatWithDelimiters(number, precision, thousands, decimal) {
-                precision = slate.utils.defaultTo(precision, 2);
-                thousands = slate.utils.defaultTo(thousands, ',');
-                decimal = slate.utils.defaultTo(decimal, '.');
-
+            function formatWithDelimiters(
+                number,
+                precision = 2,
+                thousands = ',',
+                decimal = '.'
+            ) {
                 if (isNaN(number) || number == null) {
                     return 0;
                 }
 
                 number = (number / 100.0).toFixed(precision);
 
-                var parts = number.split('.');
-                var dollarsAmount = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands);
-                var centsAmount = parts[1] ? (decimal + parts[1]) : '';
+                const parts = number.split('.');
+                const dollarsAmount = parts[0].replace(
+                    /(\d)(?=(\d\d\d)+(?!\d))/g,
+                    `$1${thousands}`
+                );
+                const centsAmount = parts[1] ? decimal + parts[1] : '';
 
                 return dollarsAmount + centsAmount;
             }
@@ -311,9 +320,6 @@ lazySizesConfig.expFactor = 4;
                 break;
             case 'amount_no_decimals_with_comma_separator':
                 value = formatWithDelimiters(cents, 0, '.', ',');
-                break;
-            case 'amount_no_decimals_with_space_separator':
-                value = formatWithDelimiters(cents, 0, ' ');
                 break;
             }
 
@@ -336,6 +342,32 @@ lazySizesConfig.expFactor = 4;
     theme.Images = (function () {
 
         /**
+         * Preloads an image in memory and uses the browsers cache to store it until needed.
+         *
+         * @param {Array} images - A list of image urls
+         * @param {String} size - A shopify image size attribute
+         */
+
+        function preload(images, size) {
+            if (typeof images === 'string') {
+                images = [images];
+            }
+
+            for (let i = 0; i < images.length; i++) {
+                const image = images[i];
+                loadImage(getSizedImageUrl(image, size));
+            }
+        }
+
+        /**
+         * Loads and caches an image in the browsers cache.
+         * @param {string} path - An image url
+         */
+        function loadImage(path) {
+            new Image().src = path;
+        }
+
+        /**
          * Find the Shopify image attribute size
          *
          * @param {string} src
@@ -343,17 +375,20 @@ lazySizesConfig.expFactor = 4;
          */
         function imageSize(src) {
             if (!src) {
+                console.debug('theme.Images.imageSize() missing src');
                 return '620x'; // default based on theme
             }
+            const match = src.match(
+                /.+_((?:pico|icon|thumb|small|compact|medium|large|grande)|\d{1,4}x\d{0,4}|x\d{1,4})[_\.@]/
+            );
 
-            var match = src.match(/.+_((?:pico|icon|thumb|small|compact|medium|large|grande)|\d{1,4}x\d{0,4}|x\d{1,4})[_\.@]/);
-
-            if (match !== null) {
+            if (match) {
                 return match[1];
             } else {
                 return null;
             }
         }
+
 
         /**
          * Adds a Shopify size attribute to a URL
@@ -363,27 +398,32 @@ lazySizesConfig.expFactor = 4;
          * @returns {*}
          */
         function getSizedImageUrl(src, size) {
-            if (size == null) {
+            if (size === null) {
                 return src;
             }
 
             if (size === 'master') {
-                return this.removeProtocol(src);
+                return removeProtocol(src);
             }
 
-            var match = src.match(/\.(jpg|jpeg|gif|png|bmp|bitmap|tiff|tif)(\?v=\d+)?$/i);
+            const match = src.match(/\.(jpg|jpeg|gif|png|bmp|bitmap|tiff|tif)(\?v=\d+)?$/i);
 
-            if (match != null) {
-                var prefix = src.split(match[0]);
-                var suffix = match[0];
+            if (match) {
+                const prefix = src.split(match[0]);
+                const suffix = match[0];
 
-                return this.removeProtocol(prefix[0] + '_' + size + suffix);
+                return removeProtocol(`${prefix[0]}_${size}${suffix}`);
+            } else {
+                return null;
             }
+        }
 
-            return null;
+        function removeProtocol(path) {
+            return path.replace(/http(s)?:/, '');
         }
 
         function getLazyloadImageUrl(src) {
+            console.warn('DEPRECATED getLazyloadImageUrl', src);
             var match = src.match(/\.(jpg|jpeg|gif|png|bmp|bitmap|tiff|tif)(\?v=\d+)?$/i);
 
             if (match != null) {
@@ -396,15 +436,13 @@ lazySizesConfig.expFactor = 4;
             return null;
         }
 
-        function removeProtocol(path) {
-            return path.replace(/http(s)?:/, '');
-        }
-
         return {
             imageSize: imageSize,
             getSizedImageUrl: getSizedImageUrl,
             getLazyloadImageUrl: getLazyloadImageUrl,
-            removeProtocol: removeProtocol
+            removeProtocol: removeProtocol,
+            preload,
+            loadImage,
         };
     })();
 
@@ -1111,8 +1149,12 @@ lazySizesConfig.expFactor = 4;
                 loaded: false,
                 loading: false
             };
-
-            this.drawer = new theme.Drawers('CartDrawer', 'cart');
+            const popout = document.querySelector('#CartDrawer');
+            if (!popout) {
+                return;
+            }
+            this.offCanvas = new bootstrap.Offcanvas(popout);
+            //this.drawer = new theme.Drawers('CartDrawer', 'cart');
             this.cartItems = [];
 
             // Prep handlebars template
@@ -1246,7 +1288,8 @@ lazySizesConfig.expFactor = 4;
 
                 // If specifically asked, open the cart drawer (only happens after product added from form)
                 if (openDrawer === true) {
-                    this.drawer.open();
+                    this.offCanvas.show();
+                    //this.drawer.open();
                 }
             },
 
@@ -6090,158 +6133,141 @@ lazySizesConfig.expFactor = 4;
         return Photoswipe;
     })();
 
-    theme.SiteSearch = (function () {
-        var selectors = {
+    (function () {
+        /**
+         * Chums Site-Search handler
+         */
+        /**
+         *
+         * @type {SiteSearchState}
+         */
+        const state = {
+            results: [],
+            loading: false,
+            timer: null,
+            lastSearch: '',
+        }
+        const selectors = {
             list: '.site-header__search-results-list',
             input: '.site-header__search-input',
             count: '.site-header__search-results-count',
         };
-        var classNames = {
+        const elements = {
+            form: document.querySelector(selectors.input).closest('form'),
+            offCanvas: document.querySelector('#header-search-container'),
+            list: document.querySelector(selectors.list),
+            search: document.querySelector(selectors.input),
+            count: document.querySelector(selectors.count) || document.createElement('div'),
+        };
+        const classNames = {
             onSale: 'search-result__prices--sale',
             hasResults: 'has-results',
             item: 'site-header__search-results-item'
         };
-        var searchURL = '/search/suggest.json?s=:SEARCH:&resources%5Btype%5D=product&resources%5Blimit%5D=5&resources%5Boptions%5D%5Bunavailable_products%5D=bury&resources%5Boptions%5D%5Bfields%5D=title%2Cproduct_type%2Cvariants.title%2Ctag%2Cvariants.barcode%2Cvariants.sku';
+        const searchURL = '/search/suggest.json?s=:SEARCH:&resources%5Btype%5D=product&resources%5Blimit%5D=5&resources%5Boptions%5D%5Bunavailable_products%5D=bury&resources%5Boptions%5D%5Bfields%5D=title%2Cproduct_type%2Cvariants.title%2Ctag%2Cvariants.barcode%2Cvariants.sku';
 
-        var template = '<div class="search-result">'
+        const template = '<div class="search-result">'
             + '<div class="search-result__image" tabindex="-1"><a href=":URL:"><img data-src=":SRC:" data-widths="[80, 120]" alt=":TITLE:" class="lazyload"></a></div>'
             + '<div class="search-result__detail">'
             + '<div><a href=":URL:">:TITLE:</a></div>'
             + '<div class="search-result__prices :PRICE_CLASS:">:PRICE_INDICATOR:: <span class="search-result__prices--original">$ :COMPARE_AT_PRICE_MIN:</span><span class="search-result__prices--current">$ :PRICE_MIN:</span></div>'
             + '</div></div>';
 
-
-        function SiteSearch() {
-            this.results = [];
-            this.loading = false;
-            this.timer = null;
-            this.elements = {
-                list: document.querySelector(selectors.list),
-                search: document.querySelector(selectors.input),
-                count: document.querySelector(selectors.count) || document.createElement('div'),
-            };
-            this.lastSearch = '';
-
-            this.search = this.search.bind(this);
-            this.load = this.load.bind(this);
-            this.displayResults = this.displayResults.bind(this);
-            this.displaySearchAll = this.displaySearchAll.bind(this);
-
-            this.init();
-        }
-
-        SiteSearch.prototype.displayResults = function () {
-            while (this.elements.list.firstChild) {
-                this.elements.list.removeChild(this.elements.list.firstChild);
-            }
-            var visible = this.elements.search.value.trim().length > 2 || this.results.length > 0;
-
-            this.elements.list.classList.toggle(classNames.hasResults, visible);
-            if (!visible) {
+        function onChangeSearch(ev) {
+            clearTimeout(state.timer);
+            if (!ev.currentTarget || ev.currentTarget.value === undefined) {
                 return;
             }
+            const search = elements.search.value.trim();
 
-            if (this.results.length === 0) {
+            if (search.length > 2) {
+                if (state.lastSearch === search) {
+                    return;
+                }
+                state.timer = setTimeout(() => loadSearch(search), 350)
+            } else {
+                state.results = [];
+                displayResults();
+            }
+        }
+
+        function displayResults() {
+            elements.list.innerText = '';
+            const visible = elements.search.value.trim().length > 2 || !!state.results.length
+            elements.list.classList.toggle(classNames.hasResults, visible);
+            if (!visible) {
+                elements.count.innerText = '';
+                return;
+            }
+            if (state.results.length === 0) {
                 var li = document.createElement('li');
                 li.innerHTML = 'No matching products found.';
-                this.elements.list.appendChild(li);
+                elements.list.appendChild(li);
             }
 
-            this.elements.count.innerText = this.results.length + " results found";
-            this.results.forEach(item => {
-                var priceClass = Number(item.price_min) < Number(item.compare_at_price_min) ? classNames.onSale : '';
-                var html = template.replace(/:URL:/g, item.url)
+            elements.count.innerText = state.results.length + " results found";
+            state.results.forEach(item => {
+                const priceClass = Number(item.price_min) < Number(item.compare_at_price_min) ? classNames.onSale : '';
+                const html = template.replace(/:URL:/g, item.url)
                     .replace(':SRC:', theme.Images.getSizedImageUrl(item.image, '80x'))
                     .replace(/:TITLE:/g, item.title)
                     .replace(':PRICE_CLASS:', priceClass)
                     .replace(':PRICE_INDICATOR:', item.price_min === item.price_max ? 'Price' : 'From')
                     .replace(':COMPARE_AT_PRICE_MIN:', item.compare_at_price_min)
                     .replace(':PRICE_MIN:', item.price_min);
-                var li = document.createElement('li');
+                const li = document.createElement('li');
                 li.classList.add(classNames.item);
                 li.innerHTML = html;
-                this.elements.list.appendChild(li);
+                elements.list.appendChild(li);
             });
-            this.displaySearchAll();
-        };
+            displaySearchAll();
+        }
 
-        SiteSearch.prototype.displaySearchAll = function () {
-            var searchSiteLink = document.createElement('a');
-            searchSiteLink.setAttribute('href', '/search?type=product%2Carticle&q=' + encodeURIComponent(this.lastSearch));
-            searchSiteLink.innerHTML = 'Search entire site for <strong>' + this.lastSearch.replace('<', '&lt;') + '</strong>';
-
-            var div = document.createElement('div');
-            div.appendChild(searchSiteLink);
-
-            var li = document.createElement('li');
-            li.appendChild(div);
-
-            this.elements.list.appendChild(li);
-        };
-
-        SiteSearch.prototype.load = function (search) {
-            if (this.loading) {
+        function loadSearch(search) {
+            if (state.loading) {
                 return;
             }
 
-            this.loading = true;
-            this.lastSearch = search;
+            state.loading = true;
+            state.lastSearch = search;
             try {
-//         var searchObject = {
-//           q: search,
-//           resources: {
-//             type: 'product',
-//             limit: 5,
-//             options: {
-//               unavailable_products: 'bury',
-//               fields: 'title,product_type,variants.title,tag,variants.barcode,variants.sku'
-//             }
-//           }
-//         };
-//         jQuery.getJSON('/search/suggest.json', searchObject).done(res => console.log(res));
-
-                var url = searchURL.replace(':SEARCH:', encodeURIComponent(search));
+                const url = searchURL.replace(':SEARCH:', encodeURIComponent(search));
                 fetch(url)
                     .then(res => res.json())
                     .then(res => {
-                        this.results = res.resources.results.products;
-                        this.displayResults();
-                        this.loading = false;
+                        state.results = res.resources.results.products;
+                        state.loading = false
+                        displayResults();
                     });
             } catch (err) {
+                state.loading = false
+                state.results = [];
                 console.log(err);
             }
-        };
+        }
 
-        SiteSearch.prototype.search = function (ev) {
-            clearTimeout(this.timer);
-            if (!ev.currentTarget || ev.currentTarget.value === undefined) {
-                return;
-            }
-            if (ev.currentTarget.value.trim().length > 2) {
-                var search = ev.currentTarget.value;
+        function displaySearchAll () {
+            const searchSiteLink = document.createElement('a');
+            searchSiteLink.setAttribute('href', '/search?type=product%2Carticle&q=' + encodeURIComponent(state.lastSearch));
+            searchSiteLink.innerHTML = 'Search entire site for <strong>' + state.lastSearch.replace('<', '&lt;') + '</strong>';
 
-                if (this.lastSearch.trim() === search.trim()) {
-                    return;
-                }
-                this.timer = setTimeout(() => this.load(search.trim()), 350)
-            } else {
-                this.results = [];
-                this.displayResults();
-            }
-        };
+            const div = document.createElement('div');
+            div.appendChild(searchSiteLink);
 
-        SiteSearch.prototype.init = function () {
-            if (!this.elements.search || !this.elements.list) {
-                return;
-            }
-            if (typeof window.fetch !== 'function') {
-                return;
-            }
-            this.elements.search.addEventListener('keydown', this.search);
-        };
-        return new SiteSearch();
-    })();
+            const li = document.createElement('li');
+            li.appendChild(div);
+
+            elements.list.appendChild(li);
+        }
+
+        elements.search.addEventListener('input', onChangeSearch);
+        elements.search.addEventListener('focus', onChangeSearch);
+        elements.form.addEventListener('submit', (ev) => ev.preventDefault());
+        elements.offCanvas.addEventListener('shown.bs.offcanvas', () => {
+            elements.search.focus();
+            elements.search.setSelectionRange(0, elements.search.value.length);
+        })
+    }());
 
 
     // Medium breakpoint is also set in theme.scss.liquid and inline throughout some templates.
@@ -6583,3 +6609,53 @@ lazySizesConfig.expFactor = 4;
         sections.register('photoswipe', theme.Photoswipe);
     });
 })(theme.jQuery);
+
+document.addEventListener("DOMContentLoaded", function() {
+    // lazy-loader from https://css-tricks.com/the-complete-guide-to-lazy-loading-images/
+    let lazyloadImages = [];
+
+    if ("IntersectionObserver" in window) {
+        lazyloadImages = document.querySelectorAll(".lazy");
+        const imageObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    var image = entry.target;
+                    image.classList.remove("lazy");
+                    imageObserver.unobserve(image);
+                }
+            });
+        });
+
+        lazyloadImages.forEach(function(image) {
+            imageObserver.observe(image);
+        });
+    } else {
+        let lazyloadThrottleTimeout;
+        lazyloadImages = document.querySelectorAll(".lazy");
+
+        function lazyload () {
+            if(lazyloadThrottleTimeout) {
+                clearTimeout(lazyloadThrottleTimeout);
+            }
+
+            lazyloadThrottleTimeout = setTimeout(function() {
+                var scrollTop = window.pageYOffset;
+                lazyloadImages.forEach(function(img) {
+                    if(img.offsetTop < (window.innerHeight + scrollTop)) {
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                    }
+                });
+                if(lazyloadImages.length == 0) {
+                    document.removeEventListener("scroll", lazyload);
+                    window.removeEventListener("resize", lazyload);
+                    window.removeEventListener("orientationChange", lazyload);
+                }
+            }, 20);
+        }
+
+        document.addEventListener("scroll", lazyload);
+        window.addEventListener("resize", lazyload);
+        window.addEventListener("orientationChange", lazyload);
+    }
+})

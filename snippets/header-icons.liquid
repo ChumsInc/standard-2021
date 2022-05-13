@@ -1,3 +1,7 @@
+{% comment %}
+required for render:
+* [id_suffix] - optional, used to disambiguate icon id for unique ARIA IDs
+{% endcomment %}
 {% if settings.enable_currencies and section.settings.toolbar_currencies == false %}
     {% render 'currency-picker', picker_id: 'header', currency_class: 'small--hide' %}
 {% endif %}
@@ -6,9 +10,9 @@
     <div class="site-nav__icons">
         {% if shop.customer_accounts_enabled %}
             <a class="site-nav__link site-nav__link--icon" href="{{ routes.account_url }}"
-               aria-labelledby="site-nav--user-icon-fallback">
+               aria-labelledby="site-nav--user-icon-fallback{% if id_suffix %}--{{ id_suffix }}{% endif %}">
                 {% render 'icon-user' %}
-                <span class="icon__fallback-text" id="site-nav--user-icon-fallback">
+                <span class="visually-hidden" id="site-nav--user-icon-fallback{% if id_suffix %}--{{ id_suffix }}{% endif %}">
           {%- if customer -%}
               {{ 'layout.customer.account' | t }}
           {%- else -%}
@@ -21,12 +25,14 @@
         {% if section.settings.header_search_enable %}
             <a href="{{ routes.search_url }}"
                role="button"
-               aria-controls="site-nav--user-icon-fallback"
+               data-bs-target="#header-search-container" data-bs-toggle="offcanvas"
+               aria-controls="header-search-container"
+               {% comment %}aria-controls="site-nav--user-icon-fallback"{% endcomment %}
                class="site-nav__link site-nav__link--icon js-search-header js-no-transition{% if section.settings.main_menu_alignment == 'center' or section.settings.main_menu_alignment == 'center-split' %} medium-up--hide{% endif %}"
-               aria-labelledby="site-nav--search-icon-fallback">
+               aria-labelledby="site-nav--search-icon-fallback{% if id_suffix %}--{{ id_suffix }}{% endif %}">
                 {% render 'icon-search' %}
-                <span class="icon__fallback-text"
-                      id="site-nav--search-icon-fallback">
+                <span class="visually-hidden"
+                      id="site-nav--search-icon-fallback{% if id_suffix %}--{{ id_suffix }}{% endif %}">
                     {{ 'general.search.title' | t }}
                 </span>
             </a>

@@ -1,42 +1,7 @@
 {% style %}
-  .blog-articles__grid {
-    margin-top: -{{ section.settings.gutter_size }}px;
-    margin-left: -{{ section.settings.gutter_size }}px;
-    {% if section.settings.full_width %}
-      padding-left: {{ section.settings.gutter_size }}px;
-      padding-right: {{ section.settings.gutter_size }}px;
-    {% endif %}
-  }
-
-  .blog-articles__grid .blog-articles__grid--gutters {
-    margin-top: -{{ section.settings.gutter_size }}px;
-    margin-left: -{{ section.settings.gutter_size }}px;
-  }
-
-  .blog-articles__grid .blog-article--padder {
-    padding-top: {{ section.settings.gutter_size }}px;
-    padding-left: {{ section.settings.gutter_size }}px;
-  }
-
-  @media only screen and (max-width: 589px) {
-    .blog-articles__grid {
-      margin-top: -{{ section.settings.gutter_size | divided_by: 2 }}px;
-      margin-left: -{{ section.settings.gutter_size | divided_by: 2 }}px;
-      {% if section.settings.full_width %}
-        padding-left: {{ section.settings.gutter_size | divided_by: 2 }}px;
-        padding-right: {{ section.settings.gutter_size | divided_by: 2 }}px;
-      {% endif %}
-    }
-
-    .blog-articles__grid .blog-articles__grid--gutters {
-      margin-top: -{{ section.settings.gutter_size | divided_by: 2 }}px;
-      margin-left: -{{ section.settings.gutter_size | divided_by: 2 }}px;
-    }
-
-    .blog-articles__grid .blog-article {
-      padding-top: {{ section.settings.gutter_size | divided_by: 2 }}px;
-      padding-left: {{ section.settings.gutter_size | divided_by: 2 }}px;
-    }
+  :root {
+  --chums-grid-col-gap: {{ section.settings.gutter_size }}px;
+  --chums-grid-row-gap: {{ section.settings.gutter_size }}px;
   }
 {% endstyle %}
 
@@ -46,10 +11,9 @@
 <div data-section-id="{{ section.id }}" data-section-type="blog">
   <div class="{% unless section.settings.full_width %}page-width{% endunless %} page-content">
 
-    <div class="page-width">
-    	{% include 'breadcrumbs' %}
+    <div class="container">
+    	{% render 'blog-breadcrumbs' %}
     </div>
-
     <header class="section-header{% if section.settings.blog_show_tag_filter and blog.tags.size > 0 %}{% unless settings.type_headers_align_text %} section-header--with-link{% endunless %}{% endif %}">
       <h1 class="section-header__title">
         {{ blog.title }}
@@ -57,7 +21,7 @@
         {% if section.settings.blog_show_rss %}
           <a href="{{ shop.url }}{{ blog.url }}.atom" class="rss-link">
             {% include 'icon-rss' %}
-            <span class="icon__fallback-text">RSS</span>
+            <span class="visually-hidden">RSS</span>
           </a>
         {% endif %}
       </h1>
@@ -66,22 +30,30 @@
         <select id="BlogTagFilter">
           <option value="/blogs/{{ blog.handle }}">All</option>
           {% for tag in blog.all_tags %}
-            {% include 'filter-out-custom-tags' %}
+            {% comment %}{% include 'filter-out-custom-tags' %}{% endcomment %}
             <option value="/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}" {% if current_tags contains tag %}selected{% endif %}>{{ tag }}</option>
           {% endfor %}
         </select>
       {% endif %}
     </header>
 
-    <div class="blog-articles__grid blog-articles__grid--gutters">
-      {% for article in blog.articles %}
-        {% include 'article-grid-item', grid_item_width: 'medium-up--one-third', per_row: '3', image_size: section.settings.blog_image_size %}
-      {% endfor %}
-    </div>
+    <div class="container-fluid container-2000">
+      <div class="blog-articles__grid blog-articles__grid--gutters">
+        {% for article in blog.articles %}
+          {% include 'article-grid-item',
+                  blog: blog,
+                  article: article,
+                  grid_item_width: 'medium-up--one-third',
+                  per_row: '3',
+                  image_size: section.settings.blog_image_size %}
+        {% endfor %}
+      </div>
 
-    {% if paginate.pages > 1 %}
-      {% include 'pagination' %}
-    {% endif %}
+      {% if paginate.pages > 1 %}
+        {% include 'pagination' %}
+      {% endif %}
+
+    </div>
 
   </div>
 </div>

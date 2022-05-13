@@ -42,7 +42,7 @@ product_available
            data-index="option{{ option_index }}"
            data-images="{{image_id | uniq | join: '|'}}"
            name="{{ option.name }}"
-           class="variant__input-{{ section_id }} variant__input--color-swatch-{{ section_id }}
+           class="variant__input-{{ section_id }} variant__input--color-swatch-{{ section_id }} visually-hidden
                     {%- unless product_available %} disabled{% endunless -%}"
            data-color-name="{{ value | escape }}"
            data-color-index="{{ color_option_index }}"

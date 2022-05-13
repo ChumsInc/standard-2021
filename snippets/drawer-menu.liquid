@@ -11,14 +11,14 @@
 
 <div id="NavDrawer" class="drawer drawer--{{ drawer_position }}">
   <div class="drawer__fixed-header drawer__fixed-header--full">
-    <div class="drawer__header drawer__header--full appear-animation appear-delay-{{ animation_row }}">
+    <div class="drawer__header drawer__header--full">
       <div class="h2 drawer__title">
         {% render 'currency-picker', picker_id: 'drawer', currency_class: 'currency-picker--drawer' %}
       </div>
       <div class="drawer__close">
         <button type="button" class="drawer__close-button js-drawer-close">
           {% render 'icon-close' %}
-          <span class="icon__fallback-text">{{ 'general.drawers.close_menu' | t }}</span>
+          <span class="visually-hidden">{{ 'general.drawers.close_menu' | t }}</span>
         </button>
       </div>
     </div>
@@ -34,7 +34,7 @@
           {%- assign has_dropdown = true -%}
         {% endif %}
 
-        <li class="mobile-nav__item appear-animation appear-delay-{{ animation_row }}">
+        <li class="mobile-nav__item">
           {% if has_dropdown %}
             <div class="mobile-nav__has-sublist">
               {% if link.url == '#' %}
@@ -152,7 +152,7 @@
             {% if section.settings.toolbar_menu != blank %}
               {% for link in toolbar_menu.links %}
                 {%- assign animation_row = animation_row | plus: 1 -%}
-                <div class="grid__item one-half appear-animation appear-delay-{{ animation_row }} medium-up--hide">
+                <div class="grid__item one-half medium-up--hide">
                   <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
                 </div>
               {% endfor %}
@@ -160,7 +160,7 @@
 
             {% if shop.customer_accounts_enabled %}
               {%- assign animation_row = animation_row | plus: 1 -%}
-              <div class="grid__item one-half appear-animation appear-delay-{{ animation_row }}">
+              <div class="grid__item one-half">
                 <a href="{{ routes.account_url }}" class="mobile-nav__link">
                   {% if customer %}
                     {{ 'layout.customer.account' | t }}
@@ -176,12 +176,12 @@
     </ul>
 
     {%- assign animation_row = animation_row | plus: 1 -%}
-    <ul class="mobile-nav__social appear-animation appear-delay-{{ animation_row }}">
+    <ul class="mobile-nav__social">
       {% if settings.social_facebook_link != blank %}
         <li class="mobile-nav__social-item">
           <a target="_blank" rel="noopener" href="{{ settings.social_facebook_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
             {% render 'icon-facebook' %}
-            <span class="icon__fallback-text">Facebook</span>
+            <span class="visually-hidden">Facebook</span>
           </a>
         </li>
       {% endif %}
@@ -189,7 +189,7 @@
         <li class="mobile-nav__social-item">
           <a target="_blank" rel="noopener" href="{{ settings.social_twitter_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}">
             {% render 'icon-twitter' %}
-            <span class="icon__fallback-text">Twitter</span>
+            <span class="visually-hidden">Twitter</span>
           </a>
         </li>
       {% endif %}
@@ -197,7 +197,7 @@
         <li class="mobile-nav__social-item">
           <a target="_blank" rel="noopener" href="{{ settings.social_pinterest_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}">
             {% render 'icon-pinterest' %}
-            <span class="icon__fallback-text">Pinterest</span>
+            <span class="visually-hidden">Pinterest</span>
           </a>
         </li>
       {% endif %}
@@ -205,7 +205,7 @@
         <li class="mobile-nav__social-item">
           <a target="_blank" rel="noopener" href="{{ settings.social_instagram_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
             {% render 'icon-instagram' %}
-            <span class="icon__fallback-text">Instagram</span>
+            <span class="visually-hidden">Instagram</span>
           </a>
         </li>
       {% endif %}
@@ -213,7 +213,7 @@
         <li class="mobile-nav__social-item">
           <a target="_blank" rel="noopener" href="{{ settings.social_snapchat_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}">
             {% render 'icon-snapchat' %}
-            <span class="icon__fallback-text">Snapchap</span>
+            <span class="visually-hidden">Snapchap</span>
           </a>
         </li>
       {% endif %}
@@ -221,7 +221,7 @@
         <li class="mobile-nav__social-item">
           <a target="_blank" rel="noopener" href="{{ settings.social_tumblr_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}">
             {% render 'icon-tumblr' %}
-            <span class="icon__fallback-text">Tumblr</span>
+            <span class="visually-hidden">Tumblr</span>
           </a>
         </li>
       {% endif %}
@@ -229,7 +229,7 @@
         <li class="mobile-nav__social-item">
           <a target="_blank" rel="noopener" href="{{ settings.social_linkedin_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'LinkedIn' }}">
             {% render 'icon-linkedin' %}
-            <span class="icon__fallback-text">LinkedIn</span>
+            <span class="visually-hidden">LinkedIn</span>
           </a>
         </li>
       {% endif %}
@@ -237,7 +237,7 @@
         <li class="mobile-nav__social-item">
           <a target="_blank" rel="noopener" href="{{ settings.social_youtube_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
             {% render 'icon-youtube' %}
-            <span class="icon__fallback-text">YouTube</span>
+            <span class="visually-hidden">YouTube</span>
           </a>
         </li>
       {% endif %}
@@ -245,7 +245,7 @@
         <li class="mobile-nav__social-item">
           <a target="_blank" rel="noopener" rel="noopener" href="{{ settings.social_vimeo_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
             {% render 'icon-vimeo' %}
-            <span class="icon__fallback-text">Vimeo</span>
+            <span class="visually-hidden">Vimeo</span>
           </a>
         </li>
       {% endif %}

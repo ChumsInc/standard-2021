@@ -41,8 +41,8 @@ variables required for this snippet
 
 <div class="variant-wrapper variant-wrapper--{{ settings.variant_type }} js">
     <label class="variant__label
-                {%- if option.name == 'Default' or option.name == 'Title' %} hidden-label{% endif -%}
-                {%- unless settings.variant_labels_enable %} hidden-label{% endunless -%}"
+                {%- if option.name == 'Default' or option.name == 'Title' %} visually-hidden{% endif -%}
+                {%- unless settings.variant_labels_enable %} visually-hidden{% endunless -%}"
            aria-live="polite" aria-atomic="true"
            for="ProductSelect-{{ section_id }}-option-{{ option_index0 }}">
         {{ option.name }}

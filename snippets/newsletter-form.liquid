@@ -7,7 +7,7 @@
     {{ form.errors | default_errors }}
   {% endif %}
 
-  <label for="Email-{{ section_id }}" class="hidden-label">{{ 'general.newsletter_form.newsletter_email' | t }}</label>
+  <label for="Email-{{ section_id }}" class="visually-hidden">{{ 'general.newsletter_form.newsletter_email' | t }}</label>
   <input type="hidden" name="contact[tags]" value="prospect,newsletter">
   <input type="hidden" name="contact[context]" value="{{ snippet_context }}">
   <div class="input-group newsletter__input-group">

@@ -84,11 +84,11 @@ Required for render:
                     aria-live="polite">
                 <span class="slideshow__pause-stop">
                     {% render 'icon-pause' %}
-                    <span class="icon__fallback-text">{{ 'sections.slideshow.pause_slideshow' | t }}</span>
+                    <span class="visually-hidden">{{ 'sections.slideshow.pause_slideshow' | t }}</span>
                 </span>
                 <span class="slideshow__pause-play">
                     {% render 'icon-play' %}
-                    <span class="icon__fallback-text">{{ 'sections.slideshow.play_slideshow' | t }}</span>
+                    <span class="visually-hidden">{{ 'sections.slideshow.play_slideshow' | t }}</span>
                 </span>
             </button>
         {% endif %}

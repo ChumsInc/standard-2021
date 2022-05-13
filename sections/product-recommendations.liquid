@@ -72,7 +72,7 @@
                     {% endif %}
                     {% if related_collection.products_count > 1 %}
                         <div class="product-recommendations">
-                            <div class="grid grid--uniform" data-aos="overflow__animation">
+                            <div class="row g-3">
                                 {%- assign current_product = product -%}
                                 {%- assign current_product_found = false -%}
                                 {%- assign related_count = 0 -%}
@@ -92,7 +92,7 @@
                                 {% endfor %}
                             </div>
 
-                            {% if settings.quick_shop_enable %}
+                            {% if false and settings.quick_shop_enable %}
                                 {% for product in related_collection.products limit: number_of_products_to_fetch %}
                                     {% if product.handle != current_product.handle %}
                                         {% render 'quick-shop-modal', product: product %}

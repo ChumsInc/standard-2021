@@ -1,3 +1,7 @@
+<script>
+    const block_settings_{{ block.id }} = {{ block.settings | json }};
+</script>
+
 {%- assign gutter_width = 0 -%}
 {%- assign aspect_total = 0 -%}
 {% if block.settings.enable_gutter %}
@@ -15,6 +19,109 @@
   {%- assign enable_zoom = false -%}
 {% endif %}
 
+{% if enable_zoom %}
+    <div class="modal fade" tabindex="-1" id="image-zoom-{{ block.id }}">
+        <div class="modal-dialog modal-xl modal-fullscreen-lg-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="image-zoom-label-{{ block.id }}"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% assign count_images = 0 %}
+<div class="row {% if block.settings.enable_gutter %}g-3{% else %}g-0{% endif %}">
+    {% if block.settings.image_1 %}
+        {%- assign count_images = count_images | plus: 1 -%}
+        {%- assign aspect_total = aspect_total | plus: block.settings.image_1.aspect_ratio -%}
+        <div class="col-12 col-1-aspect-{{ block.id }}">
+            {% capture image_1 %}
+                {{ block.settings.image_1 | image_url: width: 2000 |  image_tag: loading: 'lazy', class: 'img-fluid', widths: '200,400,800,1000' }}
+            {% endcapture %}
+            {% if block.settings.image_1_link %}
+                <a href="{{ block.settings.image_1_link }}" rel="nofollow">
+                    {{ image_1 }}
+                </a>
+            {% else %}
+                {{ image_1 }}
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if block.settings.image_2 %}
+        {%- assign count_images = count_images | plus: 1 -%}
+        {%- assign aspect_total = aspect_total | plus: block.settings.image_2.aspect_ratio -%}
+        <div class="col-12 col-2-aspect-{{ block.id }}">
+            {% capture image_2 %}
+                {{ block.settings.image_2 | image_url: height: 800 |  image_tag: loading: 'lazy', class: 'img-fluid', widths: '200,400,800,1000' }}
+            {% endcapture %}
+            {% if block.settings.image_2_link %}
+                <a href="{{ block.settings.image_2_link }}" rel="nofollow">
+                    {{ image_2 }}
+                </a>
+            {% else %}
+                {{ image_2 }}
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if block.settings.image_3 %}
+        {%- assign count_images = count_images | plus: 1 -%}
+        {%- assign aspect_total = aspect_total | plus: block.settings.image_3.aspect_ratio -%}
+        <div class="col-12 col-3-aspect-{{ block.id }}">
+            {% capture image_3 %}
+                {{ block.settings.image_3 | image_url: height: 800 |  image_tag: loading: 'lazy', class: 'img-fluid', widths: '200,400,800,1000' }}
+            {% endcapture %}
+            {% if block.settings.image_3_link %}
+                <a href="{{ block.settings.image_3_link }}" rel="nofollow">
+                    {{ image_3 }}
+                </a>
+            {% else %}
+                {{ image_3 }}
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if block.settings.image_4 %}
+        {%- assign count_images = count_images | plus: 1 -%}
+        {%- assign aspect_total = aspect_total | plus: block.settings.image_3.aspect_ratio -%}
+        <div class="col-12 col-4-aspect-{{ block.id }}">
+            {% capture image_4 %}
+                {{ block.settings.image_4 | image_url: height: 800 |  image_tag: loading: 'lazy', class: 'img-fluid', widths: '200,400,800,1000' }}
+            {% endcapture %}
+            {% if block.settings.image_4_link %}
+                <a href="{{ block.settings.image_4_link }}" rel="nofollow">
+                    {{ image_4 }}
+                </a>
+            {% else %}
+                {{ image_4 }}
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+<!-- aspect-1 {{ block.settings.image_1.aspect_ratio }} -->
+<!-- aspect-2: {{ block.settings.image_2.aspect_ratio }} -->
+<!-- aspect-3: {{ block.settings.image_3.aspect_ratio }} -->
+<!-- aspect-4: {{ block.settings.image_4.aspect_ratio }} -->
+<!-- aspect-total: {{ aspect_total }} -->
+{% style %}
+    @media (min-width: 576px) {
+        .col-1-aspect-{{ block.id }} {
+            flex-basis: {{ block.settings.image_1.aspect_ratio | divided_by: aspect_total | times: 100 }}%
+        }
+        .col-2-aspect-{{ block.id }} {
+            flex-basis: {{ block.settings.image_2.aspect_ratio | divided_by: aspect_total | times: 100 }}%
+        }
+        .col-3-aspect-{{ block.id }} {
+            flex-basis: {{ block.settings.image_3.aspect_ratio | divided_by: aspect_total | times: 100 }}%
+        }
+        .col-4-aspect-{{ block.id }} {
+            flex-basis: {{ block.settings.image_4.aspect_ratio | divided_by: aspect_total | times: 100 }}%
+        }
+    }
+{% endstyle %}
+{% comment %}
 <div
   data-subsection
   data-section-id="{{ block.id }}"
@@ -141,6 +248,7 @@
     {% endif %}
   </div>
 </div>
+{% endcomment %}
 
 {%- assign images_width = 100.0 | minus: gutter_total -%}
 {% style %}

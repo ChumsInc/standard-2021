@@ -1,9 +1,9 @@
 {% if section.settings.page_title_enable or section.settings.page_content_enable %}
-  <div class="page-width page-content{% if section.blocks.size > 0 %} page-content--with-blocks{% endif %}">
-    {% include 'breadcrumbs' %}
+  <div class="container page-content{% if section.blocks.size > 0 %} page-content--with-blocks{% endif %}">
+    {% render 'page-breadcrumbs' %}
 
-    <div class="grid">
-      <div class="grid__item medium-up--three-quarters medium-up--push-one-eighth">
+    <div class="row g-3 justify-content-center">
+      <div class="col-12 col-md-8">
 
         {% if section.settings.page_title_enable %}
           <header class="section-header">
@@ -21,9 +21,10 @@
     </div>
   </div>
 {% else %}
-<div class="visually-hidden">
-  {% include 'breadcrumbs' %}
-</div>
+  <div class="container">
+    {% render 'page-breadcrumbs' %}
+  </div>
+
 {% endif %}
 
 {% include 'page-template-blocks' %}

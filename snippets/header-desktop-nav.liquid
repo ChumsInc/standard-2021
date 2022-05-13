@@ -68,7 +68,7 @@
                             {% assign child_menu_id = menu_id | append: '-' | append: forloop.index0 %}
 
                             <div role="group" aria-labelledby="{{ child_menu_id }}"
-                                 class="grid__item medium-up--one-fifth appear-animation appear-delay-{{ animation_column }}">
+                                 class="grid__item medium-up--one-fifth">
                                 {%- assign subcollection_drop = false -%}
                                 {%- assign  subcollection_image = false -%}
                                 {% if childlink.levels > 0 and childlink.url contains '/collections/' %}

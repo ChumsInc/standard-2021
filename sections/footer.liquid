@@ -1,7 +1,7 @@
 <footer class="site-footer">
-  <div class="page-width">
+  <div class="container">
 
-    <div class="grid">
+    <div class="row g-3">
       {%- assign row_width = 0 -%}
       {% for block in section.blocks %}
         {%- assign row_width = row_width | plus: block.settings.container_width -%}
@@ -10,25 +10,25 @@
           {%- assign row_width = row_width | minus: 100 -%}
         {% endif %}
 
-        <div {{ block.shopify_attributes }} class="grid__item footer__item--{{ block.id }}" data-type="{{ block.type }}">
+        <div {{ block.shopify_attributes }} class="col-12 col-md footer__item--{{ block.id }}" data-type="{{ block.type }}">
           {% case block.type %}
           {% when 'logo_social' %}
-            {% include 'footer-logo', block: block %}
+            {% render 'footer-logo', block: block %}
           {% when 'custom' %}
-            {% include 'footer-custom-text', block: block %}
+            {% render 'footer-custom-text', block: block %}
           {% when 'newsletter' %}
-            {% include 'footer-newsletter', block: block %}
+            {% render 'footer-newsletter', block: block %}
           {% when 'menu' %}
-            {% include 'footer-menu', block: block %}
+            {% render 'footer-menu', block: block %}
           {% when 'store_map' %}
-            {% include 'footer-store-map', block: block %}
+            {% render 'footer-store-map', block: block %}
           {% endcase %}
         </div>
       {% endfor %}
       {% for block in section.blocks %}
         {% if block.type == 'logo' %}
           <div class="grid__item medium-up--hide">
-            {% include 'footer-logo', block: block %}
+            {% render 'footer-logo', block: block %}
           </div>
         {% endif %}
       {% endfor %}

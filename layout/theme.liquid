@@ -51,16 +51,20 @@
         -->
 
   {% render 'font-face' %}
-  {{ 'bootstrap.css' | asset_url | stylesheet_tag }}
-  {{ 'chums-theme.css' | asset_url | stylesheet_tag }}
-  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+  <style>
+    {% render 'bootstrap.css' %}
+  </style>
+  <style>
+    {% render 'chums-theme.css' %}
+  </style>
+  {% comment %}{{ 'theme.scss.css' | asset_url | stylesheet_tag }}{% endcomment %}
   {{ 'chums-swatches.css' | asset_url | stylesheet_tag }}
 
   {% comment %}
   Below are some javascript polyfills for older or non-standard browsers (ahem, msie).
   {% endcomment %}
-  {{ 'core-js-bundle.3.21.1.js' | asset_url | script_tag }}
-  {{ 'polyfills.1.0.25.min.js' | asset_url | script_tag }}
+  {% comment %}<script src="{{ 'core-js-bundle.3.21.1.js' | asset_url }}" async></script>{% endcomment %}
+  {% comment %}<script src="{{ 'polyfills.1.0.25.min.js' | asset_url }}" async></script>{% endcomment %}
 
   
   {% style %}
@@ -78,7 +82,7 @@
 
   <script>
     if(void 0===window.CHUMS) {
-      var CHUMS=window.CHUMS={};
+      const CHUMS=window.CHUMS={};
     }
     
     document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
@@ -114,6 +118,10 @@
   {% endcomment %}
   <script src="{{ 'vendor-scripts-jquery.1.0.27.min.js' | asset_url | split: '?' | first }}" defer="defer"></script>
   <script src="{{ 'vendor-scripts-chums.1.0.27.min.js' | asset_url | split: '?' | first }}" defer="defer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" defer="defer"
+          integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+          crossorigin="anonymous"></script>
+
 
   {% if settings.enable_currencies %}
     <script src="/services/javascripts/currencies.js" defer="defer"></script>
@@ -175,11 +183,7 @@ var _learnq = _learnq || [];
 
 var page = window.location.href;
 
-_learnq.push(['track', 'Viewed Page',
-
-{url: page}
-
-]);
+_learnq.push(['track', 'Viewed Page', {url: page}]);
 
 </script>
 
@@ -203,13 +207,9 @@ _learnq.push(['track', 'Viewed Page',
 
   {% render 'video-modal' %}
   {% render 'modal-zoom' %}
-  {% render 'photoswipe-template' %}
+  {% comment %}{% render 'photoswipe-template' %}{% endcomment %}
   {% if template contains 'product' %}
     {% render 'recently-viewed-product-template' %}
   {% endif %}
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
-          crossorigin="anonymous"></script>
-
 </body>
 </html>

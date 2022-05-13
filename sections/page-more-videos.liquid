@@ -1,3 +1,57 @@
+<style>
+
+
+  .video-list .video-list__grid {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: -22px;
+    margin-left: -22px;
+  }
+
+  .video-list .video-list__grid.video-list__grid--gutters {
+    margin-top: -22px;
+    margin-left: -22px;
+  }
+
+  .video-list .video-list__grid.video-list__grid--gutters .video--padder {
+    padding-top: 22px;
+    padding-left: 22px;
+  }
+
+  .video-list .video-list__grid .video--padder {
+    flex: 0 0 100%;
+  }
+
+  .video-list .video-list__grid .video-container {
+    position: relative;
+    padding-bottom: 56.26%;
+    height: 0;
+  }
+
+  .video-list .video-list__grid .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  .video-list .video-list__grid.video-list__grid--left {
+    justify-content: flex-start;
+  }
+
+  .video-list .video-list__grid.video-list__grid--center {
+    justify-content: center;
+  }
+
+  .video-list .video-list__grid.video-list__grid--right {
+    justify-content: flex-end;
+  }
+</style>
+
 {% style %}
   .video-list .video-list__grid .video--padder {
   	flex: 0 0 {{ 1 | times: 100 | divided_by: section.settings.per_row }}%;
@@ -24,13 +78,16 @@
       <div class="video--padder">
         <div class="video-container">
           {% if block.settings.video_url %}
-          <iframe width="560" height="315" src="{{ block.settings.video_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+          <iframe width="560" height="315" src="{{ block.settings.video_url }}"
+                  loading="lazy"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen=""></iframe>
           {% endif %}
         </div>
       </div>
       {% endfor %}
     </div>
-
   </div>
 </div>
 
@@ -38,7 +95,7 @@
   {
     "name": "More videos",
     "settings": [
-		{
+        {
           "type": "text",
           "id": "title",
           "label": "Title"

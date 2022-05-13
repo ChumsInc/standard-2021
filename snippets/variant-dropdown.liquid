@@ -1,6 +1,6 @@
 <div class="variant-wrapper variant-wrapper--{{ settings.variant_type }} js">
-    <label class="variant__label {%- if option.name == 'Default' or option.name == 'Title' %} hidden-label{% endif -%}
-                  {%- unless settings.variant_labels_enable %} hidden-label{% endunless -%}"
+    <label class="variant__label {%- if option.name == 'Default' or option.name == 'Title' %} visually-hidden{% endif -%}
+                  {%- unless settings.variant_labels_enable %} visually-hidden{% endunless -%}"
            for="SingleOptionSelector-{{ section_id }}-option-{{ forloop.index0 }}">
         {{ option.name }}
     </label>

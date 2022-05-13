@@ -1,1 +1,102 @@
+<style>
+
+    .blog-articles__grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: calc(var(--chums-grid-row-gap) / 2) calc(var(--chums-grid-col-gap) / 2);
+        /*flex-direction: row;*/
+        /*justify-content: flex-start;*/
+        /*flex-wrap: wrap;*/
+        /*text-align: center;*/
+    }
+
+    .blog-articles__grid .blog-article--padder {
+    }
+
+    @media screen and (min-width: 769px) {
+        .blog-articles__grid {
+            grid-template-columns: repeat(var(--chums-grid-cols--blog), 1fr);
+            gap: var(--chums-grid-row-gap) var(--chums-grid-col-gap);
+        }
+    }
+
+    @media screen and (min-width: 960px) {
+    }
+
+    .blog-articles__grid .blog-article {
+        padding: 0.5rem;
+        position: relative;
+        color: white;
+        /*     text-shadow: 0 0 10px black; */
+        font-weight: 700;
+        text-transform: uppercase;
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%;
+        overflow: hidden;
+    }
+
+    .blog-articles__grid .blog-article .blog-article__image--wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        text-align: center;
+        height: 100%;
+        width: 100%;
+    }
+
+    @media only screen and (min-width: 769px) {
+        .blog-articles__grid .blog-article .blog-article__image--wrapper {
+        }
+    }
+
+    .blog-articles__grid .blog-article a {
+        color: inherit;
+    }
+
+    .blog-articles__grid .blog-article .blog-article__title {
+        position: absolute;
+        bottom: 1rem;
+        text-align: left;
+        width: fit-content;
+        font-size: 1.5rem;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 1rem 1.5rem;
+    }
+
+    .blog-articles__grid .blog-article .blog-article__title .blog-article__author {
+        font-size: 1rem;
+        font-weight: 300;
+    }
+
+    .blog-articles__grid .blog-article .blog-article__image--background.lazy {
+        background-image: none !important;
+    }
+
+    .blog-articles__grid .blog-article .blog-article__image--background {
+        transform: scale(1);
+        transition: transform 5s ease-in-out;
+        height: 100%;
+        width: 100%;
+        background-position: center;
+        background-size: cover;
+    }
+
+    .blog-articles__grid .blog-article:focus .blog-article__image--background,
+    .blog-articles__grid .blog-article:hover .blog-article__image--background {
+        transform: scale(1.25);
+    }
+
+    @media only screen and (min-width: 769px) {
+        .blog-articles__grid {
+            margin-bottom: 30px;
+        }
+    }
+
+    .blog-articles__grid img {
+        display: block;
+    }
+
+</style>
 {% section 'blog-template' %}

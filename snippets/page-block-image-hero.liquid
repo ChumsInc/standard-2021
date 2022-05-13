@@ -1,186 +1,110 @@
-<div
-  data-subsection
-  data-section-id="{{ block.id }}"
-  data-section-type="slideshow-section"
-  data-align-top="true"
-  class="hero-slideshow"
-  {% if block.settings.parallax %}data-parallax="true"{% endif %}>
-  <div class="slideshow-wrapper">
-    {%- assign natural_height = false -%}
-    {% if block.settings.section_height == 'natural' %}
-      {% if block.settings.image != blank %}
-        {%- assign natural_height = true -%}
-        {%- capture natural_height_ratio -%}{{ 100 | divided_by: block.settings.image.aspect_ratio }}%{% endcapture %}
-      {% endif %}
-    {% endif %}
 
-    {% if natural_height %}
-      {% style %}
-        .hero-natural--{{ block.id }} {
-          height: 0;
-          padding-bottom: {{ natural_height_ratio }};
-        }
-      {% endstyle %}
-    {% endif %}
-
-    {% if natural_height %}
-      <div class="hero-natural--{{ block.id }}">
-    {% endif %}
-      <div id="Slideshow-{{ block.id }}"
-        class="hero hero--{{ block.settings.section_height }} hero--{{ block.id }} hero--mobile--{{ block.settings.mobile_height }} loading loading--delayed"
-        {% if natural_height %}
-          data-natural="true"
-        {% endif %}
-        data-aos="hero__animation"
-        data-slide-count="1">
-        <div
-          class="slideshow__slide slideshow__slide--{{ block.id }}"
-          data-id="{{ block.id }}">
-
-          {% style %}
-            .slideshow__slide--{{ block.id }} .hero__title {
-              font-size: {{ block.settings.title_size | times: 0.5 }}px;
-              line-height: 1.15;
-            }
-            @media only screen and (min-width: 769px) {
-              .slideshow__slide--{{ block.id }} .hero__title {
-                font-size: {{ block.settings.title_size }}px;
-              }
-            }
-
-            {% unless block.settings.color_accent contains 'rgba(0,0,0,0)' %}
-              .slideshow__slide--{{ block.id }} .btn {
-                background: {{ block.settings.color_accent }} !important;
-                border-color: {{ block.settings.color_accent }} !important;
-
-                {%- assign accent_brightness = block.settings.color_accent | color_extract: 'lightness' -%}
-
-                {% if accent_brightness > 40 %}
-                  color: #000 !important;
+<div class="image-hero--wrapper image-hero--{{ block.id }}">
+    {% unless block.settings.parallax %}
+        {{ block.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy', class: 'img-fluid image-hero--image' }}
+    {% endunless %}
+    {% assign hasSubLinks = false %}
+    {% capture heroText %}
+        <div class=" image-hero--text">
+            <div class="container">
+                <h2 class="image-hero--title">{{ block.settings.title }}</h2>
+                <div class="image-hero--sub-heading">{{ block.settings.subheading }}</div>
+                {% if block.settings.link and block.settings.link_text %}
+                    {% assign hasSubLinks = true %}
+                    <a href="{{ block.settings.link }}" rel="noreferrer" target="_blank">
+                        <div class="image-hero--sub-heading">{{ block.settings.link_text }}</div>
+                    </a>
                 {% endif %}
-              }
-
-              {% if settings.button_style == 'angled' %}
-                .slideshow__slide--{{ block.id }} .btn:before,
-                .slideshow__slide--{{ block.id }} .btn:after {
-                  background: {{ block.settings.color_accent }} !important;
-                  border-color: {{ block.settings.color_accent }} !important;
-                }
-              {% endif %}
-            {% endunless %}
-          {% endstyle %}
-
-          {%- assign hero_text = false -%}
-          {%- assign link_slide = false -%}
-          {% if block.settings.title != blank or block.settings.subheading != blank or block.settings.link_text != blank %}
-            {%- assign hero_text = true -%}
-          {% endif %}
-          {% if block.settings.link != blank and block.settings.link_2 == blank %}
-            {%- assign link_slide = true -%}
-          {% endif %}
-
-          {% if block.settings.parallax %}
-            {% if block.settings.image != blank %}
-              {% style %}
-                .hero__image--{{ block.id }} {
-                  background-position: {{ block.settings.focal_point }};
-                  background-size: cover;
-                }
-              {% endstyle %}
-            {% endif %}
-            <div class="parallax-container">
-              <div class="hero__image-wrapper">
-                <div
-                  class="parallax-image hero__image hero__image--{{ block.id }}{% unless hero_text %} hero__image--no-overlay{% endunless %}{% if block.settings.image != blank %} lazyload{% else %} hero__image--svg{% endif %}"
-                  {% if block.settings.image != blank %}
-                    data-bgset="{% include 'bgset', image: block.settings.image %}"
-                    data-sizes="auto"
-                  {% endif %}>
-                {% if block.settings.image == blank %}
-                  {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                {% if block.settings.link_2 and block.settings.link_2_text %}
+                    {% assign hasSubLinks = true %}
+                    <a href="{{ block.settings.link_2 }}" rel="noreferrer" target="_blank">
+                        <div class="image-hero--sub-heading">{{ block.settings.link_2_text }}</div>
+                    </a>
                 {% endif %}
-                </div>
-              </div>
             </div>
-          {% else %}
-            <div class="hero__image-wrapper{% unless hero_text %} hero__image-wrapper--no-overlay{% endunless %}">
-              {% if block.settings.image != blank %}
-                {% style %}
-                  .hero__image--{{ block.id }} {
-                    object-position: {{ block.settings.focal_point }};
-                    font-family: "object-fit: cover; object-position: {{ block.settings.focal_point }};";
-                  }
-                {% endstyle %}
-
-                {%- assign img_url = block.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
-
-                <img class="image-fit hero__image hero__image--{{ block.id }} lazyload"
-                  src=""
-                  data-src="{{ img_url }}"
-                  data-aspectratio="{{ block.settings.image.aspect_ratio }}"
-                  data-sizes="auto"
-                  data-parent-fit="cover"
-                  alt="{{ block.settings.image.alt | escape }}">
-                <noscript>
-                  <img class="image-fit hero__image hero__image--{{ block.id }}"
-                    src="{{ block.settings.image | img_url: '1400x' }}"
-                    alt="{{ block.settings.image.alt | escape }}">
-                </noscript>
-              {% else %}
-                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
-              {% endif %}
-            </div>
-          {% endif %}
-
-          {% if link_slide %}
-            <a href="{{ block.settings.link }}" class="hero__slide-link" aria-label="Navigate to {{ block.setting.title | escape }}"></a>
-          {% endif %}
-
-          {% if hero_text %}
-            <div class="hero__text-wrap">
-              <div class="page-width">
-                <div class="hero__text-content {{ block.settings.text_align }}">
-                  <div class="hero__text-shadow">
-                    {% unless block.settings.title == blank %}
-                      <h2 class="h1 hero__title">
-                        <div class="animation-cropper"><div class="animation-contents">
-                        {{ block.settings.title | newline_to_br }}
-                        </div></div>
-                      </h2>
-                    {% endunless %}
-                    {% if block.settings.subheading or block.settings.link or block.settings.link_2 %}
-                      {% unless block.settings.subheading == blank %}
-                        <div class="hero__subtitle">
-                          <div class="animation-cropper"><div class="animation-contents">
-                            {{ block.settings.subheading | escape }}
-                          </div></div>
-                        </div>
-                      {% endunless %}
-                      {% if block.settings.link_text != blank or block.settings.link_text_2 != blank %}
-                        <div class="hero__link">
-                          {% if block.settings.link_text != blank %}
-                            <a href="{{ block.settings.link }}" class="btn{% if block.settings.color_accent contains 'rgba(0,0,0,0)' %} btn--inverse{% endif %}">
-                              {{ block.settings.link_text }}
-                            </a>
-                          {% endif %}
-                          {% if block.settings.link_text_2 != blank %}
-                            <a href="{{ block.settings.link_2 }}" class="btn{% if block.settings.color_accent contains 'rgba(0,0,0,0)' %} btn--inverse{% endif %}">
-                              {{ block.settings.link_text_2 }}
-                            </a>
-                          {% endif %}
-                        </div>
-                      {% endif %}
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endif %}
         </div>
-      </div>
-    {% if natural_height %}
-      </div>
+    {%endcapture%}
+    {% if hasSubLinks %}
+        {{ heroText }}
+    {% elsif block.settings.link %}
+        <a href="{{ block.settings.link }}" rel="noreferrer" target="_blank">
+            {{ heroText }}
+        </a>
+    {% else %}
+        {{ heroText }}
     {% endif %}
-  </div>
 </div>
-<!-- // {{block.settings | json}} // -->
+{% assign textAlign = 'center' %}
+{% assign alignItems = 'center' %}
+{% assign alignCase = block.settings.text_align | split: ' ' | first %}
+{% assign textCase = block.settings.text_align | split: ' ' | last %}
+{% if textCase == 'horizontal-left' %}
+    {% assign textAlign = 'left' %}
+{% elsif textCase == 'horizontal-right' %}
+    {% assign textAlign = 'right' %}
+{% else %}
+    {% assign textAlign = 'center' %}
+{% endif %}
+{% if alignCase == 'vertical-center' %}
+    {% assign alignItems = 'center' %}
+{% elsif alignCase == 'vertical-bottom' %}
+    {% assign alignItems = 'flex-end' %}
+{% else %}
+    {% assign alignItems = 'flex-start' %}
+{% endif %}
+
+{% style %}
+    .image-hero--{{ block.id }} {
+        position: relative;
+        max-width: 2000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    {% if block.settings.parallax and block.settings.image %}
+        .image-hero--{{ block.id }} {
+            background-image: url({{ block.settings.image | image_url: width: 1024 }});
+            min-height: {{ 1024 | divided_by: block.settings.image.aspect_ratio }}px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: {{ block.settings.focal_point }};
+        }
+        @media (min-width: 576px) {
+            .image-hero--{{ block.id }} {
+                background-image: url({{ block.settings.image | image_url: width: 2000 }});
+                height: {{ block.settings.section_height }};
+
+            }
+        }
+    {% endif %}
+    .image-hero--{{ block.id }} .image-hero--image {
+        max-height: {{ block.settings.section_height }};
+        object-fit: cover;
+        display: block;
+    }
+    .image-hero--{{ block.id }} .image-hero--text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        color: {{ block.settings.color_accent }};
+        display: flex;
+        align-items: {{ alignItems }};
+    }
+    .image-hero--{{ block.id }} .image-hero--text .container {
+        text-align: {{ textAlign }};
+    }
+    .image-hero--{{ block.id }} .image-hero--text .image-hero--title {
+        font-size: {{ block.settings.title_size | divided_by: 2 }}px;
+    }
+    @media (min-width: 576px) {
+        .image-hero--{{ block.id }} .image-hero--text .image-hero--title {
+            font-size: {{ block.settings.title_size }}px;
+        }
+    }
+    .image-hero--{{ block.id }} .image-hero--text .image-hero--sub-heading {
+        margin-top: 1rem;
+        font-size: {% if block.settings.title_size > 48 %} {{ block.settings.title_size | divided_by: 3 }}px {% else %}1rem{% endif %};
+    }
+{% endstyle %}

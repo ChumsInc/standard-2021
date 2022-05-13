@@ -1091,7 +1091,11 @@ lazySizesConfig.expFactor = 4;
                 loading: false
             };
 
-            this.drawer = new theme.Drawers('CartDrawer', 'cart');
+            const cartPopout = document.querySelector('#CartDrawer');
+            this.offCanvas = new bootstrap.OffCanvas(cartPopout);
+            console.log('CartDrawer()', cartPopout);
+
+            // this.drawer = new theme.Drawers('CartDrawer', 'cart');
 
             // Prep handlebars template
             var source = $(selectors.template).html();
@@ -1124,7 +1128,7 @@ lazySizesConfig.expFactor = 4;
                 this.emptyCart();
 
                 if (cart.item_count === 0) {
-                    $(selectors.container).append('<p class="appear-animation appear-delay-3">' + theme.strings.cartEmpty +'</p>');
+                    $(selectors.container).append('<p>' + theme.strings.cartEmpty +'</p>');
                 } else {
                     var items = [];
                     var item = {};
@@ -1223,7 +1227,7 @@ lazySizesConfig.expFactor = 4;
 
                 // If specifically asked, open the cart drawer (only happens after product added from form)
                 if (openDrawer === true) {
-                    this.drawer.open();
+                    this.offCanvas.show();
                 }
             },
 

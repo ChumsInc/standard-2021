@@ -6,7 +6,6 @@ variables required in product-images-2.liquid:
 {% endcomment %}
 
 {% assign featured_media = current_variant.featured_media | default: product.media | first %}
-<!-- featured_media: {{ featured_media |  json }} -->
 {% unless featured_media %}
     {% for media in product.media %}
         {% if media.src == current_variant.featured_image.src %}
@@ -97,7 +96,6 @@ variables required in product-images-2.liquid:
             </template>
 
             <div class="carousel-inner" data-active-images="{{ active_images | join: ',' }}">
-                <!-- active_images: {{ active_images | json }} -->
                 {% for media in product.media %}
                     {% assign active_image = 0 %}
                     {% assign media_id = media.id | append: '' %}

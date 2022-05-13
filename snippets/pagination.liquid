@@ -1,11 +1,30 @@
 {% capture previous_label %}
-  {% render 'icon-chevron-left' %}
-  <span class="icon__fallback-text">{{ 'general.pagination.previous' | t }}</span>
+    {% render 'icon-chevron-left' %}
+    <span class="visually-hidden">{{ 'general.pagination.previous' | t }}</span>
 {% endcapture %}
 {% capture next_label %}
-  {% render 'icon-chevron-right' %}
-  <span class="icon__fallback-text">{{ 'general.pagination.next' | t }}</span>
+    {% render 'icon-chevron-right' %}
+    <span class="visually-hidden">{{ 'general.pagination.next' | t }}</span>
 {% endcapture %}
 <div class="pagination">
-  {{ paginate | default_pagination: previous: previous_label, next: next_label | replace: 'view=ajax', '' }}
+    <strong class="me-5">Page</strong>
+    {{ paginate | default_pagination: previous: previous_label, next: next_label | replace: 'view=ajax', '' }}
 </div>
+<style>
+    .pagination {
+        align-items: baseline;
+    }
+    .pagination .page.current {
+        font-weight: 700;
+        color: var(--chums-red);
+    }
+    .pagination .prev,
+    .pagination .next,
+    .pagination .deco,
+    .pagination .page {
+        margin: 0.5rem;
+        border: 1px solid transparent;
+        padding: 0.5rem;
+    }
+
+</style>

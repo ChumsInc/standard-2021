@@ -1,0 +1,89 @@
+/**
+    CSS Custom properties defined here are only helpers for the chums-theme.css.liquid file
+    because phpstorm does not properly parse the variables in .css.liquid files.
+ */
+:root {
+    /**
+    global settings
+     */
+    --media-width-sm: 576px;
+    --media-width-md: 768px;
+    --media-width-lg: 992px;
+    --media-width-xl: 1200px;
+    --media-width-xxl: 1400px;
+
+    --chums-z-idnex-nav-dropdowns: 5;
+    --chums-z-index-drawer: 30;
+    --chums-z-index-drawer-overlay: 26;
+    --chums-z-index-modal: 1055;
+    --chums-z-index-skip-to-content: 10000;
+    --chums-z-index-sticky-header: 6;
+    --chums-z-index-stuck-header: 20;
+    --chums-z-index-header-search: 20;
+    --chums-z-index-loader: 4;
+
+
+    --chums-red: '#ce0e2d';
+    --chums-red-rgb: 206, 14, 45;
+    --chums-body-bg-color: '#fff';
+    --chums-body-color: '#1c1d1d';
+    --chums-body-color-rgb: 28, 29, 29;
+    --chums-savings-color: #1c1d1d;
+    --chums-border-color: #1c1d1d;
+
+    --chums-gutter: 30px;
+
+    --chums-announcement-bar-bg-color: var(--chums-red);
+    --chums-announcement-bar-color: #fff;
+
+
+
+    /* drawer settings */
+    --chums-drawer-z-index: 30;
+    --chums-drawer-z-index-overlay: 26;
+    --chums-drawer-gutter-large: var(--chums-gutter);
+    --chums-drawer-gutter-small: calc(var(--chums-gutter) / 2);
+    --chums-drawer-color: #fff;
+    --chums-drawer-bg-color: #1c1d1d;
+    --chums-drawer-border-color: #343535;
+    --chums-drawer-button-color: #fff;
+    --chums-drawer-button-bg-color: #a26b25;
+    --chums-drawer-button-hover-bg-color: var(--chums-red);
+    --chums-drawer-nav-width: 300px;
+    --chums-drawer-cart-width: 300px;
+    --chums-drawer-cart-width-lg: 400px;
+    --chums-drawer-header-height: 70px;
+    --chums-drawer-header-height-lg: 119px;
+    --chums-drawer-footer-height: 130px;
+
+    --chums-index-section-margin-small: calc(var(--chums-gutter) * 0.85);
+    --chums-index-section-margin-large: calc(var(--chums-gutter) * 2.5);
+
+    /* image overlays */
+    --chums-image-overlay-color: #000;
+    --chums-image-overlay-opacity: 1;
+    --chums-image-overlay-text-shadow: 0;
+    --chums-image-small-bg-color: #eee;
+    --chums-image-large-bg-color: #1c1d1d;
+    --chums-grid-overlay-color: #000;
+    --chums-grid-overlay-opacity: 1;
+    --chums-grid-col-gap: 1rem;
+    --chums-grid-row-gap: 1rem;
+    --chums-grid-cols--blog: 3;
+    --chums-hero-text-color: #fff;
+
+
+/* collection settings */
+    --chums-collection-hero-large: 420px;
+    --chums-collection-hero-small: 250px;
+
+
+    /**
+    Product settings
+     */
+    --chums-swatch-sold-out-opacity: 0.5;
+    --chums-thumb-height: 96px;
+    --chums-thumb-rows: 2.5;
+    --chums-thumb-padding: 0.25rem;
+
+}

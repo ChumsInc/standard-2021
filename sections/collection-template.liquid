@@ -45,8 +45,8 @@
         {% if sort_by == collection.default_sort_by %}
           {%- assign default_sorted = true -%}
         {% endif %}
-        <label for="SortBy" class="hidden-label">{{ 'collections.sorting.title' | t }}</label>
-        <select name="SortBy" id="SortBy">
+        <label for="SortBy" class="visually-hidden">{{ 'collections.sorting.title' | t }}</label>
+        <select name="SortBy" id="SortBy" class="form-select">
           <option value="title-ascending"{% if sort_by == collection.default_sort_by %} selected="selected"{% endif %}>{{ 'collections.sorting.title' | t }}</option>
           {% for option in collection.sort_options %}
             <option value="{{ option.value }}" {% unless default_sorted %}{% if option.value == sort_by %}selected="selected"{% endif %}{% endunless %}>{{ option.name }}</option>

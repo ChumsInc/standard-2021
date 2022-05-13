@@ -1,3 +1,115 @@
+<style>
+    .site-header__search-form {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .site-header__search-btn .icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .site-header__search-results {
+        position: fixed;
+    }
+
+    .site-header__search-results-count {
+        top: 0;
+    }
+    .site-header__search-results-list {
+        display: none;
+        margin-left: 70px;
+        list-style-type: none;
+        padding: 0.5rem 2rem;
+        background-color: white;
+        box-shadow: 0 0 3px black;
+        max-width: 350px;
+    }
+    .site-header__search-results-list.has-results {
+        display: block;
+    }
+
+    .search-result {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--bs-gray-300);
+    }
+
+
+    .search-result__image {
+        flex: 0 0 80px;
+        margin-left: 1rem;
+        margin-right: 3rem;
+    }
+
+    .search-result__detail {
+        flex: 1 1 auto;
+    }
+
+    .search-result__detail a {
+        font-weight: 500;
+    }
+
+    .search-result__prices {
+        font-size: 0.85rem;
+    }
+    .search-result__prices--original {
+        display: none;
+        text-decoration: line-through;
+    }
+
+    .search-result__prices--current {
+        padding: 0.5rem 0;
+    }
+    .search-result__prices--sale.search-result__prices--original {
+        display: inline;
+    }
+    .search-result__prices--sale.search-result__prices--current {
+        color: var(--chums-red);
+    }
+</style>
+<div class="offcanvas offcanvas-top" tabindex="-1" id="header-search-container" aria-label="Search">
+    <div class="offcanvas-header">
+        <h5>Search</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close Search"></button>
+    </div>
+    <div class="offcanvas-body">
+
+        <form action="/search" method="get" class="site-header__search-form" role="search"
+              aria-label="Products"
+              aria-controls="site-header__search-results"
+              id="site-header__search-form"
+              autocomplete="off">
+            <input type="hidden" name="type" value="{{ settings.search_type }}">
+            <div class="input-group input-group-lg">
+                <button type="submit" class="btn btn-outline-primary text-link site-header__search-btn">
+                    {% render 'icon-search' %}
+                    <span class="visually-hidden">{{ 'general.search.submit' | t }}</span>
+                </button>
+                <input type="search" name="q" value="{{ search.terms | escape }}"
+                       placeholder="{{ 'general.search.placeholder' | t }}"
+                       autocomplete="off"
+                       class="site-header__search-input form-control"
+                       aria-label="{{ 'general.search.placeholder' | t }}">
+
+            </div>
+        </form>
+
+        <div class="site-header__search-results" id="site-header__search-results" role="region">
+            <div class="screen-width">
+                <div class="site-header__search-results-count" aria-live="polite"></div>
+                <ul class="site-header__search-results-list list-group" aria-live="polite" aria-atomic="true">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %}
 <div class="site-header__search-container">
     <div class="site-header__search">
         <div class="screen-width">
@@ -9,7 +121,7 @@
                 <input type="hidden" name="type" value="{{ settings.search_type }}">
                 <button type="submit" class="text-link site-header__search-btn">
                     {% render 'icon-search' %}
-                    <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
+                    <span class="visually-hidden">{{ 'general.search.submit' | t }}</span>
                 </button>
                 <input type="search" name="q" value="{{ search.terms | escape }}"
                        placeholder="{{ 'general.search.placeholder' | t }}"
@@ -20,7 +132,7 @@
 
             <button type="button" class="js-search-header-close text-link site-header__search-btn" tabindex="-1">
                 {% render 'icon-close' %}
-                <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
+                <span class="visually-hidden">{{ 'general.accessibility.close_modal' | t | json }}</span>
             </button>
         </div>
     </div>
@@ -32,3 +144,4 @@
         </div>
     </div>
 </div>
+{% endcomment %}

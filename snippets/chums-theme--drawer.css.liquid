@@ -1,0 +1,280 @@
+
+.drawer {
+    display: none;
+    position: fixed;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    top: 0;
+    bottom: 0;
+    padding: 0 var(--chums-drawer-gutter-small) var(--chums-drawer-gutter-small);
+    max-width: 95%;
+    z-index: var(--chums-drawer-z-index);
+    color: var(--chums-drawer-color);
+    background-color: var(--chums-drawer-bg-color);
+    box-shadow: 0 0 150px rgba(0,0,0,0.1);
+    transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+}
+@media (min-width: 768px) {
+    .drawer {
+        padding: 0 var(--chums-drawer-gutter-large) var(--chums-drawer-gutter-large);
+    }
+}
+.drawer a:not(.btn),
+.drawer a:not(.btn):hover
+{
+    color: var(--chums-drawer-color);
+}
+
+.drawer input,
+.drawer textarea {
+    border-color: var(--chums-drawer-border-color);
+}
+
+.drawer .btn {
+    background-color: var(--chums-drawer-bg-color);
+    color: var(--chums-drawer-color);
+}
+
+
+.drawer--right {
+    width: var(--chums-drawer-nav-width);
+    right: calc(var(--chums-drawer-nav-width) * -1);
+}
+
+.drawer--left.drawer--is-open {
+    display: block;
+    transform: translateX(var(--chums-drawer-nav-width));
+    transition-duration: 0.45s;
+}
+
+.drawer--right {
+    width: $drawerCartWidth;
+    right: -$drawerCartWidth;
+
+@include media-query($medium-up) {
+    width: $drawerCartWidthLarge;
+    right: -$drawerCartWidthLarge;
+}
+
+&.drawer--is-open {
+     display: block;
+     transform: translateX(-$drawerCartWidth);
+     transition-duration: 0.45s;
+
+@include media-query($medium-up) {
+    transform: translateX(-$drawerCartWidthLarge);
+}
+}
+}
+
+.js-drawer-open .main-content:after,
+.js-drawer-closing .main-content:after {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $colorModalBg;
+    opacity: 0;
+    z-index: $zindexDrawerOverlay;
+}
+
+.js-drawer-open .main-content:after {
+    animation: overlay-on 0.35s forwards;
+}
+
+.js-drawer-closing .main-content:after {
+    animation: overlay-off 0.25s forwards;
+}
+
+/*================ Drawer header ================*/
+
+.drawer__header {
+    display: table;
+    height: $drawerHeaderHeight;
+    width: 100%;
+    padding: ($gutter / 2.6) 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid $colorDrawerBorder;
+
+@include media-query($medium-up) {
+    height: $drawerHeaderHeightLarge;
+}
+}
+
+.drawer__header--full {
+@include media-query($medium-up) {
+    padding-left: $drawerGutterLarge;
+    padding-right: $drawerGutterLarge;
+}
+}
+
+.drawer__fixed-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $drawerHeaderHeight;
+    overflow: visible; // for close button hit area
+
+@include media-query($medium-up) {
+    height: $drawerHeaderHeightLarge;
+}
+}
+
+@include media-query($medium-up) {
+    .drawer__fixed-header:not(.drawer__fixed-header--full) {
+        left: $drawerGutterLarge;
+        right: $drawerGutterLarge;
+    }
+}
+
+.drawer__title,
+.drawer__close {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.drawer__title {
+    width: 100%;
+
+@include media-query($small) {
+    padding-left: $drawerGutterSmall;
+}
+}
+
+.drawer__close {
+    width: 1%;
+    text-align: center;
+}
+
+// Button sits on right by default
+
+   .drawer__close-button {
+       position: relative;
+       height: 100%;
+       padding: 0 $drawerGutterSmall;
+       color: inherit;
+
+&:active {
+     background-color: darken($colorDrawers, 5%);
+ }
+
+.icon {
+    height: 28px;
+    width: 28px;
+}
+
+@include media-query($medium-up) {
+    right: -$drawerGutterLarge;
+}
+}
+
+// Rare use case left close button
+
+   .drawer__close--left {
+       text-align: left;
+
+.drawer__close-button {
+    right: auto;
+    left: -$drawerGutterLarge;
+}
+}
+
+/*================ Drawer content ================*/
+
+.drawer__inner {
+    position: absolute;
+    top: $drawerHeaderHeight;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: $drawerGutterSmall $drawerGutterSmall 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+
+@include media-query($medium-up) {
+    top: $drawerHeaderHeightLarge;
+    padding-left: $gutter;
+    padding-right: $gutter;
+}
+
+.drawer--has-fixed-footer & {
+    overflow: hidden;
+    overflow-y: auto; // remove if uncommenting below media query
+}
+}
+
+// Drawer content with fixed footer
+
+   .drawer__inner--has-fixed-footer {
+       position: absolute;
+       top: 0;
+       left: 0;
+       right: 0;
+       margin: 0;
+       padding: ($gutter / 2) ($gutter / 2) 0;
+       bottom: $drawerCartFooterHeight; // overwritten with JS
+   overflow: auto;
+       -webkit-overflow-scrolling: touch;
+
+@include media-query($medium-up) {
+    padding: ($gutter / 1.35) $gutter 0;
+}
+
+// Allow whole drawer to be scrollable on short screens
+// typically when Android keyboard is open
+@media screen and (max-height: $fixedHeightLimit) {
+    position: static;
+    padding: 0;
+}
+}
+
+/*================ Drawer footer ================*/
+
+.drawer__footer {
+    border-top: 1px solid $colorDrawerBorder;
+    padding-top: $gutter / 2;
+
+@include media-query($medium-up) {
+    padding-top: $gutter / 1.35;
+}
+}
+
+.drawer__footer--fixed {
+    position: absolute;
+    bottom: 0;
+    left: $gutter / 2;
+    right: $gutter / 2;
+    min-height: $drawerCartFooterHeight; // overwritten by JS
+padding-bottom: $gutter;
+
+@include media-query($small) {
+    padding-bottom: $drawerGutterSmall;
+}
+
+@include media-query($medium-up) {
+    left: $drawerGutterLarge;
+    right: $drawerGutterLarge;
+}
+
+// Allow whole drawer to be scrollable on short screens
+// typically when Android keyboard is open
+@media screen and (max-height: $fixedHeightLimit) {
+    position: static;
+}
+}
+
+/*================ Cart-specific styles ================*/
+
+.drawer__cart.is-loading {
+    min-height: 100px;
+
+.cart {
+    transition: opacity 0.3s ease 0.7s;
+    opacity: 0.4;
+}
+}

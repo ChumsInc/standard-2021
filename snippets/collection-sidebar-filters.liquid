@@ -30,7 +30,6 @@ Required for render:
 
 {% for block in section.blocks %}
     {%- assign collapsed_state = block.settings.collapsed -%}
-    <!-- block.settings = {{ block.settings | json }} -->
     <div class="collection-sidebar__group--{{ block.id }}" {{ block.shopify_attributes }}>
         {% if block.type == 'tags_group' or 'tags_all' %}
             {%- assign tags_to_display = false -%}
@@ -42,7 +41,6 @@ Required for render:
                     {%- assign tags_to_display = collection.all_tags -%}
             {% endcase %}
 
-            <!-- tags_to_display: {{ tags_to_display | json }} -->
             {% if tags_to_display %}
                 {%- assign collection_tags = collection.tags -%}
                 {% if collection.handle == 'all' and current_tags == blank %}
@@ -111,7 +109,6 @@ Required for render:
         {% endif %}
 
         {% if block.type == 'color_group' %}
-            <!-- block = {{ block.settings |  json }} -->
             {% comment %}
               Color Swatches are created via javascript from available products on the page.
             {% endcomment %}

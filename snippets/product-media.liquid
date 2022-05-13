@@ -9,6 +9,8 @@ Render options:
     [crop] = '' (default) | 'top' | 'center' | 'bottom' | 'left' | 'right'
 {% endcomment %}
 
+<!-- media: {{ media | json }} -->
+
 {% case media.media_type %}
     {% when 'image' %}
         {% unless width %}
@@ -39,7 +41,15 @@ Render options:
             </div>
         {% else %}
             <div class="product-carousel-image-container {{ className }}" data-media-id="{{ media.id }}">
-                {{ media | external_video_tag: width: width, height: height }}
+                {% capture yt_iframe %}
+                    {{ media | external_video_tag: width: width, height: height }}
+                {%endcapture%}
+                {% assign yt_iframe = yt_iframe | replace: 'frameborder="0"', 'frameborder="0" loading="lazy"' %}
+                {% if media.host == 'youtube' %}
+                    {{ yt_iframe }}
+                {% else %}
+                    {{ media | external_video_tag: width: width, height: height }}
+                {% endif %}
             </div>
         {% endif %}
     {% when 'video' %}
