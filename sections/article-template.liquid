@@ -17,10 +17,10 @@
 {%- endif -%}
 
 
-<div class="page-width page-content">
+<div class="container mb-5 pb-5">
 
-  <div class="grid">
-    <article class="grid__item widescreen--six-tenths widescreen--push-two-tenths medium-up--two-thirds medium-up--push-one-sixth article" itemscope itemtype="http://schema.org/Article">
+  <div class="row g-3  justify-content-center">
+    <article class="col-12 col-md-8 article" itemscope itemtype="http://schema.org/Article">
 
       {% render 'blog-breadcrumbs' %}
 
@@ -58,9 +58,20 @@
         {% endif %}
       </header>
 
+      {% capture article_content %}
+        {{ article.content }}
+      {% endcapture %}
+
+      <div class="article__body rte" itemprop="articleBody">
+        {% assign article_content = article_content | replace: 'img src=', 'img loading="lazy" src=' %}
+        {{ article_content }}
+      </div>
+
+      <!--
       <div class="article__body rte" itemprop="articleBody">
         {{ article.content }}
       </div>
+      -->
 
       {% if section.settings.social_sharing_blog %}
         {% render 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image %}
@@ -166,7 +177,7 @@
   </div> 
   
   <div class="text-center">
-    <a href="{{ blog.url }}" class="btn btn--small return-link">{% render 'icon-arrow-left' %} {{ 'blogs.article.back_to_blog' | t: title: blog.title }}</a>
+    <a href="{{ blog.url }}" class="btn btn--small btn--red return-link">{% render 'icon-arrow-left' %} {{ 'blogs.article.back_to_blog' | t: title: blog.title }}</a>
   </div>
 </div>
 

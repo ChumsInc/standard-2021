@@ -104,6 +104,13 @@ h1, .h1, h2, .h2, h3, .h3 {
     text-transform: uppercase;
 }
 
+h4,
+.h4 {
+    text-transform: uppercase;
+    letter-spacing: .2em;
+    font-size: .8rem;
+}
+
 b, strong {
     font-weight: 700;
 }
@@ -126,6 +133,19 @@ label:not(.variant__button-label),
     display: none !important;
 }
 
+.btn {
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    border-radius: 0;
+}
+
+.btn--full {
+    width: 100%;
+    transition: none;
+    padding: 0.875rem 1.25rem;
+}
+
 .btn--secondary, .rte .btn--secondary {
     color: #000;
     border: 1px solid var(--bs-gray-300);
@@ -140,10 +160,10 @@ label:not(.variant__button-label),
     padding: 1rem 1.25rem;
 }
 
-.btn--full {
-    width: 100%;
-    transition: none;
-    padding: 0.875rem 1.25rem;
+.btn--red {
+    border-color: var(--chums-red);
+    background-color: var(--chums-red) !important;
+    color: white;
 }
 
 .btn--inverse {
@@ -174,16 +194,6 @@ label:not(.variant__button-label),
 
 {% render 'chums-theme-icons.css' %}
 
-.btn {
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    border-radius: 0;
-}
-
-.btn--full {
-    width: 100%;
-}
 
 .container-2000 {
     max-width: 2000px;
@@ -935,6 +945,11 @@ label.color-swatch:before,
      */
 }
 
+.breadcrumb {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
 .collection-hero header .breadcrumb-item::before {
     color: white;
 }
@@ -1585,16 +1600,18 @@ label.size-button {
         padding-bottom: 60px;
     }
 }
-
+.site-footer div[data-type="store_map"] a,
+.site-footer p,
+.site-footer .site-footer__linklist,
 .site-footer .footer__collapsible {
-    font-size: 14.45px;
+    font-size: 0.9rem;
 }
 
 @media only screen and (min-width: 769px) {
     .site-footer textarea,
     .site-footer select,
     .site-footer input {
-        font-size: 14.45px;
+        font-size: 0.9rem;
     }
 }
 
@@ -2108,3 +2125,45 @@ img[data-sizes=auto] {
     opacity: 0;
 }
 
+.rte h1, .rte .h1,
+.rte h2, .rte .h2,
+.rte h3, .rte .h3,
+.rte h4, .rte .h4,
+.rte h5, .rte .h5,
+.rte h6, .rte .h6 {
+    margin-bottom: 2rem;
+}
+
+.article .article__date {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.article h5,
+.article .h5,
+.article h6,
+.article .h6 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+.article img {
+    max-width: 100%;
+    height: auto;
+}
+
+.article ul li,
+.article p {
+    line-height: 1.8;
+}
+
+
+.announcement-bar {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.announcement-bar .announcement-text {
+    font-weight: 700;
+}

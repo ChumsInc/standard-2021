@@ -16,7 +16,11 @@
         {% assign jsonld = jsonld | append: ", " | append: jsonldElement %}
 
         <li class="breadcrumb-item {% if template.name == 'blog' %}active{% endif %}">
-            {{ blog.title }}
+            {% if template.name == 'article' %}
+                <a href="{{ shop.url }}{{ blog.url }}" title="{{ blog.title | escape }}">{{ blog.title }}</a>
+            {% else %}
+                {{ blog.title }}
+            {% endif %}
         </li>
         {% if template.name == 'article' %}
             {% capture jsonldElement %}
