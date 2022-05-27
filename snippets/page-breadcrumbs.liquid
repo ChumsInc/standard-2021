@@ -1,4 +1,4 @@
-<nav aria-label="breadcumb">
+<nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
             <a href="{{ routes.root_url }}" title="{{ 'general.breadcrumbs.home_link_title' | t }}">{{ 'general.breadcrumbs.home' | t }}</a>
@@ -11,7 +11,7 @@
         {% endcapture %}
         {% assign jsonld = jsonld | append: jsonldElement %}
         {% capture jsonldElement %}
-            {"@type": "ListItem","position": {% increment elPosition %},"name": "{{ blog.title }}","item": "{{ shop.url }}{{ blog.url }}"}
+            {"@type": "ListItem","position": {% increment elPosition %},"name": "{{ page.title }}","item": "{{ shop.url }}{{ page.url }}"}
         {% endcapture %}
         {% assign jsonld = jsonld | append: ", " | append: jsonldElement %}
         {% if page_parent %}
