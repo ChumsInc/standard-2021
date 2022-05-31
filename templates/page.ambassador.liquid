@@ -6,15 +6,13 @@
 {% assign lastname = names[0] %}
 
 <div class="page-width page-content">
+  {% render 'page-breadcrumbs', page_parent: pages['ambassadors'] %}
 
-  {% assign page_parent = pages['ambassadors'] %}
-  {% include 'breadcrumbs' %}
-
-  <div class="grid">
-    <div class="grid__item medium-up--three-quarters medium-up--push-one-eighth">
+  <div class="row g-3  justify-content-center">
+    <div class="col-12 col-md-8">
       <div class="ambassador__container">
         <div class="ambassador__main">
-          <img class="ambassador__image--hero lazyload" data-src={{page.metafields.chums.header_image | file_img_url: '1100x'}}>
+          <img class="ambassador__image--hero img-fluid" loading="lazy" src={{page.metafields.chums.header_image | file_img_url: '1100x'}}>
           <div class="ambassador__content">
             <div class="ambassador__name">
               <h1>{{ firstname }} {{ lastname }}</h1>
@@ -26,13 +24,15 @@
             </div>
           </div>
         </div>
-        <div class="ambassador__products">
+        <div class="ambassador__products row g-3 justify-content-around">
           <h3>{{firstname}}'s Essentials</h3>
           {%- assign products = page.metafields.chums.featured_products | split: '|' -%}
           {%- for _prod in products -%}
-          	{%- assign product = all_products[_prod] -%}
-          	{% include 'product-grid-item', grid_item_width: 'ambassador__item' %}
-          {%- endfor -%}         
+            {%- assign product = all_products[_prod] -%}
+            {% if product.id != empty  %}
+              {% render 'product-grid-item-2', grid_item_width: 'col-6 col-md-4 col-lg-3', product: product %}
+            {% endif %}
+          {%- endfor -%}
         </div>
       </div>
 

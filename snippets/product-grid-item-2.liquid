@@ -41,7 +41,6 @@
         {% endif %}
     {% endfor %}
 {% endif %}
-<!-- section.settings = {{ section.settings | json }} -->
 <div class="grid-product {{ grid_item_width }}{% if false and settings.quick_shop_enable and sold_out == false %} grid-product__has-quick-shop{% endif %} {% if section.settings.swatches_on_hover %}grid-product--hover-for-swatches{% endif %} {% if section.settings.reviews_on_hover %}grid-product--hover-for-reviews{% endif %}"
      data-product-id="{{ product.id }}"
      data-product="{{ product.handle }}">
