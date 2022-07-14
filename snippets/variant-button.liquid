@@ -18,6 +18,7 @@ variables required for this snippet
 {% assign has_mix = false %}
 {% assign mix_option_index = 0 %}
 
+
 {% assign productType = product.type | handleize %}
 
 {% if settings.product_color_swatches %}
@@ -100,10 +101,13 @@ variables required for this snippet
                         color_option_index: color_option_index,
                         product_available: product_available %}
             {% else %}
-                <label for="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}"
-                       class="variant__button-label{% unless product_available %} disabled{% endunless %}">
-                    {{- value | escape -}}
-                </label>
+                {% render 'variant-other-button', product: product,
+                        option: option,
+                        product_available: product_available,
+                        option_index: option_index,
+                        value: value,
+                        section_id: section_id
+                %}
             {% endif %}
         {% endfor %}
     </fieldset>
