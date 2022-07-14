@@ -35,7 +35,7 @@ if (window.NodeList && !NodeList.prototype.forEach) {
   };
 
   var selectors = {
-    container: '#shopify-section-collection-sidebar-filter',
+    container: '#collection-sidebar-filter-container',
     group: '.collection-sidebar__group',
     groupSelectedCount: '.tag-list--count',
     groupTotalCount: '.tag-list--total-tags',

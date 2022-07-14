@@ -14,6 +14,8 @@ Required for render:
 		Mono Filament (fishing line)
 	{% when 'floating accessories' %}
 		Floating
+	{% when 'made in USA' %}
+		Made in USA
 	{% else %}
 		{%- assign tag_words = tag_name | split: ' ' -%}
 		{%- for tag_word in tag_words -%}
