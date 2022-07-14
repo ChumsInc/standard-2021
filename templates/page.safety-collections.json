@@ -1,0 +1,94 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "1657809864ae748fbe": {
+      "type": "advanced-content",
+      "blocks": {
+        "16578098642b9b0d2d-1": {
+          "type": "html",
+          "settings": {
+            "code": "<h2 class=\"text-center mt-5\">CHUMS SAFETY IS ALL ABOUT DESIRABLE\nSAFETY SOLUTIONS!<\/h2>\n<div class=\"mx-5\">\n<p>With a focus on Gloves, Eyewear and Personal\nIdentification, Chums Safety offers a variety of\ninnovative, top of the line accessories that are\nunique, vibrant, lively and fun, while still promoting\nsafety among employees.<\/p>\n\n<ul>\n<li>Ensure maximum user safety<\/li>\n<li>Increase compliance\n<\/li>\n<li>Limit PPE damage or loss <\/li>\n<\/ul>\n<\/div>",
+            "width": "25%",
+            "alignment": "center"
+          }
+        }
+      },
+      "block_order": [
+        "16578098642b9b0d2d-1"
+      ],
+      "settings": {
+        "full_width": false,
+        "space_around": true
+      }
+    },
+    "165775218633b4354e": {
+      "type": "featured-collections",
+      "blocks": {
+        "16577521864b376748-7": {
+          "type": "collection",
+          "settings": {
+            "collection": "safety-eyewear-retainers",
+            "title": "Eyewear Retainers",
+            "focal_point": "80% 0"
+          }
+        },
+        "79bc9dba-1a92-4ba2-ab66-179da62aa075": {
+          "type": "collection",
+          "settings": {
+            "collection": "safety-eyewear-accessories",
+            "title": "Eyewear Accessories",
+            "focal_point": "center center"
+          }
+        },
+        "adc8afee-7050-40d4-b4d5-c77d8627585a": {
+          "type": "collection",
+          "settings": {
+            "collection": "safety-glove-clips",
+            "title": "Glove Clips",
+            "focal_point": "center center"
+          }
+        },
+        "b0ba5755-d2a5-45b5-a1cb-4b7b60d6ad41": {
+          "type": "collection",
+          "settings": {
+            "collection": "safety-id-solutions",
+            "title": "ID Solutions",
+            "focal_point": "center center"
+          }
+        },
+        "7ab6279e-dcf7-4e74-8915-ae269bd4af20": {
+          "type": "collection",
+          "settings": {
+            "collection": "safety-accessories",
+            "title": "Safety Accessories",
+            "focal_point": "center center"
+          }
+        }
+      },
+      "block_order": [
+        "16577521864b376748-7",
+        "79bc9dba-1a92-4ba2-ab66-179da62aa075",
+        "adc8afee-7050-40d4-b4d5-c77d8627585a",
+        "b0ba5755-d2a5-45b5-a1cb-4b7b60d6ad41",
+        "7ab6279e-dcf7-4e74-8915-ae269bd4af20"
+      ],
+      "settings": {
+        "title": "",
+        "divider": false,
+        "per_row": 3,
+        "enable_gutter": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1657809864ae748fbe",
+    "165775218633b4354e"
+  ]
+}
