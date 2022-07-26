@@ -7,10 +7,10 @@
     <div id="CollectionAjaxContent">
         <div class="container-lg">
             <div class="row g-3">
-                <div class="col-4 col-md-2">
+                <div class="d-none d-sm-block col-4 col-md-2">
                     {% section 'collection-sidebar-filter' %}
                 </div>
-                <div class="col-8 col-md-10">
+                <div class="col-12 col-sm-8 col-md-10">
                     {% section 'collection-promotions' %}
                     {% section 'collection-filterable-products' %}
                 </div>
@@ -18,6 +18,7 @@
         </div>
     </div>
 </div>
+
 
 
 {{ collection.metafields.shogun.below }}
