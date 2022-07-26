@@ -23,7 +23,7 @@
     --chums-body-bg-color: {{ settings.color_body_bg | default: '#fff' }};
     --chums-body-color: {{ settings.color_body_text | default: '#1c1d1d' }};
     --chums-body-color-rgb: 28, 29, 29;
-    --chums-font-family: 'Roboto';
+    --chums-font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";;
     --chums-savings-color: {{ settings.color_savings_text | default: '#1c1d1d' }};
     --chums-border-color: {{ settings.color_borders | default: '#1c1d1d' }};
 
@@ -593,7 +593,7 @@ label:not(.variant__button-label),
 }
 
 
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 768px) {
     .product-single__title {
         margin-bottom: 0.5rem;
     }
@@ -616,6 +616,10 @@ label:not(.variant__button-label),
     margin-top: 0.5rem;
 }
 
+.product-single__form .payment-buttons {
+  min-height: 166px;
+}
+
 .payment-buttons button {
     text-transform: uppercase;
     letter-spacing: 0.2em;
@@ -624,13 +628,19 @@ label:not(.variant__button-label),
 .payment-buttons .add-to-cart,
 .payment-buttons .shopify-payment-button,
 .payment-buttons .shopify-payment-button__button--unbranded {
-    min-height: 50px;
+    margin-top: 0.5rem;
+    min-height: 54px;
+}
+
+.payment-buttons .shopify-payment-button {
+  min-height: 96px;
 }
 
 .payment-buttons .shopify-payment-button__button--unbranded {
     background-color: var(--chums-red);
     transition-delay: .25s;
 }
+
 
 .variant-wrapper {
     margin-bottom: -12px;
@@ -1118,13 +1128,13 @@ body {
     flex: 0 0 auto;
 }
 
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 768px) {
     .grid-product {
         margin-bottom: 30px;
     }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 767.98px) {
     .grid-overflow-wrapper .grid-product {
         margin-bottom: 0;
     }
@@ -2169,10 +2179,11 @@ img[data-sizes=auto] {
 
 
 .announcement-bar {
-    font-size: 0.95rem;
-    line-height: 1;
+    font-size: 0.9375rem;
+    line-height: 1rem;
+    font-weight: 500;
 }
 
 .announcement-bar .announcement-text {
-    font-weight: 700;
+/*     font-weight: 700; */
 }
