@@ -18,6 +18,7 @@ variables required for render:
   {
     "@context": "http://schema.org",
     "@type": "Product",
+    "@id": "{{- shop.url -}}{{ variant.url }}",
     "offers": {
       "@type": "Offer",
       "availability":"https://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",

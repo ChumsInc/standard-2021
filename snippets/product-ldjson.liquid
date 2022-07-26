@@ -3,10 +3,19 @@ Required for render:
     product,
     current_variant,
 {% endcomment %}
+<!-- snippets/product-ldjson.liquid -->
 <script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "Product",
+    "@id": "{{- shop.url -}}{{ product.url | split: '?' | first }}",
+    {% if product.metafields.reviews.rating_count > 0 %}
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "{{ product.metafields.reviews.rating.value }}",
+      "reviewCount": "{{ product.metafields.reviews.rating_count }}"
+    },
+    {% endif %}
     "offers": {
       "@type": "Offer",
       "availability":"https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
