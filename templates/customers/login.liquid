@@ -1,7 +1,7 @@
-<div class="page-width page-content">
-  <div class="grid">
+<div class="container">
+  <div class="row justify-content-md-center">
 
-    <div class="grid__item medium-up--one-third medium-up--push-one-third">
+    <div class="col col-lg-6">
 
       <header class="section-header">
         <h1 class="section-header__title">{{ 'customer.login.title' | t }}</h1>
@@ -14,17 +14,22 @@
       <div id="CustomerLoginForm" class="form-vertical">
         {% form 'customer_login' %}
 
-          {{ form.errors | default_errors }}
+          {% if form.errors %}
+        <div class="alert alert-danger">
+          <strong>{{ form.errors | default_errors }}</strong>
+        </div>
+        {% endif %}
+
 
           <label for="CustomerEmail">{{ 'customer.login.email' | t }}</label>
-          <input type="email" name="customer[email]" id="CustomerEmail" class="input-full{% if form.errors contains 'email' %} error{% endif %}" autocorrect="off" autocapitalize="off" autofocus>
+          <input type="email" name="customer[email]" id="CustomerEmail" class="form-control form-control-lg {% if form.errors contains 'email' %} text-danger{% endif %}" autocorrect="off" autocapitalize="off" autofocus>
 
           {% if form.password_needed %}
-            <div class="grid">
-              <div class="grid__item one-half">
+            <div class="row g-3 mt-1">
+              <div class="col-6">
                 <label for="CustomerPassword">{{ 'customer.login.password' | t }}</label>
               </div>
-              <div class="grid__item one-half text-right">
+              <div class="col-6 text-end">
                 <small class="label-info">
                   <a href="#recover" id="RecoverPassword" class="js-no-transition">
                     {{ 'customer.login.forgot_password' | t }}
@@ -32,11 +37,11 @@
                 </small>
               </div>
             </div>
-            <input type="password" value="" name="customer[password]" id="CustomerPassword" class="input-full{% if form.errors contains 'password' %} error{% endif %}">
+            <input type="password" value="" name="customer[password]" id="CustomerPassword" class="form-control form-control-lg {% if form.errors contains 'password' %} text-danger{% endif %}">
           {% endif %}
 
-          <p>
-            <button type="submit" class="btn btn--full">
+          <p class="mt-3 d-grid gap-2">
+            <button type="submit" class="btn btn-primary">
               {{ 'customer.login.sign_in' | t }}
             </button>
           </p>
@@ -59,14 +64,16 @@
             {% endif %}
 
             <label for="RecoverEmail">{{ 'customer.recover_password.email' | t }}</label>
-            <input type="email" value="" name="email" id="RecoverEmail" class="input-full" autocorrect="off" autocapitalize="off">
+            <input type="email" value="" name="email" id="RecoverEmail" class="form-control form-control-lg" autocorrect="off" autocapitalize="off">
 
-            <p>
-              <button type="submit" class="btn">
+            <div class="d-grid mt-3">
+              <button type="submit" class="btn btn-lg btn-primary">
                 {{ 'customer.recover_password.submit' | t }}
               </button>
-            </p>
-            <button type="button" id="HideRecoverPasswordLink">{{ 'customer.recover_password.cancel' | t }}</button>
+            </div>
+            <div class="d-grid mt-3">
+              <button type="button" class="btn btn-lg btn-outline-secondary" id="HideRecoverPasswordLink">{{ 'customer.recover_password.cancel' | t }}</button>
+            </div>
           {% endform %}
         </div>
 
