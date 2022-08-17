@@ -3,6 +3,7 @@
 {% if section.settings.enable %}
     {% if section.settings.collection_image_enable and collection.image %}
         <div id="CollectionHeaderSection"
+             class="collection-header--{{ section.id }}"
              data-section-id="{{ section.id }}"
              data-section-type="collection-header"
              {% if section.settings.parallax %}data-parallax="true"{% endif %}>
@@ -16,7 +17,28 @@
                         </div>
                     </div>
                 {% else %}
-                    {{ collection.image | image_url: width: 2000, height: 450, crop: 'center' | image_tag: loading: 'eager', class: 'img-fluid' }}
+                    <style>
+                        #CollectionHeaderSection .collection-hero {
+                            background-image: url('{{ collection.image | image_url: width: 640 }}');
+                            background-size: cover;
+                            background-position: center center;
+                        }
+                        @media (min-width: 1024px) {
+                            #CollectionHeaderSection .collection-hero {
+                                background-image: url('{{ collection.image | image_url: width: 1024 }}');
+                            }
+                        }
+                        @media (min-width: 1920px) {
+                            #CollectionHeaderSection .collection-hero {
+                                background-image: url('{{ collection.image | image_url: width: 1920 }}');
+                            }
+                        }
+                        @media (min-width: 3000px) {
+                            #CollectionHeaderSection .collection-hero {
+                                background-image: url('{{ collection.image | image_url: width: 3000 }}');
+                            }
+                        }
+                    </style>
                 {% endif %}
 
                 <div class="collection-hero__content">
