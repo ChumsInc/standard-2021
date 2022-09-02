@@ -41,7 +41,12 @@
         {% endif %}
     {% endfor %}
 {% endif %}
-<div class="grid-product {{ grid_item_width }}{% if false and settings.quick_shop_enable and sold_out == false %} grid-product__has-quick-shop{% endif %} {% if section.settings.swatches_on_hover %}grid-product--hover-for-swatches{% endif %} {% if section.settings.reviews_on_hover %}grid-product--hover-for-reviews{% endif %}"
+
+<div class="grid-product {{ grid_item_width }}
+            {% if false and settings.quick_shop_enable and sold_out == false %} grid-product__has-quick-shop{% endif %}
+            {% if section.settings.swatches_on_hover %}grid-product--hover-for-swatches{% endif %}
+            {% if section.settings.reviews_on_hover %}grid-product--hover-for-reviews{% endif %}
+            {% if on_sale %}grid-product--on-sale{% endif %}"
      data-product-id="{{ product.id }}"
      data-product="{{ product.handle }}">
     <div class="grid-product__content">
@@ -132,8 +137,10 @@
                 {% endif %}
                 <div class="grid-product__price">
                     {% if on_sale %}
-                        <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
-                        <!-- <span class="grid-product__price--original">{{ product.compare_at_price | money }}</span> -->
+                        <div>
+                            <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+                            <span class="grid-product__price--original">{{ product.compare_at_price | money }}</span>
+                        </div>
                         <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
                     {% endif %}
                     {% if product.price_varies %}
@@ -150,9 +157,7 @@
                             {% else %}
                                 {% capture saved_amount %}{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}%{% endcapture %}
                             {% endif %}
-                            <span class="grid-product__price--savings">
-                {{ 'products.general.save_html' | t: saved_amount: saved_amount }}
-              </span>
+                            <span class="grid-product__price--savings">{{ 'products.general.save_html' | t: saved_amount: saved_amount }}</span>
                         {% endif %}
                     {% endif %}
                 </div>

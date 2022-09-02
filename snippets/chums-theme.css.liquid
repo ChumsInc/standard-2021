@@ -572,6 +572,10 @@ label:not(.variant__button-label),
     display: none;
 }
 
+.product--basic-data--pricing.on-sale {
+
+}
+
 .product__price {
     color: var(--chums-body-color);
     margin-right: 0.333rem;
@@ -580,6 +584,9 @@ label:not(.variant__button-label),
 .product-price--compare {
     padding-right: 0.333rem;
     display: inline-block;
+    text-decoration: line-through;
+}
+.product--basic-data--pricing.on-sale .product__price--compare {
     text-decoration: line-through;
 }
 
