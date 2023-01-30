@@ -19,10 +19,14 @@
 {% endif %}
 
 {%- assign new_item = false %}
+{% assign has_new_colors = false %}
 {% for tag in product.tags %}
     {% assign _tag = tag | lowercase %}
     {% if _tag == 'new' %}
         {% assign new_item = true %}
+    {% endif %}
+    {% if _tag == 'new-colors'  or _tag == 'new-color' %}
+        {% assign has_new_colors = true %}
     {% endif %}
 {% endfor %}
 
@@ -132,6 +136,11 @@
 
             <div class="grid-product__meta">
                 <div class="grid-product__title grid-product__title--{{ settings.type_product_style }}">{{ product.title }}</div>
+                {% if has_new_colors == true %}
+                    <h4 class="my-2" style="display: flex; align-items: center; color: var(--chums-red);justify-content: space-around">
+                        <div><strong>New Colors!</strong></div>
+                    </h4>
+                {% endif %}
                 {% if settings.vendor_enable %}
                     <div class="grid-product__vendor">{{ product.vendor }}</div>
                 {% endif %}
