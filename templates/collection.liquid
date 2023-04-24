@@ -7,10 +7,10 @@
     <div id="CollectionAjaxContent">
         <div class="container-lg">
             <div class="row g-3">
-                <div class="d-none d-sm-block col-4 col-md-2">
+                <div {% if collection.handle == 'all-products' %}class="d-none"{% else %}class="d-none d-sm-block col-4 col-md-2"{% endif %}>
                     {% section 'collection-sidebar-filter' %}
                 </div>
-                <div class="col-12 col-sm-8 col-md-10">
+                <div {% if collection.handle == 'all-products' %}class="col-12"{% else %}class="col-12 col-sm-8 col-md-10"{% endif %}>
                     {% section 'collection-promotions' %}
                     {% section 'collection-filterable-products' %}
                 </div>

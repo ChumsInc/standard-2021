@@ -1,5 +1,10 @@
+{%- assign per_page = section.settings.products_per_page -%}
 {%- assign per_row = section.settings.per_row -%}
-<!-- collection = {{ collection | json }} -->
+{% if collection.handle == 'chums' or collection.handle == 'outdoor-accessories' %}
+    {% assign per_page = collection.products.count %}
+{% endif %}
+
+{% paginate collection.products by per_page %}
 <div id="CollectionSection" data-section-id="{{ section.id }}" data-section-type="collection-template">
 
     {% if collection.description != blank %}
@@ -76,15 +81,12 @@
                 linklists: linklists %}
     {% endif %}
 
-    {% if false and settings.quick_shop_enable %}
-        {% for product in collection.products %}
-            {% if product.available %}
-                {% render 'quick-shop-modal', product: product %}
-            {% endif %}
-        {% endfor %}
+    {% if paginate.pages > 1 %}
+        {% include 'pagination' %}
     {% endif %}
 </div>
 
+{% endpaginate %}
 
 {% schema %}
     {
@@ -131,6 +133,15 @@
                 "type": "header",
                 "content": "Products"
             },
+          {
+            "type": "range",
+            "id": "products_per_page",
+            "label": "Products per page",
+            "default": 24,
+            "min": 12,
+            "max": 48,
+            "step": 4
+          },
             {
                 "type": "range",
                 "id": "per_row",
