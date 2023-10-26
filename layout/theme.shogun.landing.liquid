@@ -12,9 +12,7 @@ This file can be re-written at any time.
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="{{ settings.color_button }}">
-  <link rel="canonical" href="{{ canonical_url }}">
-  <link rel="dns-prefetch" href="https://ajax.googleapis.com">
-  <meta name="format-detection" content="telephone=no">
+
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -22,6 +20,11 @@ This file can be re-written at any time.
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-W5BRKMS');</script>
   <!-- End Google Tag Manager -->
+  
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="dns-prefetch" href="https://ajax.googleapis.com">
+  <meta name="format-detection" content="telephone=no">
+
 
   {%- if settings.favicon -%}
     <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png" />
@@ -35,15 +38,30 @@ This file can be re-written at any time.
   {%- endif -%}
 
   {% render 'social-meta-tags' %}
+  <style>
+    {% comment %}{% render 'bootstrap.css' %}{% endcomment %}
+  </style>
+
+  <!--
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+        -->
 
   {% render 'font-face' %}
-  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
-  {{ 'swatches.scss.css' | asset_url | stylesheet_tag }}
+  <style>
+    {% render 'bootstrap.css' %}
+  </style>
+  <style>
+    {% render 'chums-theme.css' %}
+  </style>
+  {% comment %}{{ 'theme.scss.css' | asset_url | stylesheet_tag }}{% endcomment %}
+  {{ 'chums-swatches.css' | asset_url | stylesheet_tag }}
 
   {% comment %}
   Below are some javascript polyfills for older or non-standard browsers (ahem, msie).
   {% endcomment %}
-  {{ 'polyfills.1.0.25.min.js' | asset_url | script_tag }}
+  {% comment %}<script src="{{ 'core-js-bundle.3.21.1.js' | asset_url }}" async></script>{% endcomment %}
+  {% comment %}<script src="{{ 'polyfills.1.0.25.min.js' | asset_url }}" async></script>{% endcomment %}
 
   
   {% style %}
@@ -61,7 +79,7 @@ This file can be re-written at any time.
 
   <script>
     if(void 0===window.CHUMS) {
-      var CHUMS=window.CHUMS={};
+      const CHUMS=window.CHUMS={};
     }
     
     document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
@@ -95,8 +113,12 @@ This file can be re-written at any time.
   {% comment %}
   vendor-scripts-jquery.1.0.25: minimized pack of jquery 3.5.1, theme-jquery.js, jquery.ba-throttle-debounce.js
   {% endcomment %}
-  <script src="{{ 'vendor-scripts-jquery.1.0.25.min.js' | asset_url | split: '?' | first }}" defer="defer"></script>
-  <script src="{{ 'vendor-scripts-chums.1.0.25.min.js' | asset_url | split: '?' | first }}" defer="defer"></script>
+  <script src="{{ 'vendor-scripts-jquery.1.0.27.min.js' | asset_url | split: '?' | first }}" defer="defer"></script>
+  <script src="{{ 'vendor-scripts-chums.1.0.27.min.js' | asset_url | split: '?' | first }}" defer="defer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" defer="defer"
+          integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+          crossorigin="anonymous"></script>
+
 
   {% if settings.enable_currencies %}
     <script src="/services/javascripts/currencies.js" defer="defer"></script>
@@ -111,8 +133,14 @@ This file can be re-written at any time.
   {%- endif -%}
   
 
+  <!-- shogun-head -->
   {% render 'shogun-head' %}
-  {% include 'judgeme_core' %}
+  <!-- /shogun-head -->
+  {% render 'judgeme_core' %}
+  
+  <meta name="facebook-domain-verification" content="ldsr6v2qefxpfs2ehlwx14rmni4369" />
+  <meta name="facebook-domain-verification" content="q3lgitlmblipdah4c2u0q23rhnfkxt" />
+  <script async defer src="https://tools.luckyorange.com/core/lo.js?site-id=573588ff"></script>
 
 </head>
 
@@ -129,11 +157,7 @@ var _learnq = _learnq || [];
 
 var page = window.location.href;
 
-_learnq.push(['track', 'Viewed Page',
-
-{url: page}
-
-]);
+_learnq.push(['track', 'Viewed Page', {url: page}]);
 
 </script>
   <style type="text/css">

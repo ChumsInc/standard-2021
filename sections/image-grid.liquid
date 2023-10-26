@@ -199,10 +199,10 @@
                                     </div>
                                 {% endif %}
                             {% when 'image' %}
-                                {% if block.settings.link != blank %}<a href="{{ block.settings.link }}">{% endif %}
+                                {% if block.settings.link != blank %}<a href="{{ block.settings.link }}" role="button">{% endif %}
                                     {% if block.settings.image != blank %}
                                         {% assign img_size = 400 | times: block.settings.item_col_span | append: 'x' %}
-                                        <div class="custom-grid__item--bg-image"
+                                        <div class="custom-grid__item--bg-image" role="img"
                                              aria-label="{{ block.settings.image.alt}}"
                                              style="height: 0;
                                                 padding-bottom: calc({{ 100 | divided_by: block.settings.image.aspect_ratio }}% {% unless block.settings.item_col_span == 1 %} - {{ section.settings.gutter| default: '0px' }} / {{ block.settings.item_col_span }}{% endunless %});

@@ -6,24 +6,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="{{ settings.color_button }}">
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7HGJLYGP2B"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-7HGJLYGP2B');
-  </script>
-
-  <script type="text/javascript">
-  /* <![CDATA[ */
-  (function(){if(window.voyage)return;window.voyage={q:[]};var fns=['init', 'track'];
-  for(var i=0;i<fns.length;i++){(function(fn){window.voyage[fn]=function(){
-  this.q.push([fn,arguments]);}})(fns[i])}})();voyage.init('74ac98d0fa', { popup: true });
-  /* ]]> */
-  </script>
-  <script async src="https://assets.voyagetext.com/voyage.production.js"></script>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-W5BRKMS');</script>
+  <!-- End Google Tag Manager -->
+  
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="dns-prefetch" href="https://ajax.googleapis.com">
   <meta name="format-detection" content="telephone=no">
@@ -148,9 +138,8 @@
 
 <body class="template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}{% if settings.enable_currencies %} currencies-enabled{% endif %}" data-transitions="false">
   <!-- Google Tag Manager (noscript) -->
-  {% comment %}<noscript>{% endcomment %}
-    {% comment %}<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W5BRKMS" height="0" width="0" style="display:none;visibility:hidden"></iframe>{% endcomment %}
-  {% comment %}</noscript>{% endcomment %}
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W5BRKMS"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
   
   {% comment %}

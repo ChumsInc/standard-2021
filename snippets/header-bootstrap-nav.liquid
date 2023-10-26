@@ -45,7 +45,7 @@ variables required for render:
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     {% for link in main_menu.links limit: limit offset: offset %}
                         {% assign has_dropdown = false %}
-                        {% assign link_id = 'menu-' | concat: forloop.index0 %}
+                        {% assign link_id = 'menu-' | append: forloop.index0 %}
                         {% if link.levels > 0 %}
                             {% assign has_dropdown = true %}
                         {% endif %}

@@ -35,11 +35,11 @@ Required for render:
                     {%- assign link_slide = true -%}
                 {% endif %}
                 {% style %}
-                    .carousel-item--{{ block.id }} .carousel-caption h4 {
+                    .carousel-item--{{ block.id }} .carousel-caption .caption-text {
                         font-size: {{ block.settings.title_size | times: 0.5 }}px;
                     }
                     @media only screen and (min-width: 769px) {
-                        .carousel-item--{{ block.id }} .carousel-caption h4 {
+                        .carousel-item--{{ block.id }} .carousel-caption .caption-text {
                             font-size: {{ block.settings.title_size }}px;
                         }
                     }
