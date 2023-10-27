@@ -4,7 +4,26 @@
 {% section 'collection-header' %}
 
 <div id="CollectionAjaxResult" class="collection-content">
+    <style>
+        .collection-description {
+            max-width: 900px;
+            margin: auto;
+            /*padding-left: 5rem;*/
+            /*padding-right: 5rem;*/
+            margin-bottom: 1rem;
+            font-size: calc(var(--bs-body-font-size) * 1.25);
+        }
+    </style>
     <div id="CollectionAjaxContent">
+        {% if collection.description != blank %}
+            <div class="container collection-description">
+                <div class="rte">
+                    {{ collection.description }}
+                </div>
+            </div>
+            <hr class="hr--clear hr--small">
+        {% endif %}
+
         <div class="container-lg">
             <div class="row g-3">
                 <div {% if collection.handle == 'all-products' %}class="d-none"{% else %}class="d-none d-sm-block col-4 col-md-2"{% endif %}>

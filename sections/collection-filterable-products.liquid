@@ -7,13 +7,6 @@
 {% paginate collection.products by per_page %}
 <div id="CollectionSection" data-section-id="{{ section.id }}" data-section-type="collection-template">
 
-    {% if collection.description != blank %}
-        <div class="rte">
-            {{ collection.description }}
-        </div>
-        <hr class="hr--clear hr--small">
-    {% endif %}
-
     {% if section.settings.subcollection_style == 'above' %}
         {% render 'subcollections',
                 per_row: section.settings.subcollections_per_row,

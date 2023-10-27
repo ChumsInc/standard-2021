@@ -28,7 +28,7 @@
         {% endfor %}
     {% endunless %}
 
-    <select name="id" id="ProductSelect-{{ section_id }}" class="product-single__variants no-js">
+    <select name="id" id="ProductSelect-{{ section_id }}" class="product-single__variants no-js" aria-hidden="true" tabindex="-1">
         {% for variant in product.variants %}
             {% if variant.available %}
                 <option {% if variant == product.selected_or_first_available_variant %}
@@ -43,6 +43,7 @@
             {% endif %}
         {% endfor %}
     </select>
+    <label for="ProductSelect-{{ section_id }}" class="d-none" aria-hidden="true">Select Product Variant</label>
     <div class="sr-only" id="ProductSelect-{{ section_id }}__sold-out-alert"  aria-live="polite" aria-atomic="true"></div>
 
 

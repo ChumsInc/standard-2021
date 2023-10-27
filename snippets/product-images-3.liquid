@@ -55,7 +55,7 @@ variables required in product-images-2.liquid:
 
         {%endcapture%}
         <div id="product-carousel-{{ section_id }}" class="carousel carousel-dark slide product-carousel"
-             data-bs-ride="carousel" data-bs-interval="false">
+             data-bs-interval="false">
 
             <template class="carousel-inner-template">
                 {% for media in product.media %}
@@ -145,7 +145,7 @@ variables required in product-images-2.liquid:
                             {% if media.media_type == 'external_video' %}
                                 <span class="product-carousel-thumb--play-icon">{% render 'icon-play' %}</span>
                             {% endif %}
-                            {% render 'product-media', media: media, className: 'img-thumbnail', width: 96, height: 96 %}
+                            {% render 'product-media', media: media, className: 'img-thumbnail', width: 96, height: 96, thumb: true %}
                         </button>
                     </div>
                 {% endif %}

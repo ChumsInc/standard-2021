@@ -42,46 +42,28 @@
                 {% endif %}
 
                 <div class="collection-hero__content">
-                    <div class="container">
-                        <header class="section-header section-header--hero">
-                            <div class="section-header__shadow">
-                                {% render 'collection-breadcrumbs', collection: collection %}
-                                <h1 class="section-header__title">
-                                    {{ collection.title }}
-                                </h1>
-                            </div>
-                        </header>
-                    </div>
                 </div>
             </div>
-        </div>
-    {% else %}
-        {%- assign disable_sticky_header = true -%}
-        <div class="container page-content page-content--top">
-            <header class="section-header section-header--flush">
-                <h1 class="section-header__title">
-                    {{ collection.title }}
-                </h1>
-            </header>
         </div>
     {% endif %}
 {% else %}
     {%- assign disable_sticky_header = true -%}
 {% endif %}
 
-{%- if disable_sticky_header -%}
-    {% comment %}
-      Div to trigger theme.CollectionHeader JS
-    {% endcomment %}
-    <div
-            id="CollectionHeaderSection"
-            data-section-id="{{ section.id }}"
-            data-section-type="collection-header">
-        <div class="container">
-            {% render 'collection-breadcrumbs' %}
-        </div>
-    </div>
-{%- endif -%}
+<style>
+    .section-header--hero {
+        --chums-hero-text-color: #000;
+    }
+</style>
+<div class="container">
+    <header class="section-header section-header--hero">
+        {% render 'collection-breadcrumbs', collection: collection %}
+        <h1 class="section-header__title">
+            {{ collection.title }}
+        </h1>
+    </header>
+</div>
+
 
 {% schema %}
 {

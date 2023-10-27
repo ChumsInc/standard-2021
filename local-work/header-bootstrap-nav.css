@@ -120,6 +120,8 @@
     top: inherit;
     right: inherit;
     padding: inherit;
+    display: flex;
+    align-items: center;
   }
 }
 .navbar .navbar--nav-icons .site-nav__link {

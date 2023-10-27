@@ -7,6 +7,7 @@ Render options:
     [height] = ''
     [loading] = 'lazy' (default) | 'eager'
     [crop] = '' (default) | 'top' | 'center' | 'bottom' | 'left' | 'right'
+    [thumb] = false
 {% endcomment %}
 
 <!-- media: {{ media | json }} -->
@@ -25,8 +26,12 @@ Render options:
         {% unless className %}
             {% assign className = 'img-fluid' %}
         {% endunless %}
+        {% assign altTag = media.alt %}
+        {% if thumb %}
+            {% assign altTag = media.alt | append: ' thumbnail' %}
+        {% endif %}
         <div class="{{ containerClassName }}" data-media-id="{{ media.id }}">
-            {{ media | image_url: width: width, height: height, crop: crop | image_tag: loading: loading, class: className }}
+            {{ media | image_url: width: width, height: height, crop: crop | image_tag: loading: loading, class: className, alt: altTag }}
         </div>
     {% when 'external_video' %}
         {% unless width %}
