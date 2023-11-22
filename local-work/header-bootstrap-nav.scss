@@ -50,6 +50,8 @@
 
   .navbar-cart-toggler {
     order: 2;
+    display: flex;
+    align-items: center;
     @media (min-width: 992px) {
       display: none;
     }
@@ -116,6 +118,8 @@
       top: inherit;
       right: inherit;
       padding: inherit;
+      display: flex;
+      align-items: center;
     }
 
     .site-nav__link {
@@ -376,3 +380,36 @@
   }
 }
 
+
+
+/**
+40th Anniversary logo handling stuff.
+ */
+.header-40years {
+  padding: 0;
+  .navbar-brand {
+    @media (max-width: 768px) {
+      padding: 0;
+    }
+    .site-header__logo-link img {
+      border-radius: 20px;
+      max-width: 100%;
+      height: auto;
+      margin: 0;
+      @media (min-width: 768px) {
+        margin: 0;
+        width: 115px;
+        max-width: 115px;
+        border-radius: 20px;
+      }
+      @media (min-width: 992px) {
+        margin: 0 2rem;
+      }
+    }
+  }
+  .navbar--nav-icons {
+      @media (min-width: 992px) {
+        top: 20px;
+      }
+  }
+}

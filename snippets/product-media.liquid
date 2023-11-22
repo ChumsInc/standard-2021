@@ -10,36 +10,38 @@ Render options:
     [thumb] = false
 {% endcomment %}
 
-<!-- media: {{ media | json }} -->
-
 {% case media.media_type %}
     {% when 'image' %}
-        {% unless width %}
-            {% assign width = 2048 %}
-        {% endunless %}
-        {% unless loading %}
-            {% assign loading = 'lazy' %}
-        {% endunless %}
-        {% unless containerClassName %}
-            {% assign containerClassName = 'product-carousel-image-container' %}
-        {% endunless %}
-        {% unless className %}
-            {% assign className = 'img-fluid' %}
-        {% endunless %}
-        {% assign altTag = media.alt %}
-        {% if thumb %}
-            {% assign altTag = media.alt | append: ' thumbnail' %}
-        {% endif %}
+        {% liquid
+            unless width
+                assign width = 2048
+            endunless
+            unless loading
+                assign loading = 'lazy'
+            endunless
+            unless containerClassName
+                assign containerClassName = 'product-carousel-image-container'
+            endunless
+            unless className
+                assign className = 'img-fluid'
+            endunless
+            assign altTag = media.alt
+            if thumb
+                assign altTag = media.alt | append: ' thumbnail'
+            endif
+        %}
         <div class="{{ containerClassName }}" data-media-id="{{ media.id }}">
             {{ media | image_url: width: width, height: height, crop: crop | image_tag: loading: loading, class: className, alt: altTag }}
         </div>
     {% when 'external_video' %}
-        {% unless width %}
-            {% assign width = 800 %}
-        {% endunless %}
-        {% unless height %}
-            {% assign height = width | divided_by: media.aspect_ratio %}
-        {% endunless %}
+        {% liquid
+            unless width
+                assign width = 800
+            endunless
+            unless height
+                assign height = width | divided_by: media.aspect_ratio
+            endunless
+        %}
         {% if width <= 256 %}
             <div class="product-carousel-image-container" data-media-id="{{ media.id }}">
                 {{ media.preview_image | image_url: width: width, height: height | image_tag: loading: 'lazy', class: className}}

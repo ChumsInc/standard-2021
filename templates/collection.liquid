@@ -1,27 +1,55 @@
+{{collection.metafields.shogun.above}}
 {% render 'shogun-products', content: collection %}
 
 {{ collection.metafields.shogun.above }}
 {% section 'collection-header' %}
 
 <div id="CollectionAjaxResult" class="collection-content">
-    <style>
-        .collection-description {
-            max-width: 900px;
-            margin: auto;
-            /*padding-left: 5rem;*/
-            /*padding-right: 5rem;*/
-            margin-bottom: 1rem;
-            font-size: calc(var(--bs-body-font-size) * 1.25);
-        }
-    </style>
     <div id="CollectionAjaxContent">
         {% if collection.description != blank %}
-            <div class="container collection-description">
-                <div class="rte">
+            <div class="container collection-description" >
+                <div class="rte collapse" id="collection-description--{{ collection.id }}">
                     {{ collection.description }}
+                </div>
+                <div style="text-align: center">
+                    <button class="btn btn-sm btn-outline-secondary border-0" id="collection-description-toggle--{{ collection.id }}"
+                            data-bs-toggle="collapse" data-bs-target="#collection-description--{{ collection.id }}"
+                            aria-expanded="false" aria-controls="collection-description--{{ collection.id }}">
+                        <span class="collapsed-title">Show More</span>
+                        <span class="not-collapsed-title">Show Less</span>
+                    </button>
                 </div>
             </div>
             <hr class="hr--clear hr--small">
+            <style>
+                .collection-description {
+                    max-width: 900px;
+                    margin: auto auto 1rem;
+                    font-size: calc(var(--bs-body-font-size) * 1.25);
+                }
+                #collection-description--{{ collection.id }}.collapsing {
+                    min-height: calc(var(--bs-body-font-size) * var(--bs-body-line-height) * 1.25);
+                }
+                #collection-description--{{ collection.id }}.collapse:not(.show) {
+                    height: calc(var(--bs-body-font-size) * var(--bs-body-line-height) * 1.25);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    display: block;
+                }
+                #collection-description--{{ collection.id }}.collapse.show {
+                    height: auto;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: normal;
+                }
+                #collection-description-toggle--{{ collection.id }}[aria-expanded="true"] .collapsed-title {
+                    display: none;
+                }
+                #collection-description-toggle--{{ collection.id }}[aria-expanded="false"] .not-collapsed-title {
+                    display: none;
+                }
+            </style>
         {% endif %}
 
         <div class="container-lg">
@@ -41,4 +69,4 @@
 
 
 {{ collection.metafields.shogun.below }}
-
+{{collection.metafields.shogun.below}}

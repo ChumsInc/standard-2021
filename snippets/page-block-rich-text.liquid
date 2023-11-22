@@ -3,9 +3,15 @@
         <div class="row g-3 justify-content-center">
             <div class="col-12 {% if block.settings.narrow_column %} col-md-8{% endif %}">
                 {% if block.settings.title != blank %}
-                    <p class="h2">
-                        {{ block.settings.title | escape }}
-                    </p>
+                    {% if section.settings.page_title_enable == true %}
+                        <p class="h2">
+                            {{ block.settings.title | escape }}
+                        </p>
+                    {% else %}
+                        <h1 class="h2">
+                            {{ block.settings.title | escape }}
+                        </h1>
+                    {% endif %}
                 {% endif %}
                 {% if block.settings.text != blank %}
                     <div class="rte">

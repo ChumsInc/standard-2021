@@ -51,6 +51,8 @@
 }
 .navbar .navbar-cart-toggler {
   order: 2;
+  display: flex;
+  align-items: center;
 }
 @media (min-width: 992px) {
   .navbar .navbar-cart-toggler {
@@ -349,3 +351,41 @@
     flex-basis: 25%;
   }
 }
+
+/**
+40th Anniversary logo handling stuff.
+ */
+.header-40years {
+  padding: 0;
+}
+@media (max-width: 768px) {
+  .header-40years .navbar-brand {
+    padding: 0;
+  }
+}
+.header-40years .navbar-brand .site-header__logo-link img {
+  border-radius: 20px;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+}
+@media (min-width: 768px) {
+  .header-40years .navbar-brand .site-header__logo-link img {
+    margin: 0;
+    width: 115px;
+    max-width: 115px;
+    border-radius: 20px;
+  }
+}
+@media (min-width: 992px) {
+  .header-40years .navbar-brand .site-header__logo-link img {
+    margin: 0 2rem;
+  }
+}
+@media (min-width: 992px) {
+  .header-40years .navbar--nav-icons {
+    top: 20px;
+  }
+}
+
+/*# sourceMappingURL=header-bootstrap-nav.css.map */

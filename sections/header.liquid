@@ -66,12 +66,12 @@
                     {% render 'toolbar', overlay_header: overlay_header %}
                 {% endif %}
             {% endif %}
-            <header class="site-header{% if settings.type_navigation_style == 'heading' %} site-header--heading-style{% endif %} header-40years"
+            <div class="site-header{% if settings.type_navigation_style == 'heading' %} site-header--heading-style{% endif %} header-40years"
                     data-sticky="{{ sticky_header }}">
                 {% render 'header-bootstrap-nav', main_menu: main_menu, overlay_header: overlay_header %}
 
                 {% render 'header-search', settings: settings %}
-            </header>
+            </div>
         </div>
     </div>
 

@@ -41,7 +41,28 @@ variables required for this snippet
 
 
 <div class="variant-wrapper variant-wrapper--{{ settings.variant_type }} js">
-
+    <label class="variant__label
+                {%- if option.name == 'Default' or option.name == 'Title' %} visually-hidden{% endif -%}
+                {%- unless settings.variant_labels_enable %} visually-hidden{% endunless -%}"
+           aria-live="polite" aria-atomic="true"
+           for="ProductSelect-{{ section_id }}-option-{{ option_index0 }}">
+        {{ option.name }}
+        {% if is_color %}
+            <span class="variant__label-info">
+                  <span id="VariantColorLabel-{{ section_id }}-{{ option_index0 }}"
+                        data-option-index="{{ color_option_index }}">
+                    {{- option.selected_value -}}
+                  </span>
+            </span>
+        {% elsif is_size %}
+            <span class="variant__label-info">
+                <span id="VariantSizeLabel-{{ section_id }}-{{ option_index0 }}"
+                      data-option-index="{{ size_option_index }}">
+                    {{- option.selected_value -}}
+                </span>
+            </span>
+        {% endif %}
+    </label>
 
     {% assign product_available = true %}
 
@@ -50,27 +71,7 @@ variables required for this snippet
               name="{{ option.name }}"
               data-index="option{{ option_index }}"
               id="ProductSelect-{{ section_id }}-option-{{ option_index0 }}">
-        <legend class="variant__label
-                {%- if option.name == 'Default' or option.name == 'Title' %} visually-hidden{% endif -%}
-                {%- unless settings.variant_labels_enable %} visually-hidden{% endunless -%}"
-               aria-live="polite" aria-atomic="true">
-            {{ option.name }}
-            {% if is_color %}
-                <span class="variant__label-info">
-                  <span id="VariantColorLabel-{{ section_id }}-{{ option_index0 }}"
-                        data-option-index="{{ color_option_index }}">
-                    {{- option.selected_value -}}
-                  </span>
-            </span>
-            {% elsif is_size %}
-                <span class="variant__label-info">
-                <span id="VariantSizeLabel-{{ section_id }}-{{ option_index0 }}"
-                      data-option-index="{{ size_option_index }}">
-                    {{- option.selected_value -}}
-                </span>
-            </span>
-            {% endif %}
-        </legend>
+        <legend class="visually-hidden">{% if is_color %}Choose a color{% else %}Choose an option{% endif %}</legend>
         {% for value in option.values %}
             {% if is_size %}
                 {% render 'variant-size-button', product: product,

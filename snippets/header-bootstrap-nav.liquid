@@ -1,7 +1,6 @@
 {% comment %}
 variables required for render:
-    main_menu,
-    overlay_header
+    main_menu
 {% endcomment %}
 
 {% unless limit %}
@@ -56,6 +55,7 @@ variables required for render:
                                     {% if has_dropdown %}
                                         id="{{ link_id }}"
                                         role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                        aria-haspopup="true"
                                     {% endif %}
                                aria-label="{{ link.title | escape }} menu">
                                 {{ link.title }}

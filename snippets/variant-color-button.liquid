@@ -53,7 +53,7 @@ product_available
                 {%- unless product_available %} disabled{% endunless -%}"
            aria-label="{{value | upper}} {% unless product_available %}{{ 'products.product.sold_out' | t }}{% endunless %} "
            title="{{value | upper}} {% unless product_available %}{{ 'products.product.sold_out' | t }}{% endunless %} ">
-        {% comment %}<span class="sr-only">{{- value | escape -}} {% unless product_available %}{{ 'products.product.sold_out' | t }}{% endunless %}</span>{% endcomment %}
+        <!-- <span class="sr-only">{{- value | escape -}} {% unless product_available %}{{ 'products.product.sold_out' | t }}{% endunless %}</span> -->
     </label>
     {% render 'product-variant-ldjson',
               variant: matchingVariant,

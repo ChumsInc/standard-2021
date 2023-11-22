@@ -5,16 +5,18 @@ variables required in product-images-2.liquid:
 
 {% endcomment %}
 
-{% assign featured_media = current_variant.featured_media | default: product.media | first %}
-{% unless featured_media %}
-    {% for media in product.media %}
-        {% if media.src == current_variant.featured_image.src %}
-            {% assign featured_media = media %}
-        {% endif %}
-    {%endfor%}
-{%endunless%}
-{% assign sku = current_variant.sku | default: product.sku %}
-{% assign currentHashSKU = sku | prepend: '#' %}
+{% liquid
+    assign featured_media = current_variant.featured_media | default: product.media | first
+    unless featured_media
+        for media in product.media
+            if media.src == current_variant.featured_image.src
+                assign featured_media = media
+            endif
+        endfor
+    endunless
+    assign sku = current_variant.sku | default: product.sku
+    assign currentHashSKU = sku | prepend: '#'
+%}
 <script>
     const product_{{ section_id }} = {{ product | json }};
     const currentVariant_{{ section_id }} = {{ current_variant |  json }};
@@ -31,26 +33,36 @@ variables required in product-images-2.liquid:
             {% endfor %}
         </div>
     {% else %}
-        {% assign active_images = "" | split: '' %}
-        {% for media in product.media %}
-            {% assign hashSKU = '' %}
-            {% assign altWords = media.alt | split: ' ' %}
-            {% for word in altWords %}
-                {% assign isHash =  word | slice: 0 %}
-                {% if isHash == '#' %}{% assign hashSKU = word %}{% endif %}
-            {% endfor %}
-            {% if hashSKU == '' %}
-                {% for variant in product.variants %}
-                    {% if variant.featured_media == media %}
-                        {% assign hashSKU = variant.sku | prepend: '#' %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-            {% if media == featured_media or hashSKU == currentHashSKU or hashSKU == '' %}
-                {% assign media_id = media.id | split: ' ' %}
-                {% assign active_images = active_images | concat: media_id | uniq %}
-            {% endif %}
-        {% endfor %}
+        {% liquid
+            assign active_images = "" | split: ''
+            for media in product.media
+                assign hashSKU = ''
+                assign img_sku = media.alt | split: '#' | last | split: ' ' | first
+                if img_sku contains '_' or img_sku contains '-'
+                    assign altWords = media.alt | split: ' '
+                    for word in altWords
+                        assign isHash = word | slice: 0
+                        if isHash == '#'
+                            assign hashSKU = word
+                        endif
+                    endfor
+                elsif img_sku != blank
+                    assign hashSKU = img_sku | prepend: '#'
+                endif
+                if hashSKU == ''
+                    for variant in product.variants
+                        if variant.featured_media == media
+                            assign hashKU = variant.sku | prepend: '#'
+                            assign defaultLabel = variant.name | append: ' // ' | append: variant.sku
+                        endif
+                    endfor
+                endif
+                if media == featured_media or hashSKU == currentHashSKU or hashSKU == ''
+                    assign media_id = media.id | split: ' '
+                    assign active_images = active_images | concat: media_id | uniq
+                endif
+            endfor
+        %}
         {% capture __product_thumbs %}
 
         {%endcapture%}
@@ -66,21 +78,30 @@ variables required in product-images-2.liquid:
             </template>
             <template class="carousel-thumbs-template">
                 {% for media in product.media %}
-                    {% assign defaultLabel = '' %}
-                    {% assign hashSKU = '' %}
-                    {% assign altWords = media.alt | split: ' ' %}
-                    {% for word in altWords %}
-                        {% assign isHash =  word | slice: 0 %}
-                        {% if isHash == '#' %}{% assign hashSKU = word %}{% endif %}
-                    {% endfor %}
-                    {% if hashSKU == '' %}
-                        {% for variant in product.variants %}
-                            {% if variant.featured_media == media %}
-                                {% assign hashSKU = variant.sku | prepend: '#' %}
-                                {% assign defaultLabel = variant.name | append: ' // ' | append: variant.sku %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
+                    {%- liquid
+                        assign defaultLabel = ''
+                        assign hashSKU = ''
+                        assign img_sku = media.alt | split: '#' | last | split: ' ' | first
+                        if img_sku contains '_' or img_sku contains '-'
+                            assign altWords = media.alt | split: ' '
+                            for word in altWords
+                                assign isHash = word | slice: 0
+                                if isHash == '#'
+                                    assign hashSKU = word
+                                endif
+                            endfor
+                        elsif img_sku != blank
+                            assign hashSKU = img_sku | prepend: '#'
+                        endif
+                        if hashSKU == ''
+                            for variant in product.variants
+                                if variant.featured_media == media
+                                    assign hashKU = variant.sku | prepend: '#'
+                                    assign defaultLabel = variant.name | append: ' // ' | append: variant.sku
+                                endif
+                            endfor
+                        endif
+                    -%}
                     <div class="product-carousel-thumb thumb--{{ media.media_type -}}" data-media-id="{{ media.id }}"
                          data-chums-sku="{{ hashSKU | default: 'all' }}">
                         <button type="button" data-bs-target="#product-carousel-{{ section_id }}" data-bs-slide-to=""
@@ -97,21 +118,23 @@ variables required in product-images-2.liquid:
 
             <div class="carousel-inner" data-active-images="{{ active_images | join: ',' }}">
                 {% for media in product.media %}
-                    {% assign active_image = 0 %}
-                    {% assign media_id = media.id | append: '' %}
-                    {% for id in active_images %}
-                        {% if media_id == id %}
-                            {% assign active_image = 1 %}
-                        {% endif %}
-                    {% endfor %}
-                    {% assign currentImage = 0 %}
-                    {% if featured_media == media %}
-                        {% assign currentImage = 1 %}
-                    {% endif %}
-                    {% assign loading = 'lazy' %}
-                    {% if currentImage == 1 %}
-                        {% assign loading = 'eager' %}
-                    {% endif %}
+                    {%- liquid
+                        assign active_image = 0
+                        assign media_id = media.id | append: ''
+                        for id in active_images
+                            if media_id == id
+                                assign active_image = 1
+                            endif
+                        endfor
+                        assign currentImage = 0
+                        if featured_media == media
+                            assign currentImage = 1
+                        endif
+                        assign loading = 'lazy'
+                        if currentImage == 1
+                            assign loading = 'eager'
+                        endif
+                    -%}
                     {% if active_image == 1 %}
                         <div class="carousel-item {% if currentImage == 1 %}active{% endif %}" data-media-id="{{ media.id }}">
                             {% render 'product-media', media: media, className: 'd-block w-100 img-fluid', loading: loading %}
@@ -122,17 +145,19 @@ variables required in product-images-2.liquid:
         </div>
         <div id="product-carousel-thumbs-{{ section_id }}" class="product-carousel-thumbs mt-3">
             {% for media in product.media %}
-                {% assign active_image = 0 %}
-                {% assign media_id = media.id | append: '' %}
-                {% for id in active_images %}
-                    {% if media_id == id %}
-                        {% assign active_image = 1 %}
-                    {% endif %}
-                {% endfor %}
-                {% assign currentImage = 0 %}
-                {% if featured_media == media %}
-                    {% assign currentImage = 1 %}
-                {% endif %}
+                {%- liquid
+                    assign active_image = 0
+                    assign media_id = media.id | append: ''
+                    for id in active_images
+                        if media_id == id
+                            assign active_image = 1
+                        endif
+                    endfor
+                    assign currentImage = 0
+                    if featured_media == media
+                        assign currentImage = 1
+                    endif
+                -%}
                 {% if active_image == 1 %}
                     {% capture __bsSlideTo %}{% increment bsSlideTo %}{%endcapture%}
                     <div class="product-carousel-thumb thumb--{{ media.media_type -}} {% if __bsSlideTo == '0' %} thumb--active{% endif %}"
@@ -149,44 +174,6 @@ variables required in product-images-2.liquid:
                         </button>
                     </div>
                 {% endif %}
-                {% assign defaultLabel = 'Slide ' | concat: forloop.index %}
-                {% assign hashSKU = '' %}
-                {% assign altWords = media.alt | split: ' ' %}
-                {% for word in altWords %}
-                    {% assign isHash =  word | slice: 0 %}
-                    {% if isHash == '#' %}{% assign hashSKU = word %}{% endif %}
-                {% endfor %}
-                {% if hashSKU == '' %}
-                    {% for variant in product.variants %}
-                        {% if variant.featured_media == media %}
-                            {% assign hashSKU = variant.sku | prepend: '#' %}
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-                {% if media == featured_media or hashSKU == currentHashSKU or hashSKU == '' %}
-                    {% assign media_id = media.id | split: ' ' %}
-                    {% assign active_images = active_images | concat: media_id | uniq %}
-                {% endif %}
-                {% comment %}
-                <div class="product-carousel-thumb thumb--{{ media.media_type -}}
-                            {%- if media == featured_media %} thumb--active{%- endif -%}
-                            {%- if hashSKU == currentHashSKU %} thumb--current-sku{%- endif -%}
-                            {%- if hashSKU == '' %} thumb--all-skus{%- endif -%}"
-                     data-chums-sku="{{ hashSKU }}">
-
-                    <button type="button" data-bs-target="#product-carousel-{{ section_id }}" data-bs-slide-to="{{ forloop.index0 }}"
-                            class="product-carousel-button {% if forloop.index0 == 0 %}active{% endif %}"
-                            {% if forloop.index0 == 0 %}aria-current="true" {% endif %}
-                            aria-label="{{ media.alt | default: defaultLabel }}">
-                        {% if media.media_type == 'external_video' %}
-                            <span class="product-carousel-thumb--play-icon">
-                          {% render 'icon-play' %}
-                        </span>
-                        {% endif %}
-                        {% render 'product-media', media: media, className: 'img-thumbnail', width: 96, height: 96 %}
-                    </button>
-                </div>
-                {% endcomment %}
             {% endfor %}
         </div>
     {% endif %}

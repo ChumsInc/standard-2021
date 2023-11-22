@@ -26,7 +26,7 @@
         <div class="footer__newsletter">
             <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}"
                    placeholder="{{ 'general.newsletter_form.newsletter_email' | t }}" name="contact[email]"
-                   required
+                   required aria-required="true"
                    id="Email-{{ block.id }}" class="footer__newsletter-input" autocorrect="off"
                    autocapitalize="off">
             <button type="submit" class="footer__newsletter-btn" name="commit" aria-label="Subscribe">

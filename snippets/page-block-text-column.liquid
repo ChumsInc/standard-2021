@@ -1,0 +1,34 @@
+{% comment %}
+Required for render:
+    title
+    image
+    enable_image
+    text
+    button_link
+    button_label
+{% endcomment %}
+
+<div class="col">
+    <div class="mb-3">
+    {% if button_link != blank %}<a href="{{ button_link }}" target="_blank" rel="noreferrer">{% endif %}
+            {% if enable_image %}
+                {% if image != blank %}
+                    {{ image | image_url: width: 800 | image_tag: class: 'img-fluid', loading: 'lazy' }}
+                {% else %}
+                    <div class="image-wrap text-spacing">{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+                {% endif %}
+            {% endif %}
+            {% if title != blank %}
+                <h2 class="h3">{{ title }}</h2>
+            {% endif %}
+            {% if text != blank %}
+                <div class="rte-setting text-spacing">{{ text }}</div>
+            {% endif %}
+            {% if button_label != blank %}
+                <div class="btn btn--secondary btn--small">
+                    {{ button_label }}
+                </div>
+            {% endif %}
+            {% if button_link != blank %}</a>{% endif %}
+    </div>
+</div>

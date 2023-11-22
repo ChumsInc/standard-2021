@@ -199,14 +199,14 @@
                                     </div>
                                 {% endif %}
                             {% when 'image' %}
-                                {% if block.settings.link != blank %}<a href="{{ block.settings.link }}" role="button">{% endif %}
+                                {% if block.settings.link != blank %}<a href="{{ block.settings.link }}" role="button" aria-label="{{ block.settings.image.alt | escape }}">{% endif %}
                                     {% if block.settings.image != blank %}
-                                        {% assign img_size = 400 | times: block.settings.item_col_span | append: 'x' %}
+                                        {% assign img_size = 400 | times: block.settings.item_col_span %}
                                         <div class="custom-grid__item--bg-image" role="img"
-                                             aria-label="{{ block.settings.image.alt}}"
+                                             aria-label="{{ block.settings.image.alt | escape }}"
                                              style="height: 0;
                                                 padding-bottom: calc({{ 100 | divided_by: block.settings.image.aspect_ratio }}% {% unless block.settings.item_col_span == 1 %} - {{ section.settings.gutter| default: '0px' }} / {{ block.settings.item_col_span }}{% endunless %});
-                                                background-image: url({{ block.settings.image | img_url: img_size }})">
+                                                background-image: url({{ block.settings.image | image_url: width: img_size  }})">
                                         </div>
                                     {% else %}
                                         <div class="custom-grid__item--bg-image" style="height: 0;
