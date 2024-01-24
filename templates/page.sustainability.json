@@ -1,0 +1,96 @@
+{
+  "sections": {
+    "a972cfa7-c690-4e78-9bab-d31e344c482b": {
+      "type": "hero-image",
+      "blocks": {
+        "template--16571215741125__a972cfa7-c690-4e78-9bab-d31e344c482b-image-1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/sustainability-header-2.jpg",
+            "image_portrait": "shopify:\/\/shop_images\/Sustainability_mobile_headers.jpg",
+            "link": "",
+            "top_subheading": "",
+            "title": "",
+            "title_size": 80,
+            "subheading": "",
+            "text_color": "#ce0e2d",
+            "button_text": "",
+            "button_link": "",
+            "button_color": "#ce0e2d",
+            "button_text_color": "#FFFFFF"
+          }
+        }
+      },
+      "block_order": [
+        "template--16571215741125__a972cfa7-c690-4e78-9bab-d31e344c482b-image-1"
+      ],
+      "settings": {
+        "title": "Hero Image"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "custom_css": [
+        "h1 {margin-bottom: \"3rem\";}"
+      ],
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "d38f0507-891f-4ab5-80de-05cb350e280b": {
+      "type": "link-list",
+      "blocks": {
+        "c2e3206d-1882-466c-9682-f2f69f7d9185": {
+          "type": "url",
+          "settings": {
+            "link_text": "SUSTAINABILITY & <br> IMPACT REPORT",
+            "link_file": "",
+            "link_url": "https:\/\/cdn.shopify.com\/s\/files\/1\/0093\/8908\/0661\/files\/Chums_Sustainability_and_Impact_Report_2022.pdf?v=1705594298",
+            "link_width": 4
+          }
+        },
+        "8663d914-f104-4067-b813-acd944f359d9": {
+          "type": "url",
+          "settings": {
+            "link_text": "STANDARDS OF MANUFACTURING PRACTICES",
+            "link_file": "",
+            "link_url": "https:\/\/cdn.shopify.com\/s\/files\/1\/0093\/8908\/0661\/files\/Chums_Standards_of_Manufacturing_Practices_January_2024.pdf?v=1704992098",
+            "link_width": 4
+          }
+        }
+      },
+      "block_order": [
+        "c2e3206d-1882-466c-9682-f2f69f7d9185",
+        "8663d914-f104-4067-b813-acd944f359d9"
+      ],
+      "settings": {
+        "link_list__fullwidth": false,
+        "link_list__gap": 5,
+        "link_list__desktop_gap": 3,
+        "link_list__justify": "center"
+      }
+    },
+    "ad2b42a3-b97a-4aa0-908b-b2e4d49c596b": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Shop our Sustainable Products",
+        "home_featured_products": "eco-friendly-products",
+        "per_row": 4,
+        "rows": 1,
+        "mobile_scrollable": true,
+        "view_all": false,
+        "divider": false,
+        "swatches_on_hover": false,
+        "show_reviews": false,
+        "justify_content_center": true
+      }
+    }
+  },
+  "order": [
+    "a972cfa7-c690-4e78-9bab-d31e344c482b",
+    "main",
+    "d38f0507-891f-4ab5-80de-05cb350e280b",
+    "ad2b42a3-b97a-4aa0-908b-b2e4d49c596b"
+  ]
+}

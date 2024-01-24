@@ -25,7 +25,7 @@
 
         <div class="page-width {% if section.settings.mobile_scrollable %}page-width--flush-small{% endif %}">
             <div {% if section.settings.mobile_scrollable %}class="grid-overflow-wrapper"{% endif %}>
-                <div class="product-grid row g-3" style="width: fit-content; min-width: 100%; align-items: center;">
+                <div class="product-grid row g-3 {% if section.settings.justify_content_center %} justify-content-md-center{% endif %}" style="width: fit-content; min-width: 100%; align-items: center;">
                     {% style %}
                         #CollectionSection-{{ section.id }} .product-grid .grid-product__see-all {
                             margin-top: 0;
@@ -183,7 +183,13 @@
                 "id": "show_reviews",
                 "label": "Show product reviews on collection",
                 "default": false
-            }
+            },
+          {
+            "type": "checkbox",
+            "id": "justify_content_center",
+            "label": "Center collection items",
+            "default": false
+          }
         ],
         "presets": [{
             "name": "Featured collection",

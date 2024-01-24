@@ -1,0 +1,120 @@
+<div class="section--link-list {% if section.settings.link_list__fullwidth %}page-width{% else %}container-lg{% endif %}">
+  {% if section.blocks.size > 0 %}
+    <div class="row g-{{ section.settings.link_list__gap }} g-lg-{{ section.settings.link_list__desktop_gap }} justify-content-{{ section.settings.link_list__justify }}">
+    {% for block in section.blocks %}
+      <div class="{% if block.settings.link_width == 0 %}col{% else %}col-md-{{ block.settings.link_width }}{% endif %}">
+        {% if block.settings.link_text > '' %}        
+          {% if block.settings.link_file != blank %}
+            {% assign link_url = block.settings.link_file | asset_url %}
+            {{ block.settings.link_text | link_to: link_url, class: 'd-block btn btn--red' }}
+          {% elsif block.settings.link_url != blank %}
+            {{ block.settings.link_text | link_to: block.settings.link_url, target: section.settings.link_target, class: 'd-block btn btn--red' }}
+          {% endif %}    
+        {% endif %}
+      </div>
+    {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "Link List",
+    "class": "index-section--flush",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "link_list__fullwidth",
+        "label": "Show Full width",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "link_list__gap",
+        "label": "Gap Width",
+        "min": 0,
+        "max": 5,
+        "default": 3,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "link_list__desktop_gap",
+        "label": "Gap Width (Desktop)",
+        "min": 0,
+        "max": 5,
+        "default": 3,
+        "step": 1
+      },
+      {
+        "type": "select",
+        "id": "link_list__justify",
+        "label": "Link Alignment",
+        "options": [
+          {"value": "left", "label":"Left"},
+          {"value": "center", "label":"Center"},
+          {"value": "right", "label":"Right"}
+        ],
+        "default": "center"
+      }
+    ],
+    "blocks": [
+      {      
+        "name": "Link Button",
+        "type": "url",    
+        "settings": [
+          {
+            "type": "text",
+            "id": "link_text",
+            "label": "Link Button Text"
+          },
+          {
+            "type": "text",
+            "id": "link_file",
+            "label": "Link Target Asset Filename"
+          },
+          {
+            "type": "text",
+            "id": "link_url",
+            "label": "Link Target Outside URL"
+          },
+          {
+            "type": "range",
+            "id": "link_width",
+            "min": 0,
+            "max": 12,
+            "step": 1,
+            "label": "Link Width",
+            "default": 0
+          },
+          {
+            "type": "paragraph",
+            "content": "Enter the filename of a previously uploaded file of the url to a file on Chums Intranet or B2B"
+          },
+          {
+            "type": "select",
+            "id": "link_target",
+            "label": "Open in",
+            "options": [
+              {"value": "_self", "label":"Same Window/Tab"},
+              {"value": "_blank", "label":"New Window/Tab"}
+            ],
+            "default": "_blank"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Link List",
+        "category": "Links to pages"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
