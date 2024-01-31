@@ -37,17 +37,19 @@ variables required in product-images-2.liquid:
             assign active_images = "" | split: ''
             for media in product.media
                 assign hashSKU = ''
-                assign img_sku = media.alt | split: '#' | last | split: ' ' | first
-                if img_sku contains '_' or img_sku contains '-'
-                    assign altWords = media.alt | split: ' '
-                    for word in altWords
-                        assign isHash = word | slice: 0
-                        if isHash == '#'
-                            assign hashSKU = word
-                        endif
-                    endfor
-                elsif img_sku != blank
-                    assign hashSKU = img_sku | prepend: '#'
+                if media.alt contains '#'
+                    assign img_sku = media.alt | split: '#' | last | split: ' ' | first
+                    if img_sku contains '_' or img_sku contains '-'
+                        assign altWords = media.alt | split: ' '
+                        for word in altWords
+                            assign isHash = word | slice: 0
+                            if isHash == '#'
+                                assign hashSKU = word
+                            endif
+                        endfor
+                    elsif img_sku != blank
+                        assign hashSKU = img_sku | prepend: '#'
+                    endif
                 endif
                 if hashSKU == ''
                     for variant in product.variants
@@ -68,7 +70,6 @@ variables required in product-images-2.liquid:
         {%endcapture%}
         <div id="product-carousel-{{ section_id }}" class="carousel carousel-dark slide product-carousel"
              data-bs-interval="false">
-
             <template class="carousel-inner-template">
                 {% for media in product.media %}
                     <div class="carousel-item" data-media-id="{{ media.id }}">
@@ -81,22 +82,24 @@ variables required in product-images-2.liquid:
                     {%- liquid
                         assign defaultLabel = ''
                         assign hashSKU = ''
-                        assign img_sku = media.alt | split: '#' | last | split: ' ' | first
-                        if img_sku contains '_' or img_sku contains '-'
-                            assign altWords = media.alt | split: ' '
-                            for word in altWords
-                                assign isHash = word | slice: 0
-                                if isHash == '#'
-                                    assign hashSKU = word
-                                endif
-                            endfor
-                        elsif img_sku != blank
-                            assign hashSKU = img_sku | prepend: '#'
+                        if media.alt contains '#'
+                            assign img_sku = media.alt | split: '#' | last | split: ' ' | first
+                            if img_sku contains '_' or img_sku contains '-'
+                                assign altWords = media.alt | split: ' '
+                                for word in altWords
+                                    assign isHash = word | slice: 0
+                                    if isHash == '#'
+                                        assign hashSKU = word
+                                    endif
+                                endfor
+                            elsif img_sku != blank
+                                assign hashSKU = img_sku | prepend: '#'
+                            endif
                         endif
                         if hashSKU == ''
                             for variant in product.variants
-                                if variant.featured_media == media
-                                    assign hashKU = variant.sku | prepend: '#'
+                                if variant.featured_media.id == media.id
+                                    assign hashSKU = variant.sku | prepend: '#'
                                     assign defaultLabel = variant.name | append: ' // ' | append: variant.sku
                                 endif
                             endfor
